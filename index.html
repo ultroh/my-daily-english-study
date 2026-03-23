@@ -30,8 +30,32 @@
     <script>
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
+                    {
+            day: 84,
+            date: "2026-03-23",
+            topic: "Smart Small Talk at Work",
+            items: [
+                { exp: "How’s your week shaping up?", mean: "이번 주 어떻게 풀려가고 있어요? / 시작이 어때요?", ex: "Hey, Buma! How’s your week shaping up so far?" },
+                { exp: "Keeping busy with [task]", mean: "[업무]로 계속 좀 바쁘게 지냈어요.", ex: "I’ve been keeping busy with the new report lately." },
+                { exp: "Let's catch up over coffee", mean: "언제 커피 한잔하면서 못다 한 얘기 나눠요.", ex: "It's good to see you! Let's catch up over coffee sometime this week." }
+            ],
+            dialogue: [
+                { spk: "Colleague", en: "Hi Buma! Long time no see. How’s your week shaping up?", ko: "안녕 Buma님! 오랜만이에요. 이번 주 시작은 어때요?" },
+                { spk: "Buma", en: "Not bad, but I’ve been keeping busy with some travel fatigue from the weekend.", ko: "나쁘지 않아요. 주말 여행 피로 때문에 좀 정신없이 지내고 있네요." },
+                { spk: "Colleague", en: "I heard you went to your brother's house. How was it?", ko: "동생분 댁에 다녀오셨다면서요. 어땠어요?" },
+                { spk: "Buma", en: "It was great! I have so much to tell you. Let's catch up over coffee sometime.", ko: "정말 좋았어요! 할 말이 많은데, 언제 커피 한잔하면서 얘기해요." },
+                { spk: "Colleague", en: "Sounds like a plan! Have a good one!", ko: "좋아요! 좋은 하루 보내세요!" }
+            ],
+            feedback: [
+                "Shaping up: [쉐이핑업]처럼 한 단어처럼 부드럽게 연음하세요.",
+                "Keeping busy: [키이핑 비지]처럼 'ee' 발음을 길게 강조해 보세요.",
+                "Catch up over: [캐챱 오우버]라고 한 호흡에 이어서 리듬감을 살려보세요."
+            ],
+            closing: "내일 출근해서 동료에게 'How's your week shaping up?'이라고 슬쩍 건네보세요! 😊☕"
+        },
+
         {
-            day: 85,
+            day: 83,
             date: "2026-03-22",
             topic: "Post-trip Fatigue & Recovery",
             items: [
