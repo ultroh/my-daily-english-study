@@ -1801,7 +1801,7 @@
                     <h2 class="text-xl font-bold text-center text-slate-100 mb-8 italic">"${day.topic}"</h2>
                     
                     <div class="grid grid-cols-3 gap-3 mb-10">
-                        ${day.items.map(item => `
+                        ${(day.items || []).map(item => `
                             <div class="vocab-box" onclick="this.classList.toggle('active')">
                                 <span class="text-blue-400 font-bold text-sm md:text-base leading-tight">${item.exp}</span>
                                 <div class="hidden-content text-left">
@@ -1840,41 +1840,6 @@
                         <section class="pt-6 border-t border-dashed border-slate-600">
                             <div class="text-center">
                                 <p class="text-orange-400 text-sm font-medium">💡 ${day.closing}</p>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            `).join('');
-                    </div>
-
-                    <div class="space-y-8">
-                        ${day.dialogue.length > 0 ? `
-                        <section>
-                            <h3 class="section-title text-base">🗨️ Dialogue</h3>
-                            <div class="bg-slate-50 p-5 rounded-2xl space-y-4 border border-slate-100">
-                                ${day.dialogue.map(d => `
-                                    <div class="flex gap-3">
-                                        <span class="font-bold text-xs ${d.spk === 'Jini' ? 'text-pink-500' : 'text-blue-600'} w-10 shrink-0">${d.spk}</span>
-                                        <div class="text-sm">
-                                            <p class="text-slate-800 font-semibold">${d.en}</p>
-                                            <p class="text-slate-400 text-xs mt-1">${d.ko}</p>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </section>` : ''}
-
-                        ${day.feedback.length > 0 ? `
-                        <section>
-                            <h3 class="section-title text-base">🎙️ Pronunciation & Feedback</h3>
-                            <ul class="list-disc list-inside text-sm text-slate-600 space-y-2 px-2 leading-relaxed">
-                                ${day.feedback.map(f => `<li>${f}</li>`).join('')}
-                            </ul>
-                        </section>` : ''}
-
-                        <section class="pt-6 border-t border-dashed border-slate-200">
-                            <div class="text-center">
-                                <p class="text-orange-500 text-sm font-medium">💡 ${day.closing}</p>
                             </div>
                         </section>
                     </div>
