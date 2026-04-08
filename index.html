@@ -36,6 +36,30 @@
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
+            day: 101,
+            date: "2026-04-08",
+            topic: "Handling Unexpected Situations",
+            items: [
+                { exp: "Something unexpected has come up", mean: "갑자기 예상치 못한 일이 생겼습니다.", ex: "I'm sorry, but something unexpected has come up, so I need to reschedule our meeting." },
+                { exp: "I'm currently dealing with a minor setback", mean: "현재 약간의 차질을 겪고 있습니다.", ex: "I'm currently dealing with a minor setback regarding the payroll system." },
+                { exp: "Let's play it by ear", mean: "(상황을 봐 가며) 그때그때 정합시다.", ex: "We don't have a fixed plan for the dinner yet, so let's play it by ear." }
+            ],
+            dialogue: [
+                { spk: "Colleague", en: "Buma, are we still meeting at 10 AM to discuss the hiring plan?", ko: "Buma님, 우리 10시에 채용 계획 논의하기로 한 거 여전히 유효한가요?" },
+                { spk: "Buma", en: "Actually, something unexpected has come up. I have an urgent meeting with the director.", ko: "사실, 갑자기 급한 일이 생겼어요. 처장님과 긴급 회의가 잡혔거든요." },
+                { spk: "Colleague", en: "Oh, I see. Will it take long?", ko: "아, 그렇군요. 오래 걸릴까요?" },
+                { spk: "Buma", en: "I'm currently dealing with a minor setback in my schedule, so I'm not sure.", ko: "일정에 약간 차질이 생겨서 잘 모르겠네요." },
+                { spk: "Colleague", en: "No problem. When should we reschedule?", ko: "괜찮습니다. 언제로 다시 잡을까요?" },
+                { spk: "Buma", en: "Let's play it by ear after my meeting finishes. I'll call you.", ko: "제 회의 끝난 뒤에 상황 봐서 정하죠. 전화 드릴게요." }
+            ],
+            feedback: [
+                "Unexpected: 'un'보다는 'ex'에 강세를 주어 [언-익스펙티드]라고 리듬감 있게 발음해 보세요.",
+                "Setback: 't' 발음을 강하게 내뱉기보다 살짝 멈췄다가 'b'로 넘어가는 느낌으로 [셋-백]이라고 합니다.",
+                "Play it by ear: 'it'과 'by'를 부드럽게 이어 마치 한 단어처럼 [플레이트 바이 이어]라고 발음해 보세요."
+            ],
+            closing: "100일을 넘어 새로운 101일의 시작을 축하드립니다! 돌발 상황에서도 유연하게 대처하는 Buma님의 전문적인 모습을 응원합니다. 편안한 밤 보내세요! 😊✨"
+        },
+            {
     day: 100,
     date: "2026-04-07",
     topic: "High Stakes & Critical Moments",
