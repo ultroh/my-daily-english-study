@@ -36,6 +36,42 @@
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
+    day: 102,
+    date: "2026-04-09",
+    topic: "Gathering Input & Transitioning Topics",
+    items: [
+        { 
+            exp: "What’s your take on this?", 
+            mean: "이 점에 대해서 어떻게 생각하시나요? (당신의 의견은 어떠한가요?)", 
+            ex: "We have two options for the recruitment fair. What’s your take on this?" 
+        },
+        { 
+            exp: "I'd like to hear your thoughts on...", 
+            mean: "~에 대한 당신의 생각을 듣고 싶습니다.", 
+            ex: "I'd like to hear your thoughts on the new employee training program." 
+        },
+        { 
+            exp: "Moving on to the next item, ...", 
+            mean: "다음 안건으로 넘어가서, ...", 
+            ex: "Moving on to the next item, let’s discuss the vacation policy." 
+        }
+    ],
+    dialogue: [
+        { spk: "Manager", en: "So, we've decided to update the internal portal.", ko: "그래서 내부 포털을 업데이트하기로 결정했습니다." },
+        { spk: "Buma", en: "Moving on to the next item, we need to talk about the hybrid work model.", ko: "다음 안건으로 넘어가서, 하이브리드 근무 모델에 대해 이야기해야 합니다." },
+        { spk: "Manager", en: "Right. Some departments want more remote days. What’s your take on this?", ko: "맞아요. 일부 부서에서 재택근무 일을 더 늘려달라고 하더군요. Buma님 생각은 어때요?" },
+        { spk: "Buma", en: "It could improve morale, but we need to check the productivity data.", ko: "사기를 높일 수는 있겠지만, 생산성 데이터를 확인해봐야 합니다." },
+        { spk: "Manager", en: "I'd like to hear your thoughts on how to balance this fairly.", ko: "어떻게 하면 이를 공정하게 균형 잡을 수 있을지에 대한 Buma님의 의견을 듣고 싶네요." }
+    ],
+    feedback: [
+        "What’s your take: 'take'를 명확하게 발음하며 끝을 살짝 올려 질문의 느낌을 살리세요. [왓츠 유어 테이크]",
+        "Thoughts on: 'th' 발음에 유의하며 'Thoughts'와 'on'을 부드럽게 연음하세요. [쏘츠 온]",
+        "Moving on: 'Moving'의 'g' 발음을 너무 강조하지 말고 자연스럽게 'on'과 이어줍니다. [무빙 온]"
+    ],
+    closing: "Buma님, 오늘 배운 표현들은 회의를 주도하거나 상대방의 참여를 이끌어낼 때 정말 강력한 도구가 됩니다. 특히 \"What’s your take on this?\"는 질문 하나만으로도 상대방을 존중한다는 느낌을 줄 수 있죠. 편안한 목요일 밤 되세요! 😊✨☕"
+},
+
+            {
             day: 101,
             date: "2026-04-08",
             topic: "Handling Unexpected Situations",
