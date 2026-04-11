@@ -1,2114 +1,258 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Daily English Lesson</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
-        /* 눈이 편안한 어두운 배경 및 텍스트 색상 */
-        body { font-family: 'Pretendard', sans-serif; background-color: #0f172a; color: #cbd5e1; -webkit-tap-highlight-color: transparent; }
-        
-        /* 단어장 박스 기본 및 활성화 상태 (다크 테마) */
-        .vocab-box { transition: all 0.2s ease-in-out; border: 2px solid #334155; cursor: pointer; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-radius: 1.25rem; padding: 12px; background-color: #1e293b; }
-        .vocab-box.active { height: auto; border-color: #60a5fa; background-color: #0f172a; }
-        
-        .hidden-content { display: none; margin-top: 12px; width: 100%; border-top: 1px solid #334155; pt-3; }
-        .section-title { border-left: 4px solid #60a5fa; padding-left: 10px; font-weight: 700; color: #f8fafc; margin-bottom: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>내 비서</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      
+      padding-top: env(safe-area-inset-top);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
+      
+      overflow-y: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      padding: 10px 16px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 15px 0;
+      color: #ffffff;
+    }
+
+    /* 2x2 그리드 레이아웃 적용 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+
+    .action-card {
+      background-color: #1c1c1e;
+      padding: 16px;
+      border-radius: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px; 
+    }
+    
+    .action-card h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #a1a1a6;
+    }
+
+    .data-value {
+      font-size: 24px; /* 2칸 배열에 맞춰 크기 축소 */
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.2;
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    
+    button:active { transform: scale(0.97); }
+
+    .btn-fuel { background-color: #ff9500; }
+    .btn-robot { background-color: #34c759; }
+    .btn-wash { background-color: #007aff; }
+    .btn-hair { background-color: #af52de; } /* 새로운 버튼 색상 (보라색) */
+
+    .input-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    input[type="number"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      text-align: center;
+      border: none;
+      border-radius: 12px;
+      background-color: #2c2c2e;
+      color: #ffffff;
+      outline: none;
+    }
+    
+    /* 날짜 선택 아이콘 색상 보정 */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+  </style>
 </head>
-<body class="p-4 md:p-8 pb-20">
-    <div class="max-w-3xl mx-auto">
-        <header class="flex justify-between items-end mb-10">
-            <div>
-                <h1 class="text-3xl font-bold text-slate-100">☕ My Daily English Study</h1>
-            </div>
-            <div id="stats" class="text-right text-blue-400 font-black text-2xl"></div>
-        </header>
+<body>
 
-        <div id="listContainer" class="space-y-12"></div>
+  <div class="app-container">
+    <h2>✨ 내 비서</h2>
+    
+    <div class="grid-container">
+      <div class="action-card">
+        <h3>🚗 이달의 주유</h3>
+        <div class="data-value" id="fuel-data">...</div>
+        <button class="btn-fuel" onclick="runAction('addFuel')">주유 기록</button>
+      </div>
+
+      <div class="action-card">
+        <h3>🤖 로청이 현황</h3>
+        <div class="data-value" id="robot-data">...</div>
+        <button class="btn-robot" onclick="runAction('addRobot')">청소 기록</button>
+      </div>
+
+      <div class="action-card">
+        <h3>🫧 세차 잔액</h3>
+        <div class="data-value" id="wash-data">...</div>
+        <div class="input-group">
+          <input type="number" id="washAmount" placeholder="금액 입력">
+          <button class="btn-wash" onclick="runCarWash()">잔액 차감</button>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <h3>✂️ Hair Cut Day</h3>
+        <div class="data-value" id="hair-data">...</div>
+        <div class="input-group">
+          <input type="date" id="hairDateVal">
+          <button class="btn-hair" onclick="runHairCut()">날짜 저장</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
-        const studyData = [
-            {
-    day: 104,
-    date: "2026-04-11",
-    topic: "Leisure & Recharging",
-    items: [
-        { 
-            exp: "I’m just taking it easy", 
-            mean: "그냥 좀 쉬고 있어요. / 느긋하게 보내고 있어요.", 
-            ex: "What are you doing this weekend? - Oh, I’m just taking it easy at home." 
-        },
-        { 
-            exp: "I need to recharge my batteries", 
-            mean: "재충전의 시간이 필요해요.", 
-            ex: "After a busy week at work, I really need to recharge my batteries." 
-        },
-        { 
-            exp: "I’m going to binge-watch a show", 
-            mean: "드라마(쇼)를 몰아볼 거예요.", 
-            ex: "I'm going to binge-watch the new season of my favorite series tonight." 
-        }
-    ],
-    dialogue: [
-        { spk: "Friend", en: "Hey Buma, do you have any big plans for the weekend?", ko: "헤이 Buma, 이번 주말에 특별한 계획 있어?" },
-        { spk: "Buma", en: "Not really. I’m just taking it easy today.", ko: "딱히 없어. 오늘은 그냥 느긋하게 쉬고 있어." },
-        { spk: "Friend", en: "Good for you. You looked exhausted lately.", ko: "잘됐네. 너 최근에 좀 지쳐 보였거든." },
-        { spk: "Buma", en: "Yeah, I really need to recharge my batteries before Monday.", ko: "맞아, 월요일이 되기 전에 정말 재충전이 필요해." },
-        { spk: "Friend", en: "What about tonight?", ko: "오늘 밤은 뭐 할 거야?" },
-        { spk: "Buma", en: "I think I’m going to binge-watch that Japanese drama you recommended.", ko: "네가 추천해 준 그 일본 드라마 정주행할 것 같아." }
-    ],
-    feedback: [
-        "Taking it easy: 'Taking it'을 연음하여 [테이킹 잇]이 아닌 [테이키닛]으로 발음하고 끝을 부드럽게 내리세요.",
-        "Recharge my batteries: 'Batteries'를 발음할 때 'tt'를 굴려서 [배러리즈]에 가깝게 소리 내 보세요.",
-        "Binge-watch: 'Binge'의 'ge' 발음을 짧고 강하게 끊어서 [빈지-왓치]라고 리듬감 있게 말해 보세요."
-    ],
-    closing: "주말의 휴식은 다음 주를 위한 가장 가치 있는 투자입니다. 대전의 평온한 토요일 밤, Buma님의 온전한 재충전을 응원합니다! ✨"
-},
-            {
-    day: 103,
-    date: "2026-04-10",
-    topic: "Summarizing & Closing Conversations",
-    items: [
-        { 
-            exp: "To wrap things up, ...", 
-            mean: "마무리하자면, ... / 끝으로 정리하자면, ...", 
-            ex: "To wrap things up, let's review our action items for next week." 
-        },
-        { 
-            exp: "The bottom line is...", 
-            mean: "핵심은 ~입니다. / 결국 중요한 것은 ~입니다.", 
-            ex: "The bottom line is that we need more budget for the hiring fair." 
-        },
-        { 
-            exp: "Let's call it a day.", 
-            mean: "오늘은 이만하죠. / 오늘은 여기까지 합시다.", 
-            ex: "We've covered everything on the agenda. Let's call it a day." 
-        }
-    ],
-    dialogue: [
-        { spk: "Colleague", en: "We've been talking about the recruitment plan for two hours.", ko: "두 시간 동안 채용 계획에 대해 이야기했네요." },
-        { spk: "Buma", en: "I know. To wrap things up, let me summarize our decision.", ko: "그러게요. 마무리하자면, 우리의 결정을 요약해 볼게요." },
-        { spk: "Colleague", en: "Good idea. What’s the final conclusion?", ko: "좋은 생각이에요. 최종 결론이 뭐죠?" },
-        { spk: "Buma", en: "The bottom line is that we prioritize senior candidates this time.", ko: "결국 중요한 건 이번에는 경력직 후보자를 우선순위에 둔다는 거예요." },
-        { spk: "Colleague", en: "Agreed. I'll prepare the draft by Monday.", ko: "동의해요. 월요일까지 초안을 준비할게요." },
-        { spk: "Buma", en: "Great. We’ve done enough work. Let's call it a day!", ko: "좋아요. 충분히 일했으니 오늘은 이만 퇴근합시다!" }
-    ],
-    feedback: [
-        "Wrap things up: 'Wrap'의 'W'는 묵음이므로 'r' 발음부터 시작하여 [랲 띵스 업]이라고 리듬감 있게 이어서 발음하세요.",
-        "Bottom line: 'tt' 발음을 굴려서 [바럼 라인]으로 발음하면 더 원어민스럽습니다.",
-        "Call it a day: 'Call it'을 연음 처리하여 [콜릿 어 데이]라고 한 단어처럼 발음해 보세요."
-    ],
-    closing: "이번 주 한 주 동안 Buma님의 삶에서 가장 중요한 'Bottom line'은 무엇이었나요? 행복하고 편안한 주말 보내세요, Buma님! 😊✨☕"
-},
-            {
-    day: 102,
-    date: "2026-04-09",
-    topic: "Gathering Input & Transitioning Topics",
-    items: [
-        { 
-            exp: "What’s your take on this?", 
-            mean: "이 점에 대해서 어떻게 생각하시나요? (당신의 의견은 어떠한가요?)", 
-            ex: "We have two options for the recruitment fair. What’s your take on this?" 
-        },
-        { 
-            exp: "I'd like to hear your thoughts on...", 
-            mean: "~에 대한 당신의 생각을 듣고 싶습니다.", 
-            ex: "I'd like to hear your thoughts on the new employee training program." 
-        },
-        { 
-            exp: "Moving on to the next item, ...", 
-            mean: "다음 안건으로 넘어가서, ...", 
-            ex: "Moving on to the next item, let’s discuss the vacation policy." 
-        }
-    ],
-    dialogue: [
-        { spk: "Manager", en: "So, we've decided to update the internal portal.", ko: "그래서 내부 포털을 업데이트하기로 결정했습니다." },
-        { spk: "Buma", en: "Moving on to the next item, we need to talk about the hybrid work model.", ko: "다음 안건으로 넘어가서, 하이브리드 근무 모델에 대해 이야기해야 합니다." },
-        { spk: "Manager", en: "Right. Some departments want more remote days. What’s your take on this?", ko: "맞아요. 일부 부서에서 재택근무 일을 더 늘려달라고 하더군요. Buma님 생각은 어때요?" },
-        { spk: "Buma", en: "It could improve morale, but we need to check the productivity data.", ko: "사기를 높일 수는 있겠지만, 생산성 데이터를 확인해봐야 합니다." },
-        { spk: "Manager", en: "I'd like to hear your thoughts on how to balance this fairly.", ko: "어떻게 하면 이를 공정하게 균형 잡을 수 있을지에 대한 Buma님의 의견을 듣고 싶네요." }
-    ],
-    feedback: [
-        "What’s your take: 'take'를 명확하게 발음하며 끝을 살짝 올려 질문의 느낌을 살리세요. [왓츠 유어 테이크]",
-        "Thoughts on: 'th' 발음에 유의하며 'Thoughts'와 'on'을 부드럽게 연음하세요. [쏘츠 온]",
-        "Moving on: 'Moving'의 'g' 발음을 너무 강조하지 말고 자연스럽게 'on'과 이어줍니다. [무빙 온]"
-    ],
-    closing: "Buma님, 오늘 배운 표현들은 회의를 주도하거나 상대방의 참여를 이끌어낼 때 정말 강력한 도구가 됩니다. 특히 \"What’s your take on this?\"는 질문 하나만으로도 상대방을 존중한다는 느낌을 줄 수 있죠. 편안한 목요일 밤 되세요! 😊✨☕"
-},
+<script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzgANRpoJ72EKc3lGFp80f7W8Xs5qRx91bdd8NAbtgP3sb5KxjBU3PNseaa5TGtYusiWA/exec';
 
-            {
-            day: 101,
-            date: "2026-04-08",
-            topic: "Handling Unexpected Situations",
-            items: [
-                { exp: "Something unexpected has come up", mean: "갑자기 예상치 못한 일이 생겼습니다.", ex: "I'm sorry, but something unexpected has come up, so I need to reschedule our meeting." },
-                { exp: "I'm currently dealing with a minor setback", mean: "현재 약간의 차질을 겪고 있습니다.", ex: "I'm currently dealing with a minor setback regarding the payroll system." },
-                { exp: "Let's play it by ear", mean: "(상황을 봐 가며) 그때그때 정합시다.", ex: "We don't have a fixed plan for the dinner yet, so let's play it by ear." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Buma, are we still meeting at 10 AM to discuss the hiring plan?", ko: "Buma님, 우리 10시에 채용 계획 논의하기로 한 거 여전히 유효한가요?" },
-                { spk: "Buma", en: "Actually, something unexpected has come up. I have an urgent meeting with the director.", ko: "사실, 갑자기 급한 일이 생겼어요. 처장님과 긴급 회의가 잡혔거든요." },
-                { spk: "Colleague", en: "Oh, I see. Will it take long?", ko: "아, 그렇군요. 오래 걸릴까요?" },
-                { spk: "Buma", en: "I'm currently dealing with a minor setback in my schedule, so I'm not sure.", ko: "일정에 약간 차질이 생겨서 잘 모르겠네요." },
-                { spk: "Colleague", en: "No problem. When should we reschedule?", ko: "괜찮습니다. 언제로 다시 잡을까요?" },
-                { spk: "Buma", en: "Let's play it by ear after my meeting finishes. I'll call you.", ko: "제 회의 끝난 뒤에 상황 봐서 정하죠. 전화 드릴게요." }
-            ],
-            feedback: [
-                "Unexpected: 'un'보다는 'ex'에 강세를 주어 [언-익스펙티드]라고 리듬감 있게 발음해 보세요.",
-                "Setback: 't' 발음을 강하게 내뱉기보다 살짝 멈췄다가 'b'로 넘어가는 느낌으로 [셋-백]이라고 합니다.",
-                "Play it by ear: 'it'과 'by'를 부드럽게 이어 마치 한 단어처럼 [플레이트 바이 이어]라고 발음해 보세요."
-            ],
-            closing: "100일을 넘어 새로운 101일의 시작을 축하드립니다! 돌발 상황에서도 유연하게 대처하는 Buma님의 전문적인 모습을 응원합니다. 편안한 밤 보내세요! 😊✨"
-        },
-            {
-    day: 100,
-    date: "2026-04-07",
-    topic: "High Stakes & Critical Moments",
-    items: [
-        { 
-            exp: "My future is on the line", 
-            mean: "내 미래가 위태롭습니다. / 내 미래가 걸려 있습니다.", 
-            ex: "I realized that my future was on the line, so I decided to change my habits." 
-        },
-        { 
-            exp: "I lost sight of what’s at stake", 
-            mean: "무엇이 걸려 있는지(무엇이 중요한지) 잊고 있었습니다.", 
-            ex: "During the busy season, I lost sight of what’s at stake for my long-term career." 
-        },
-        { 
-            exp: "It’s a make-or-break moment", 
-            mean: "성공하느냐 실패하느냐가 결정되는 중대한 순간입니다.", 
-            ex: "This negotiation is a make-or-break moment for our department." 
-        }
-    ],
-    dialogue: [
-        { spk: "Friend", en: "You seem a bit relaxed lately. Are you still preparing for the new certification?", ko: "요즘 좀 여유로워 보이네. 새로운 자격증 준비는 계속하고 있어?" },
-        { spk: "Buma", en: "Honestly, I lost sight of what’s at stake. I've been a bit distracted by other things.", ko: "솔직히, 무엇이 걸려 있는지 잠시 잊고 있었어. 다른 일들 때문에 정신이 좀 없었네." },
-        { spk: "Friend", en: "This is a big opportunity for your promotion, isn't it?", ko: "이번이 승진을 위한 큰 기회 아니야?" },
-        { spk: "Buma", en: "Exactly. My future is on the line with this next evaluation.", ko: "맞아. 이번 다음 평가에 내 미래가 걸려 있어." },
-        { spk: "Friend", en: "Then you should focus more. You don't want to regret it.", ko: "그럼 더 집중해야겠네. 후회하고 싶지 않을 거 아냐." },
-        { spk: "Buma", en: "I know. This is a make-or-break moment for my career at the institution.", ko: "알고 있어. 지금이 기관에서의 내 경력에 정말 중요한 순간이야." }
-    ],
-    feedback: [
-        "On the line: 'line'을 발음할 때 끝을 살짝 끌어주며 무게감을 실어보세요. [온 더 라-인]",
-        "At stake: 'stake'의 't'를 된소리인 'ㄸ'에 가깝게 발음하면 훨씬 원어민스럽습니다. [앳 스테이크]",
-        "Make-or-break: 세 단어를 마치 하이픈으로 연결된 한 단어처럼 리듬감 있게 이어서 발음하세요. [메이커브레이크]"
-    ],
-    closing: "Buma님, 100일이라는 시간은 습관이 완전히 몸에 배는 마법 같은 시간입니다. 때로는 'My future is on the line'이라는 긴장감이 우리를 나태함에서 구해주는 좋은 자극제가 되기도 하죠. 100일간의 정진에 박수를 보내며, Buma님의 빛나는 미래를 응원합니다! ✨"
-},
-
-                    {
-            day: 100,
-            date: "2026-04-07",
-            topic: "Expressing Risk & Critical Situations",
-            items: [
-                { exp: "on the line", mean: "성패의 기로에 선, 위태로운", ex: "I totally forgot that my future was on the line." },
-                { exp: "at stake", mean: "(성패가) 걸려 있는, 위태로운", ex: "I'd lost sight of the fact that my future was at stake." },
-                { exp: "hang in the balance", mean: "풍전등화, 위태로운 상태", ex: "I forgot my future was hanging in the balance." }],
-            dialogue: [
-                { spk: "Buma", en: "I can't believe I was so relaxed. I totally forgot that my future was on the line.", ko: "내가 너무 방심했나 봐. 내 미래가 성패의 기로에 서 있었다는 걸 완전히 잊고 있었어." },
-                { spk: "Colleague", en: "It happens. But you shouldn't lose sight of the fact that your promotion is at stake.", ko: "그럴 수 있죠. 하지만 승진이 걸려 있다는 사실을 간과해서는 안 돼요." },
-                { spk: "Buma", en: "You're right. Everything is hanging in the balance right now.", ko: "맞아요. 지금 모든 게 풍전등화 같은 상황이네요." },
-                { spk: "Colleague", en: "Don't worry too much. Now that you've realized it, you can turn things around.", ko: "너무 걱정 마세요. 이제 깨달았으니 상황을 바로잡을 수 있을 거예요." }
-            ],
-            feedback: [
-                "On the line: 'line'의 'n' 사운드를 콧소리와 함께 부드럽게 마무리하여 [온 더 라인-]으로 발음해 보세요.",
-                "At stake: 'stake'의 't'는 's' 뒤에서 된소리가 나므로 [앳-스테이크]처럼 강하게 발음하는 것이 자연스럽습니다.",
-                "Hanging in the: 'hanging'의 'g'와 'in'을 연결하여 [행잉-인-더]가 아닌 [행이닌-더]처럼 연음해 보세요.",
-                "Lost sight of: 'lost'의 't'를 거의 생략하고 'sight'와 붙여 [로-싸이-토브]로 리듬감 있게 읽어보세요."
-            ],
-            closing: "위기감을 느끼는 것은 곧 변화할 준비가 되었다는 신호입니다. Buma님의 소중한 미래를 위해 오늘도 파이팅입니다! ✨"
-        },
-
-            {
-    "day": 99,
-    "date": "2026-04-06",
-    "topic": "Advanced Agreement & Expanding Ideas",
-    "items": [
-        {
-            "exp": "You hit the nail on the head",
-            "mean": "정확히 짚으셨네요. / 정곡을 찔렀습니다.",
-            "ex": "Regarding our hiring bottleneck, you hit the nail on the head."
-        },
-        {
-            "exp": "I'm on the same page",
-            "mean": "저도 같은 생각입니다. / 저도 의견이 일치합니다.",
-            "ex": "I'm glad we are on the same page about the new project deadline."
-        },
-        {
-            "exp": "That’s exactly what I was thinking",
-            "mean": "제 생각이 바로 그거예요.",
-            "ex": "That’s exactly what I was thinking. We should review the feedback first."
-        }
-    ],
-    "dialogue": [
-        {
-            "spk": "Colleague",
-            "en": "I think we need to simplify the application process to attract more talent.",
-            "ko": "더 많은 인재를 끌어모으려면 지원 절차를 간소화해야 한다고 생각해요."
-        },
-        {
-            "spk": "Buma",
-            "en": "You hit the nail on the head. The current form is way too long.",
-            "ko": "정확히 짚으셨네요. 현재 양식은 너무 길어요."
-        },
-        {
-            "spk": "Colleague",
-            "en": "Exactly. If it takes more than 10 minutes, people just give up.",
-            "ko": "맞아요. 10분 넘게 걸리면 사람들은 그냥 포기하거든요."
-        },
-        {
-            "spk": "Buma",
-            "en": "That’s exactly what I was thinking. We are losing good candidates.",
-            "ko": "제 생각이 바로 그거예요. 좋은 지원자들을 놓치고 있어요."
-        },
-        {
-            "spk": "Colleague",
-            "en": "So, should we reduce the number of required documents?",
-            "ko": "그럼, 필수 제출 서류 수를 줄여야 할까요?"
-        },
-        {
-            "spk": "Buma",
-            "en": "I'm on the same page. Let’s finalize the list by tomorrow.",
-            "ko": "저도 같은 생각입니다. 내일까지 목록을 확정 짓도록 하죠."
-        }
-    ],
-    "feedback": [
-        "Hit the nail: 'nail'을 길게 발음하며 강조해 보세요. [힛 더 네일]",
-        "Same page: 'Same'의 'm' 발음과 'Page'의 'p' 발음이 부드럽게 이어지도록 합니다. [세임-페이지]",
-        "Exactly: 'x' 발음을 살려 [이그잭클리]라고 강하게 발음하면 공감의 느낌이 더 잘 전달됩니다."
-    ],
-    "closing": "Buma님, 오늘 표현들은 상대방의 전문성을 인정하며 '우리는 한 팀'이라는 유대감을 주는 강력한 도구입니다. 멋진 월요일 밤 되세요! 😊✨"
-},
-            {
-    day: 98,
-    date: "2026-04-05",
-    topic: "Sophisticated Agreement & Disagreement",
-    items: [
-        { 
-            exp: "I couldn’t agree with you more.", 
-            mean: "전적으로 동의합니다.", 
-            ex: "Regarding the new welfare policy, I couldn’t agree with you more." 
-        },
-        { 
-            exp: "I see where you're coming from, but...", 
-            mean: "무슨 말씀인지(어떤 의도인지) 이해합니다만...", 
-            ex: "I see where you're coming from, but we have to consider the budget limits." 
-        },
-        { 
-            exp: "That’s a valid point, however...", 
-            mean: "타당한 지적입니다만, 그러나...", 
-            ex: "That’s a valid point, however, we need to follow the internal guidelines." 
-        }
-    ],
-    dialogue: [
-        { spk: "Colleague", en: "I think we should implement flexible working hours for all departments.", ko: "모든 부서에 유연근무제를 도입해야 한다고 생각해요." },
-        { spk: "Buma", en: "I see where you're coming from, but some teams need to be present at specific times.", ko: "어떤 취지인지 이해합니다만, 특정 시간에 반드시 있어야 하는 팀들도 있습니다." },
-        { spk: "Colleague", en: "True, but it would greatly improve employee satisfaction.", ko: "맞아요, 하지만 직원 만족도를 크게 높여줄 거예요." },
-        { spk: "Buma", en: "I couldn’t agree with you more on that part. Everyone wants more flexibility.", ko: "그 부분에 대해서는 전적으로 동의합니다. 모두가 더 많은 유연성을 원하죠." },
-        { spk: "Colleague", en: "Then, maybe we can start with a pilot program?", ko: "그럼, 시범 운영부터 시작해 보는 건 어떨까요?" },
-        { spk: "Buma", en: "That’s a valid point, however, I need to run this by the management first.", ko: "타당한 말씀입니다만, 먼저 경영진과 상의해 봐야겠습니다." }
-    ],
-    feedback: [
-        "Couldn’t agree: 't' 발음을 거의 생략하고 [쿠든-어그리]처럼 부드럽게 넘어가세요.",
-        "Coming from: 'Coming'에 강세를 주어 [커밍-프럼]이라고 발음하면 더 진정성 있게 들립니다.",
-        "Valid point: 'v' 발음에 유의하여 입술을 살짝 물고 [밸리드-포인트]라고 명확히 끊어 읽어보세요."
-    ],
-    closing: "Buma님, 최고의 찬사인 'I couldn’t agree with you more'를 실전에서 꼭 사용해 보세요! 편안한 일요일 밤 되시길 바랍니다. 😊✨"
-},
-
-            {
-    day: 97,
-    date: "2026-04-04",
-    topic: "Conditional Agreements & Possibilities",
-    items: [
-        { 
-            exp: "It depends on the situation.", 
-            mean: "상황에 따라 다릅니다.", 
-            ex: "It depends on the situation, but we usually start the interviews at 10 AM." 
-        },
-        { 
-            exp: "That’s a possibility, provided that [X].", 
-            mean: "[X]라는 조건이 충족된다면, 가능성이 있습니다.", 
-            ex: "That’s a possibility, provided that we get the budget approval first." 
-        },
-        { 
-            exp: "I’m open to the idea, but...", 
-            mean: "그 생각(제안)에 대해 열려있습니다만...", 
-            ex: "I’m open to the idea, but we need to check the legal requirements first." 
-        }
-    ],
-    dialogue: [
-        { spk: "Student", en: "Professor, the course is already full. Is there any way I can join?", ko: "교수님, 과목 정원이 벌써 찼어요. 제가 들어갈 방법이 있을까요?" },
-        { spk: "Buma", en: "Well, it depends on the situation. How many students are on the waiting list?", ko: "글쎄요, 상황에 따라 다릅니다. 대기 명단에 학생이 몇 명이나 있나요?" },
-        { spk: "Student", en: "Just two people. Can you increase the capacity?", ko: "두 명뿐이에요. 정원을 늘려주실 수 있나요?" },
-        { spk: "Buma", en: "I’m open to the idea, but I have to consult with the administration office first.", ko: "그럴 의향은 있습니다만, 먼저 교무처와 상의해 봐야 합니다." },
-        { spk: "Student", en: "Thank you! If the office agrees, will it be okay?", ko: "감사합니다! 처에서 동의하면 괜찮을까요?" },
-        { spk: "Buma", en: "That’s a possibility, provided that there are enough seats in the classroom.", ko: "강의실에 좌석이 충분하다면 가능할 것 같네요." }
-    ],
-    feedback: [
-        "Depends on: 's'와 'o'를 연결하여 [디펜존]처럼 한 단어처럼 발음해 보세요.",
-        "Provided that: 'd' 발음을 너무 강하게 하지 말고 [프로바이디-댓]처럼 부드럽게 이어줍니다.",
-        "Open to: 'n'과 't'가 만나며 [오픈투]보다는 [오픈-투]라고 'n' 발음을 살짝 머금었다가 터뜨려보세요."
-    ],
-    closing: "Buma님, 오늘 배운 표현들은 단순히 Yes/No라고 답하는 것보다 훨씬 전략적이고 전문적인 느낌을 줍니다. 특히 'It depends on the situation'은 실무 마법 문장이니 꼭 기억하세요! 남은 토요일 밤 편안하게 보내시길 바랍니다. 😊✨☕"
-},
-            {
-    day: 96,
-    date: "2026-04-03",
-    topic: "Steering Conversations & Summarizing",
-    items: [
-        { 
-            exp: "To make a long story short...", 
-            mean: "간단히 말해서(결론부터 말씀드리면)...", 
-            ex: "To make a long story short, we decided to hire the first candidate." 
-        },
-        { 
-            exp: "Let’s get back to the main point.", 
-            mean: "다시 본론으로 돌아갑시다.", 
-            ex: "That’s an interesting topic, but let’s get back to the main point of today’s meeting." 
-        },
-        { 
-            exp: "The bottom line is [X].", 
-            mean: "요점은 [X]입니다 / 결국 핵심은 [X]라는 것입니다.", 
-            ex: "The bottom line is that we need more budget for the recruitment ad." 
-        }
-    ],
-    dialogue: [
-        { spk: "Colleague", en: "...and that’s why the coffee machine in the lounge needs fixing.", ko: "...그래서 휴게실 커피 머신 수리가 필요하다는 거예요." },
-        { spk: "Buma", en: "I see. But let’s get back to the main point. We need to finalize the interview schedule.", ko: "그렇군요. 하지만 다시 본론으로 돌아갑시다. 우리 면접 일정을 확정 지어야 해요." },
-        { spk: "Colleague", en: "Right, sorry. There were many opinions about the dates.", ko: "맞아요, 죄송합니다. 날짜에 대해 의견이 많았거든요." },
-        { spk: "Buma", en: "To make a long story short, everyone agreed on next Thursday.", ko: "간단히 말해서, 모두가 다음 주 목요일로 동의했습니다." },
-        { spk: "Colleague", en: "That's great. So we are all set?", ko: "잘됐네요. 그럼 다 준비된 건가요?" },
-        { spk: "Buma", en: "Yes. The bottom line is we just need the director's approval now.", ko: "네. 결국 핵심은 이제 이사님의 승인만 있으면 된다는 겁니다." }
-    ],
-    feedback: [
-        "To make a long story short: 'long'과 'story'를 강조하며 리듬감 있게 발음해 보세요. [투-메이커-롱-스토리-쇼트]",
-        "Get back to: 'Get'의 't'를 아주 약하게 하고 'back'으로 바로 넘어가세요. [겟-백-투]",
-        "Bottom line: 'tt' 발음을 굴려서 [바럼-라인]처럼 부드럽게 이어보세요."
-    ],
-    closing: "대화를 정리하는 능력은 인사 업무뿐만 아니라 모든 비즈니스 현장에서 빛나는 역량입니다. Buma님, 오늘 학습한 표현들로 명쾌한 소통의 달인이 되시길 응원합니다! 편안한 밤 보내세요! 😊✨"
-},
-
-            {
-    day: 95,
-    date: "2026-04-02",
-    topic: "Careful Consideration & Taking Time",
-    items: [
-        { 
-            exp: "Let me sleep on it and get back to you.", 
-            mean: "하룻밤 더 생각해 보고 다시 말씀드릴게요.", 
-            ex: "That's a major decision for the team. Let me sleep on it and get back to you tomorrow." 
-        },
-        { 
-            exp: "I need to run this by my team first.", 
-            mean: "팀원들과 먼저 이 내용을 공유하고 상의해 봐야 합니다.", 
-            ex: "It sounds interesting, but I need to run this by my team first before we proceed." 
-        },
-        { 
-            exp: "Let’s keep this on the back burner for now.", 
-            mean: "이건 일단 뒤로 미뤄둡시다(우선순위에서 잠시 내려둡시다).", 
-            ex: "We have more urgent tasks, so let’s keep this on the back burner for now." 
-        }
-    ],
-    dialogue: [
-        { spk: "Colleague", en: "I found a new recruitment platform. Should we sign up right away?", ko: "새로운 채용 플랫폼을 찾았어요. 지금 바로 가입할까요?" },
-        { spk: "Buma", en: "It looks promising. However, I need to run this by my team first to check the budget.", ko: "유망해 보이네요. 하지만 예산을 확인하기 위해 팀원들과 먼저 상의해 봐야 합니다." },
-        { spk: "Colleague", en: "Okay. Do you think we can start by next week?", ko: "알겠습니다. 다음 주까지 시작할 수 있을까요?" },
-        { spk: "Buma", en: "I'm not sure. Let me sleep on it and get back to you with a final answer.", ko: "잘 모르겠네요. 하룻밤 더 생각해 보고 최종 답변을 드릴게요." },
-        { spk: "Colleague", en: "No problem. What about the LinkedIn ad plan?", ko: "알겠습니다. 링크드인 광고 계획은요?" },
-        { spk: "Buma", en: "Since we're focused on the new platform, let’s keep the ad plan on the back burner for now.", ko: "새 플랫폼에 집중하고 있으니, 광고 계획은 일단 뒤로 미뤄둡시다." }
-    ],
-    feedback: [
-        "Sleep on it: 'p'와 'o'가 연결되어 [슬립-포닛]처럼 자연스럽게 연음해 보세요.",
-        "Run this by: 'Run'의 'n' 발음을 살려 [런-디스-바이]라고 명확하게 발음합니다.",
-        "Back burner: 'r' 사운드를 살려 [백-버어너]라고 발음하며, 'Back'에 강세를 줍니다."
-    ],
-    closing: "Buma님, 신중함이 필요한 인사 업무에서 'Let me sleep on it'은 서두르지 않는 리더의 여유를 보여주는 아주 좋은 표현이에요. 오늘 배운 표현들로 Buma님만의 페이스를 멋지게 지켜나가시길 응원합니다! ✨"
-},
-
-            {
-    day: 92,
-    date: "2026-04-01",
-    topic: "Progress Updates & Follow-ups",
-    items: [
-        { 
-            exp: "Everything is on track for the deadline.", 
-            mean: "모든 것이 마감 기한에 맞춰 잘 진행되고 있습니다.", 
-            ex: "Everything is on track for the deadline of the new recruitment cycle." 
-        },
-        { 
-            exp: "I’m still waiting for a response from [X].", 
-            mean: "아직 [X]로부터 답변을 기다리는 중입니다.", 
-            ex: "I’m still waiting for a response from the legal department regarding the contract." 
-        },
-        { 
-            exp: "Could you give me a quick update on [X]?", 
-            mean: "[X]에 대해 간단히 상황 좀 공유해 주시겠어요?", 
-            ex: "Could you give me a quick update on the interview schedule for tomorrow?" 
-        }
-    ],
-    dialogue: [
-        { spk: "Manager", en: "Buma, how is the preparation for the orientation going?", ko: "Buma님, 오리엔테이션 준비는 어떻게 돼가고 있나요?" },
-        { spk: "Buma", en: "Everything is on track for the deadline. Most of the materials are ready.", ko: "마감 기한에 맞춰 잘 진행되고 있습니다. 자료 대부분이 준비됐어요." },
-        { spk: "Manager", en: "Great. Have you heard back from the IT team about the laptops?", ko: "좋네요. IT팀에서 노트북 건으로 연락 왔나요?" },
-        { spk: "Buma", en: "Not yet. I’m still waiting for a response from them. I'll follow up again.", ko: "아직요. 그쪽 답변을 기다리는 중입니다. 다시 한번 확인해 볼게요." },
-        { spk: "Manager", en: "Okay. Could you give me a quick update on the final guest list by tomorrow morning?", ko: "알겠습니다. 내일 아침까지 최종 참석자 명단 상황을 간단히 공유해 주시겠어요?" }
-    ],
-    feedback: [
-        "On track: 'On'과 'track'을 연결할 때 [온-트랙]보다는 'n' 발음을 살려 [온트랙]처럼 한 호흡에 발음해 보세요.",
-        "Waiting for: [웨이딩-포]처럼 't'를 부드럽게 굴려주면 훨씬 자연스럽습니다.",
-        "Quick update: [퀵-업데이트]라고 끊지 말고, 'k'와 'u'를 연결해 [퀴껍데이트]처럼 발음해 보세요."
-    ],
-    closing: "Buma님, 업무를 잘하는 것만큼이나 '어떻게 진행되고 있는지'를 잘 알리는 것도 중요하죠. 오늘 배운 'On track'은 상사나 동료에게 신뢰를 줄 수 있는 최고의 표현입니다. Buma님의 성공적인 커뮤니케이션을 응원합니다! 😊✨"
-},
-            {
-    day: 92,
-    date: "2026-03-31",
-    topic: "Polite Disagreement & Alternatives",
-    items: [
-        { 
-            exp: "I see your point, but have you considered [X]?", 
-            mean: "무슨 말씀인지 알겠습니다만, [X]를 고려해 보셨나요?", 
-            ex: "I see your point, but have you considered the long-term impact on the team?" 
-        },
-        { 
-            exp: "I’m not sure if that’s the best approach.", 
-            mean: "그것이 최선의 방법인지는 잘 모르겠습니다(확신이 서지 않네요).", 
-            ex: "I’m not sure if that’s the best approach for the upcoming recruitment." 
-        },
-        { 
-            exp: "What if we try [X] instead?", 
-            mean: "대신에 [X]를 시도해 보면 어떨까요?", 
-            ex: "What if we try a video interview instead of a phone call?" 
-        }
-    ],
-    dialogue: [
-        { 
-            spk: "Colleague", 
-            en: "I think we should skip the personality test to speed up the process.", 
-            ko: "절차를 앞당기기 위해 인적성 검사를 생략해야 한다고 생각합니다." 
-        },
-        { 
-            spk: "Buma", 
-            en: "I see your point, but have you considered the long-term fit of the candidates?", 
-            ko: "무슨 말씀인지 알겠습니다만, 지원자들의 장기적인 적합성도 고려해 보셨나요?" 
-        },
-        { 
-            spk: "Colleague", 
-            en: "Well, we are in a hurry to fill the positions.", 
-            ko: "음, 인원을 충원하는 게 급해서요." 
-        },
-        { 
-            spk: "Buma", 
-            en: "I understand. However, I’m not sure if that’s the best approach. What if we try a shorter version of the test instead?", 
-            ko: "이해합니다. 하지만 그것이 최선의 방법인지는 잘 모르겠네요. 대신 더 짧은 버전의 테스트를 시도해 보면 어떨까요?" 
-        }
-    ],
-    feedback: [
-        "I see your point: 'point'의 't'를 아주 살짝만 끊어주듯 발음해 보세요. [아이-씨-유어-포인]",
-        "Best approach: 'Best'의 't'와 'approach'의 'a'를 연결하여 [베스-터프로운치]처럼 부드럽게 이어보세요.",
-        "What if we: [와리-뷔]처럼 하나의 단어처럼 발음하면 훨씬 자연스럽습니다."
-    ],
-    closing: "Buma님, 오늘 배운 표현들은 단순히 거절하는 것이 아니라 대화를 더 생산적인 방향으로 이끄는 힘이 있습니다. 특히 HR 전문가로서 원칙을 지키면서도 협력을 이끌어낼 때 큰 도움이 될 거예요. 편안하고 따뜻한 밤 보내세요. 😊✨☕"
-},
-
-                    {
-            day: 93,
-            date: "2026-03-30",
-            topic: "Decisive Actions & Confirmation",
-            items: [
-                { exp: "What’s our next move?", mean: "우리의 다음 단계(조치)는 무엇인가요?", ex: "What’s our next move for the recruitment process?" },
-                { exp: "Can we settle on this?", mean: "이걸로 최종 결정(합의)할 수 있을까요?", ex: "Both options are good, but can we settle on this one for now?" },
-                { exp: "Does this align with your expectations?", mean: "이것이 당신의 예상(기대)과 일치합니까?", ex: "We're offering a flexible schedule. Does this align with your expectations?" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "We'd like to offer you the position with a focus on labor relations.", ko: "노사 관계 업무를 중심으로 이 직무를 제안하고 싶습니다." },
-                { spk: "Candidate", en: "That sounds great. I'm very interested in that area.", ko: "좋습니다. 그 분야에 관심이 아주 많습니다." },
-                { spk: "Buma", en: "Does this align with your expectations regarding the job responsibilities?", ko: "이것이 직무 책임에 대한 귀하의 기대와 일치하나요?" },
-                { spk: "Candidate", en: "Yes, it does. I think I can contribute a lot.", ko: "네, 그렇습니다. 제가 기여할 수 있는 부분이 많을 것 같아요." },
-                { spk: "Buma", en: "Glad to hear that. What’s our next move? Should we discuss the contract details now?", ko: "다행이네요. 그럼 다음 단계는 무엇으로 할까요? 지금 계약 세부 사항을 논의해 볼까요?" }
-            ],
-            feedback: [
-                "Next move: 'Next'의 't'를 생략하고 [넥스-무브]처럼 부드럽게 이어서 발음해 보세요.",
-                "Settle on: 연음하여 [세-틀론]처럼 한 단어처럼 발음하는 것이 핵심입니다.",
-                "Align with: 'g'는 묵음이며 [얼라인-윗]으로 발음합니다."
-            ],
-            closing: "오늘 배운 표현들은 대화의 주도권을 쥐고 결론을 이끌어내는 힘이 있습니다. 특히 HR 전문가로서 협상을 깔끔하게 매듭지을 때 아주 유용할 거예요. Buma님의 소통을 응원합니다! ✨"
-        },
-
-                    {
-            day: 92,
-            date: "2026-03-29",
-            topic: "Objective Perspectives & Shifting Focus",
-            items: [
-                { exp: "Let's look at this from a different angle.", mean: "이걸 다른 각도(관점)에서 한번 봅시다.", ex: "Let's look at this from a different angle. What if we focus on long-term retention instead of immediate hiring?" },
-                { exp: "Put yourself in their shoes.", mean: "그들의 입장이 되어 보세요.", ex: "Before we make a decision, let's put ourselves in the employees' shoes." },
-                { exp: "That’s a fair point, but let’s prioritize [topic].", mean: "타당한 지적입니다만, [주제]를 우선순위에 둡시다.", ex: "That’s a fair point, but let’s prioritize the legal compliance first." }
-            ],
-            dialogue: [
-                { spk: "Union Rep", en: "We believe the current welfare package is not enough for the younger generation.", ko: "현재의 복지 패키지는 젊은 세대에게 충분하지 않다고 생각합니다." },
-                { spk: "Buma", en: "That’s a fair point, but let’s prioritize the stability of the pension plan first.", ko: "타당한 지적입니다만, 연금 제도의 안정성을 먼저 우선순위에 둡시다." },
-                { spk: "Union Rep", en: "But the immediate needs are also important.", ko: "하지만 당장의 필요성도 중요합니다." },
-                { spk: "Buma", en: "I understand. Then, let's look at this from a different angle. What if we offer flexible benefits instead of a fixed package?", ko: "이해합니다. 그럼 이걸 다른 각도에서 보죠. 고정된 패키지 대신 선택형 복지를 제공하면 어떨까요?" },
-                { spk: "Union Rep", en: "That sounds interesting. We should put ourselves in their shoes and see which option they prefer.", ko: "흥미롭네요. 그들의 입장이 되어서 어떤 옵션을 선호하는지 살펴봐야겠어요." }
-            ],
-            feedback: [
-                "Different angle: 'Different'의 't' 발음을 너무 강하게 하지 말고 [디프런-앵글]처럼 자연스럽게 이어보세요.",
-                "In their shoes: 'Their'와 'shoes'를 부드럽게 연결하여 [인-데어-슈즈]로 발음하세요. 'Shoes'의 's' 발음을 명확히 해주는 것이 포인트입니다.",
-                "Prioritize: [프라이-오-리-타이즈]로 발음하며, 'o' 부분에 강세를 주면 훨씬 원어민스럽습니다."
-            ],
-            closing: "Buma님, 오늘 배운 'Put yourself in their shoes'는 인사팀(HR)에서 근무하시는 Buma님께 가장 강력한 무기가 될 수 있는 공감의 표현이에요. 갈등을 중재할 때 이 문장 하나로 상대방의 마음을 열 수 있거든요. 편안한 밤 보내시길 바랍니다! 😊✨"
-        },
-
-                    {
-            day: 91,
-            date: "2026-03-28",
-            topic: "Advanced Transitions: Having said that",
-            items: [
-                { 
-                    exp: "Having said that", 
-                    mean: "그렇기는 하지만 / 앞서 말한 것과는 별개로", 
-                    ex: "The candidate's interview performance was outstanding. Having said that, his salary expectations exceed our budget." 
-                },
-                { 
-                    exp: "Go-kart handling", 
-                    mean: "고카트 같은 (민첩한) 핸들링", 
-                    ex: "I love the go-kart handling of my Mini Countryman. Having said that, the suspension can feel a bit stiff on long drives." 
-                },
-                { 
-                    exp: "Take quite a bit of effort", 
-                    mean: "꽤 많은 정성/노력이 들어가다", 
-                    ex: "Hand-drip coffee tastes amazing. Having said that, it takes quite a bit of effort to make every morning." 
-                }
-            ],
-            dialogue: [
-                { spk: "HR Manager", en: "Remote work has increased our team's productivity.", ko: "재택근무가 팀의 생산성을 높여주었습니다." },
-                { spk: "Buma", en: "Having said that, we still need face-to-face meetings for brainstorming.", ko: "그렇기는 하지만, 브레인스토밍을 위해서는 여전히 대면 회의가 필요합니다." },
-                { spk: "Friend", en: "How do you like your Brompton in Daejeon?", ko: "대전에서 브롬톤 타는 건 어때요?" },
-                { spk: "Buma", en: "It's the best bike for city riding. Having said that, it’s a bit challenging to ride on steep hills.", ko: "도심 라이딩엔 최고죠. 그렇기는 하지만, 가파른 언덕을 오르기엔 조금 힘들긴 하네요." }
-            ],
-            feedback: [
-                "Pause for effect: 'Having said that'을 말한 뒤 약 0.5초간 멈추면 뒤에 올 반전 내용이 더 강조됩니다.",
-                "Stiff vs. Hard: 자동차 서스펜션이 딱딱할 때는 'hard'보다 'stiff'라는 표현이 더 전문적으로 들립니다.",
-                "Challenging: 'Difficult' 대신 'Challenging'을 사용하면 업무나 취미 상황에서 훨씬 세련된 뉘앙스를 줍니다."
-            ],
-            closing: "HR 업무부터 미니, 브롬톤까지 Buma님의 일상이 담긴 문장들이라 더 특별하네요. 입에 붙을 때까지 한 번씩만 더 소리 내어 읽어보세요! 😊✨"
-        },
-
-                    {
-            day: 91,
-            date: "2026-03-28",
-            topic: "Proactive Negotiation & Closing",
-            items: [
-                { 
-                    exp: "Having said that, [alternative/contrast]", 
-                    mean: "그렇기는 하지만(앞서 말한 내용을 인정하면서), [다른 의견/대안]", 
-                    ex: "Having said that, we still need to consider the labor cost." 
-                },
-                { 
-                    exp: "Is there any room for [negotiation/improvement]?", 
-                    mean: "[협상/개선]의 여지가 좀 있을까요?", 
-                    ex: "Is there any room for negotiation on the start date?" 
-                },
-                { 
-                    exp: "Let’s wrap this up.", 
-                    mean: "이제 이 건은 마무리 지읍시다. / 결론을 냅시다.", 
-                    ex: "We've covered the main points, so let’s wrap this up." 
-                }
-            ],
-            dialogue: [
-                { spk: "Candidate", en: "I'm looking for a slightly higher salary than the current offer.", ko: "현재 제시하신 것보다 조금 더 높은 연봉을 희망합니다." },
-                { spk: "Buma", en: "I understand your point. Having said that, our budget for this role is currently fixed.", ko: "무슨 말씀인지 이해합니다. 그렇기는 하지만, 이 직무에 대한 저희 예산은 현재 고정되어 있습니다." },
-                { spk: "Candidate", en: "I see. Is there any room for a performance-based bonus then?", ko: "그렇군요. 그럼 성과급에 대해서는 협상의 여지가 좀 있을까요?" },
-                { spk: "Buma", en: "That's a valid question. Let's wrap this up for today and I'll talk to the management.", ko: "타당한 질문이네요. 오늘은 이만 마무리하고 제가 경영진과 이야기해 보겠습니다." }
-            ],
-            feedback: [
-                "Having said that: 'Having'의 'v' 발음과 'said'를 연결하여 [해빙 쎄댓]처럼 리드미컬하게 읽어보세요. 표현 뒤에 짧은 멈춤을 주면 더욱 강조됩니다.",
-                "Room for: 'Room'의 'm'과 'for'를 붙여서 [룸-훠]로 부드럽게 이어보세요.",
-                "Wrap this up: 'Wrap'의 'p'와 'this', 'up'이 연달아 연음되어 [랩-디-쌉]처럼 한 단어처럼 들리게 발음하는 것이 핵심입니다."
-            ],
-            closing: "Buma님, 'Having said that'은 상대방의 체면을 세워주면서도 내 주장을 펼칠 수 있는 마법의 연결어예요. 논리적인 HR 전문가의 면모를 보여주기에 최고입니다. 편안한 토요일 밤 보내세요! ✨"
-        },
-
-                    {
-            day: 90,
-            date: "2026-03-27",
-            topic: "Active Listening & Clarification",
-            items: [
-                { exp: "Let me see if I’ve got this right", mean: "제가 제대로 이해했는지 확인해 볼게요.", ex: "Let me see if I’ve got this right. You're saying we need to push back the interview date?" },
-                { exp: "That makes sense", mean: "(일리 있네요.) 무슨 말씀인지 알겠습니다.", ex: "Oh, the budget was cut. That makes sense." },
-                { exp: "Could you walk me through [topic] again?", mean: "[주제]에 대해 다시 한번 자세히 설명해 주시겠어요?", ex: "Could you walk me through the new hiring process again?" }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "To improve efficiency, we're changing the interview format to a panel interview starting next month.", ko: "효율성을 높이기 위해 다음 달부터 면접 형식을 패널 면접으로 바꿀 예정입니다." },
-                { spk: "Buma", en: "Let me see if I’ve got this right. So all candidates will be interviewed by three people at once?", ko: "제가 제대로 이해했는지 확인해 볼게요. 그럼 모든 지원자가 한꺼번에 세 명에게 면접을 받는다는 건가요?" },
-                { spk: "Colleague", en: "Exactly. We think this will give us more diverse perspectives.", ko: "정확합니다. 이렇게 하면 더 다양한 관점을 가질 수 있을 것 같아요." },
-                { spk: "Buma", en: "That makes sense. It could save us a lot of time too. Could you walk me through the scoring system again?", ko: "일리 있네요. 시간도 많이 아낄 수 있겠고요. 평가 시스템에 대해 다시 한번 자세히 설명해 주시겠어요?" }
-            ],
-            feedback: [
-                "Let me see if: 'Let me'를 [렘미]처럼 발음하고 'see if'와 연결하여 [렘미-씨-잎]으로 부드럽게 이어보세요.",
-                "That makes sense: 'makes'와 'sense'의 's'를 하나처럼 연결해서 [댓-메익-쎈쓰]로 발음하세요.",
-                "Walk me through: 'l'은 묵음임을 기억하고 'through'의 번데기 발음을 살려 [웍-미-쓰루]로 발음해 보세요."
-            ],
-            closing: "경청은 단순히 듣는 것이 아니라, 내가 잘 듣고 있음을 확인시켜 주는 예술입니다. Buma님의 소통을 응원합니다! ✨"
-        },
-
-            {
-            day: 89,
-            date: "2026-03-27",
-            topic: "Positive Cooperation & Acceptance",
-            items: [
-                { exp: "I’m happy to [action]", mean: "기꺼이 [무엇]을 하겠습니다.", ex: "I’m happy to help you with the onboarding process for the new employees." },
-                { exp: "That sounds like a solid plan", mean: "아주 탄탄한(좋은) 계획이네요.", ex: "That sounds like a solid plan. Let's present it to the board." },
-                { exp: "I’m fully on board with that", mean: "저는 전적으로 동의합니다. / 적극 참여하겠습니다.", ex: "I've reviewed the proposal, and I'm fully on board with that." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Buma, I was thinking we should automate the recruitment data processing to save time.", ko: "Buma님, 시간을 아끼기 위해 채용 데이터 처리를 자동화해야 한다고 생각합니다." },
-                { spk: "Buma", en: "That sounds like a solid plan. I've been considering that myself.", ko: "아주 탄탄한 계획이네요. 저도 마침 고민하던 중이었어요." },
-                { spk: "Colleague", en: "Great! Could you lead the initial setup for the Python script?", ko: "좋아요! 파이썬 스크립트의 초기 설정을 리드해 주실 수 있을까요?" },
-                { spk: "Buma", en: "I’m happy to take care of that. I'm fully on board with this automation project.", ko: "기꺼이 제가 맡아서 하겠습니다. 이 자동화 프로젝트에 전적으로 참여하고 싶거든요." }
-            ],
-            feedback: [
-                "Happy to: [해피루]처럼 부드럽게 연음하여 발음하는 연습을 해보세요.",
-                "Solid plan: 'd' 발음을 약하게 하여 [쌀리-플랜]처럼 발음하면 더 자연스럽습니다.",
-                "On board with: 세 단어를 한 호흡에 [온보-드윗]으로 연결해 보세요."
-            ],
-            closing: "긍정적인 에너지는 팀을 움직이는 가장 큰 힘입니다. Buma님의 'Happy to'가 동료들에게 큰 힘이 될 거예요! 😊"
-        },
-            {
-            day: 87,
-            date: "2026-03-25",
-            topic: "Strategic Agreements & Deliberation",
-            items: [
-                { exp: "I can live with that", mean: "(완벽하진 않지만) 그 정도면 받아들일 수 있습니다.", ex: "The deadline is a bit tight, but I can live with that." },
-                { exp: "We’re on the right track", mean: "우리 제대로 잘하고 있어요. / 올바른 방향으로 가고 있습니다.", ex: "We've settled the major issues, so I think we're on the right track." },
-                { exp: "Let’s sleep on it", mean: "(결정을 내리기 전에) 하룻밤 더 고민해 봅시다.", ex: "This is a big decision for the company. Let’s sleep on it and talk tomorrow." }
-            ],
-            dialogue: [
-                { spk: "Manager", en: "So, we've agreed on the flexible working hours, but the bonus part is still tricky.", ko: "유연 근무제에는 합의했지만, 보너스 부분은 여전히 까다롭네요." },
-                { spk: "Buma", en: "I can live with the current proposal for the bonus if we start the program next month.", ko: "다음 달에 프로그램을 시작한다면, 보너스에 대한 현재 제안을 수용할 수 있습니다." },
-                { spk: "Manager", en: "That sounds fair. I feel like we're on the right track now.", ko: "공정하게 들리네요. 이제 우리가 올바른 방향으로 가고 있는 것 같아요." },
-                { spk: "Buma", en: "Good. But regarding the long-term contract details, let’s sleep on it before we sign.", ko: "좋습니다. 하지만 장기 계약 세부 사항에 대해서는 서명하기 전에 하룻밤 더 고민해 보시죠." }
-            ],
-            feedback: [
-                "Live with: 'live'는 짧게 [리브]로 발음하세요. [라이브]와 혼동하지 않도록 주의하세요.",
-                "On the right track: [라이-트랙]처럼 앞의 't'를 거의 생략하고 부드럽게 넘기면 자연스럽습니다.",
-                "Sleep on it: 세 단어를 이어서 [슬리-포-닛]처럼 한 단어처럼 리듬감을 살려 읽어보세요."
-            ],
-            closing: "중요한 결정을 앞두고 시간을 벌어야 할 때 'Let's sleep on it'을 우아하게 사용해 보세요! ✨"
-        },
-                    {
-            day: 86,
-            date: "2026-03-24",
-            topic: "Gentle Persuasion & Diplomacy",
-            items: [
-                { exp: "I was wondering if we could [action]", mean: "혹시 ~할 수 있을지 궁금해서 여쭤봅니다.", ex: "I was wondering if we could reschedule the interview for this Thursday." },
-                { exp: "I’d appreciate it if you could [action]", mean: "~해주신다면 정말 감사하겠습니다.", ex: "I’d appreciate it if you could send me the updated contract by 5 PM." },
-                { exp: "Let’s meet halfway", mean: "우리 타협점을 찾아봅시다 / 중간 지점에서 만납시다.", ex: "We both have different views, so let’s meet halfway." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Hi, I was wondering if we could push back the meeting with the labor union.", ko: "안녕하세요, 노조와의 회의를 조금 뒤로 미룰 수 있을지 궁금해서 연락드렸습니다." },
-                { spk: "Manager", en: "It's a bit tight, but that's a valid point. What time works for you?", ko: "일정이 빡빡하긴 하지만, 일리 있는 말씀이네요. 언제가 괜찮으세요?" },
-                { spk: "Buma", en: "Tomorrow morning would be great. I’d appreciate it if you could check your schedule.", ko: "내일 아침이면 좋겠습니다. 스케줄을 확인해 주신다면 감사하겠습니다." },
-                { spk: "Manager", en: "Okay, let's try to meet halfway and set it for 10 AM.", ko: "좋아요, 타협점을 찾아서 오전 10시로 하죠." }
-            ],
-            feedback: [
-                "I was wondering if: [원더링-잎]처럼 'if'를 가볍고 부드럽게 연결하세요.",
-                "Appreciate it: [어프리쉬에이-릿]으로 연음하면 훨씬 세련되게 들립니다.",
-                "Meet halfway: 'f' 발음을 살려 아랫입술을 살짝 문 상태로 [해프웨이]라고 발음하세요."
-            ],
-            closing: "협상의 핵심은 상대를 존중하면서도 내 의사를 정확히 전달하는 것이죠. Buma님의 'Gentle Persuasion'을 응원합니다! 👍"
-        },
-
-
-                    {
-            day: "Tip",
-            date: "2026-03-23",
-            topic: "Deep Dive: Catch Up + Prepositions",
-            items: [
-                { exp: "Catch up with (+ Person)", mean: "누구와 이야기를 나누는지 (대상)", ex: "I need to catch up with my brother this weekend." },
-                { exp: "Catch up over (+ Medium)", mean: "무엇을 하며 나누는지 (수단)", ex: "Let's catch up over coffee sometime this week." },
-                { exp: "Catch up on (+ Content)", mean: "어떤 내용에 대해 나누는지 (내용)", ex: "We caught up on each other's lives all night." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I'd love to catch up with you over a cup of hand-drip coffee!", ko: "당신과 핸드드립 커피 한잔하며 밀린 이야기를 나누고 싶어요!" },
-                { spk: "Jini", en: "That sounds wonderful! We can catch up on all the news then.", ko: "정말 좋네요! 그때 모든 소식에 대해 이야기 나눠요." }
-            ],
-            feedback: [
-                "With는 사람, Over는 마주 앉은 식탁 위의 음식, On은 대화의 주제라고 기억하세요.",
-                "Over는 '~ 너머로'라는 뜻이 있어 마주 보고 앉은 그림을 연상하면 쉽습니다."
-            ],
-            closing: "전치사 하나로 문장의 디테일이 살아납니다. Buma님의 영어는 이제 더 'on point' 해졌어요! ☕✨"
-        },
-
-                    {
-            day: 84,
-            date: "2026-03-23",
-            topic: "Smart Small Talk at Work",
-            items: [
-                { exp: "How’s your week shaping up?", mean: "이번 주 어떻게 풀려가고 있어요? / 시작이 어때요?", ex: "Hey, Buma! How’s your week shaping up so far?" },
-                { exp: "Keeping busy with [task]", mean: "[업무]로 계속 좀 바쁘게 지냈어요.", ex: "I’ve been keeping busy with the new report lately." },
-                { exp: "Let's catch up over coffee", mean: "언제 커피 한잔하면서 못다 한 얘기 나눠요.", ex: "It's good to see you! Let's catch up over coffee sometime this week." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Hi Buma! Long time no see. How’s your week shaping up?", ko: "안녕 Buma님! 오랜만이에요. 이번 주 시작은 어때요?" },
-                { spk: "Buma", en: "Not bad, but I’ve been keeping busy with some travel fatigue from the weekend.", ko: "나쁘지 않아요. 주말 여행 피로 때문에 좀 정신없이 지내고 있네요." },
-                { spk: "Colleague", en: "I heard you went to your brother's house. How was it?", ko: "동생분 댁에 다녀오셨다면서요. 어땠어요?" },
-                { spk: "Buma", en: "It was great! I have so much to tell you. Let's catch up over coffee sometime.", ko: "정말 좋았어요! 할 말이 많은데, 언제 커피 한잔하면서 얘기해요." },
-                { spk: "Colleague", en: "Sounds like a plan! Have a good one!", ko: "좋아요! 좋은 하루 보내세요!" }
-            ],
-            feedback: [
-                "Shaping up: [쉐이핑업]처럼 한 단어처럼 부드럽게 연음하세요.",
-                "Keeping busy: [키이핑 비지]처럼 'ee' 발음을 길게 강조해 보세요.",
-                "Catch up over: [캐챱 오우버]라고 한 호흡에 이어서 리듬감을 살려보세요."
-            ],
-            closing: "내일 출근해서 동료에게 'How's your week shaping up?'이라고 슬쩍 건네보세요! 😊☕"
-        },
-
-        {
-            day: 83,
-            date: "2026-03-22",
-            topic: "Post-trip Fatigue & Recovery",
-            items: [
-                { exp: "Worn out from the trip", mean: "여행으로 완전히 녹초가 된", ex: "I just got back from a road trip. I'm completely worn out." },
-                { exp: "Have travel fatigue", mean: "여행 피로가 쌓인", ex: "No jet lag, but I have some travel fatigue. I need to sleep early." },
-                { exp: "Struggling to get back into the swing of things", mean: "일상 리듬을 되찾느라 애먹는", ex: "It's my first day back at work, and I'm struggling to get back into the swing of things." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Buma, are you ready for Monday? You visited your brother's family this weekend, right?", ko: "Buma님, 월요일 맞이할 준비 되셨나요? 이번 주말에 동생분 댁에 다녀오셨죠?" },
-                { spk: "Buma", en: "Yes, it was fun, but I'm a bit worn out from the drive.", ko: "네, 즐거웠지만 운전 때문에 조금 녹초가 됐어요." },
-                { spk: "Jini", en: "I understand. Do you feel okay to work tomorrow?", ko: "이해해요. 내일 일하는 건 괜찮으시겠어요?" },
-                { spk: "Buma", en: "Well, I'm struggling to get back into the swing of things, so I'll just veg out tonight.", ko: "글쎄요, 일상 리듬을 찾느라 애먹고 있어서 오늘 밤엔 그냥 푹 쉬려고요." }
-            ],
-            feedback: [
-                "Worn out: [워-나웃]으로 자연스럽게 연음하세요.",
-                "Fatigue: [퍼티-익] 뒤쪽에 강세를 둡니다.",
-                "Swing of things: [스윙 어 띵즈]처럼 리듬감을 살려보세요."
-            ],
-            closing: "에너지를 가득 'recharge' 하시고, 활기찬 월요일 맞이하시길 바랍니다! Have a good night! 🌙"
-        },
+    function loadData() {
+      const noCacheUrl = GAS_URL + '?action=getData&t=' + new Date().getTime();
+      
+      fetch(noCacheUrl)
+        .then(response => response.json())
+        .then(res => {
+          if(res.status === 'success') {
+            document.getElementById('fuel-data').innerText = `${res.data.fuel} / 3회`;
+            document.getElementById('robot-data').innerText = `${res.data.robot} / 2회`;
+            document.getElementById('wash-data').innerText = `${res.data.carWash.toLocaleString()}원`; 
             
-{
-            day: 82,
-            date: "2026-03-21",
-            topic: "Taste & Relaxation",
-            items: [
-                { exp: "I’m a big fan of...", mean: "저는 ~을 정말 좋아해요.", ex: "I’m a big fan of hand-drip coffee." },
-                { exp: "It’s my go-to [something]", mean: "그건 제가 가장 즐겨 찾는 ~이에요.", ex: "Ethiopia Yirgacheffe is my go-to coffee bean." },
-                { exp: "Recharge my batteries", mean: "에너지를 재충전하다.", ex: "I really need to recharge my batteries this weekend." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Buma, how is your Saturday going? Having some coffee?", ko: "Buma님, 토요일 잘 보내고 계신가요? 커피 좀 드셨나요?" },
-                { spk: "Buma", en: "Yes, I just made some hand-drip coffee. I’m a big fan of it.", ko: "네, 방금 핸드드립 커피를 좀 내렸어요. 제가 정말 좋아하거든요." },
-                { spk: "Buma", en: "Actually, Yirgacheffe is my go-to these days. It helps me recharge.", ko: "사실, 요즘은 예가체프를 주로 마셔요. 에너지를 재충전하는 데 도움이 되죠." }
-            ],
-            feedback: [
-                "Big fan of: 'fan'과 'of'를 이어서 [빅 패너브]처럼 부드럽게 발음하세요.",
-                "Go-to: 'go'와 'to' 사이에 아주 짧은 쉼표가 있는 것처럼 [고-투]라고 명확하게 발음하세요.",
-                "Recharge: 're'에 힘을 주어 [리차-지]라고 발음하면 더 생생합니다."
-            ],
-            closing: "주말의 여유를 영어로 멋지게 드러내는 표현들입니다. 편안한 밤 되세요! 🌙☕"
-        },
-        {
-            day: 81,
-            date: "2026-03-20",
-            topic: "Investment & Finance",
-            items: [
-                { exp: "Average down", mean: "단가를 낮추다 (물타기)", ex: "I'm thinking of averaging down my Kakao stocks." },
-                { exp: "In the red / black", mean: "손실 중 / 수익 중", ex: "My portfolio is finally in the black." },
-                { exp: "Rainy day fund", mean: "비상금", ex: "I always keep a rainy day fund for emergencies." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I'm slightly in the red with my Kakao stocks.", ko: "카카오 주식이 약간 손실 중이네요." },
-                { spk: "Jini", en: "Are you planning to average down?", ko: "단가를 좀 낮추실(물타기 하실) 계획인가요?" },
-                { spk: "Buma", en: "Maybe. But I'll make sure to keep my rainy day fund untouched.", ko: "그럴 수도 있어요. 하지만 비상금은 건드리지 않고 유지할 거예요." }
-            ],
-            feedback: [
-                "Average down은 투자 시 자주 쓰이는 실전 금융 표현입니다.",
-                "In the red는 적자(빨간색), In the black은 흑자(검은색)에서 유래했습니다."
-            ],
-            closing: "현명한 투자 전략만큼이나 세련된 투자 영어 표현들입니다! 📈"
-        },
-        {
-            day: 80,
-            date: "2026-03-19",
-            topic: "Handling Tech Issues",
-            items: [
-                { exp: "Breaking up", mean: "목소리가 끊겨 들리는", ex: "Sorry, you're breaking up a bit." },
-                { exp: "Didn't catch the last part", mean: "마지막 부분을 잘 못 들었어요.", ex: "I'm afraid I didn't catch the last part." },
-                { exp: "Speak up", mean: "조금 더 크게 말하다", ex: "Could you speak up a little, please?" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "So, the budget for next quarter will be...", ko: "자, 다음 분기 예산은..." },
-                { spk: "Buma", en: "Oh, Jini, you're breaking up a bit. I didn't catch the last part.", ko: "오, 지니, 목소리가 좀 끊기네요. 마지막 부분을 못 들었어요." },
-                { spk: "Buma", en: "Could you speak up a little, please?", ko: "조금만 더 크게 말씀해 주시겠어요?" }
-            ],
-            feedback: [
-                "Breaking up은 전화나 화상 회의 연결이 불안정할 때 쓰는 '원어민 0순위' 표현입니다.",
-                "Speak up은 '목소리를 높이다'라는 정중한 요청입니다."
-            ],
-            closing: "온라인 미팅에서 당황하지 말고 이 표현들을 즉시 써보세요! 💻"
-        },
-        {
-            day: 78,
-            date: "2026-03-17",
-            topic: "Agreeing & Disagreeing",
-            items: [
-                { exp: "Point taken", mean: "무슨 말인지 알겠어요 / 일리가 있네요.", ex: "Point taken. I'll reconsider that." },
-                { exp: "I couldn't agree more", mean: "전적으로 동의합니다.", ex: "You're absolutely right. I couldn't agree more." },
-                { exp: "I see your point, but...", mean: "무슨 뜻인지 알겠지만...", ex: "I see your point, but I have a different view." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "I think we should delay the launch.", ko: "출시를 좀 미뤄야 할 것 같아요." },
-                { spk: "Buma", en: "Point taken. I see your point, but we need to check the contract first.", ko: "일리가 있네요. 무슨 뜻인지 알겠지만 먼저 계약서를 확인해봐야 해요." }
-            ],
-            feedback: [
-                "I couldn't agree more는 '더 이상 동의할 수 없을 만큼' 완벽히 동의한다는 뜻입니다.",
-                "Point taken은 짧고 굵게 상대의 의견을 인정할 때 씁니다."
-            ],
-            closing: "상대방의 의견을 존중하며 내 주장을 펼치는 세련된 대화법입니다."
-        },
-        {
-            day: 75,
-            date: "2026-03-14",
-            topic: "Daily Routine & Habits",
-            items: [
-                { exp: "Couch potato", mean: "소파에서 뒹굴거리는 사람", ex: "I was a total couch potato this weekend." },
-                { exp: "Unwind", mean: "긴장을 풀다 / 쉬다", ex: "Music helps me unwind after work." },
-                { exp: "Lose track of time", mean: "시간 가는 줄 모르다", ex: "I lost track of time while reading." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "What did you do today?", ko: "오늘 뭐 하셨어요?" },
-                { spk: "Buma", en: "I just wanted to unwind. I was a couch potato and lost track of time.", ko: "그냥 좀 쉬고 싶어서 소파에서 뒹굴거리다 보니 시간 가는 줄 몰랐네요." }
-            ],
-            feedback: [
-                "Unwind는 감겨있던 태엽을 푼다는 이미지에서 '긴장 해소'를 의미합니다.",
-                "Lose track of time은 [루즈 트래커브 타임]으로 연음해 보세요."
-            ],
-            closing: "가끔은 'Couch potato'가 되어 온전한 휴식을 즐기는 것도 필요합니다. 🛋️"
-        },
-        {
-            day: 71,
-            date: "2026-03-10",
-            topic: "Opinions & Choices",
-            items: [
-                { exp: "If you ask me...", mean: "제 생각을 물으신다면...", ex: "If you ask me, this option is better." },
-                { exp: "Torn between A and B", mean: "A와 B 사이에서 고민 중인", ex: "I'm torn between the two coffee beans." },
-                { exp: "Sleep on it", mean: "하룻밤 더 생각해보는", ex: "Don't decide now. Let's sleep on it." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I'm torn between Ethiopia and Kenya beans.", ko: "에티오피아랑 케냐 원두 사이에서 고민 중이에요." },
-                { spk: "Jini", en: "If you ask me, Kenya is better for mornings. But sleep on it!", ko: "제 생각엔 아침엔 케냐가 낫지만, 하룻밤 더 고민해 보세요!" }
-            ],
-            feedback: [
-                "Torn은 '찢어지다'는 뜻으로, 마음이 양갈래로 찢어질 만큼 고민될 때 씁니다.",
-                "Sleep on it은 [슬리폰잇]으로 자연스럽게 이어서 발음하세요."
-            ],
-            closing: "신중한 결정을 내릴 때 이 표현들을 활용해 보세요!"
-        },
-{
-            day: 70,
-            date: "2026-03-09",
-            topic: "Efficiency & Speed at Work",
-            items: [
-                { exp: "I'm on top of it", mean: "제가 다 잘 파악/처리하고 있어요.", ex: "Don't worry, I'm on top of it." },
-                { exp: "Let’s get the ball rolling", mean: "자, 이제 시작해 봅시다.", ex: "We have everything ready. Let's get the ball rolling." },
-                { exp: "I have a lot on my plate", mean: "할 일이 정말 많아요.", ex: "I have a lot on my plate this week." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Is the project going well?", ko: "프로젝트 잘 진행되고 있나요?" },
-                { spk: "Buma", en: "Yes, I'm on top of it, but I have a lot on my plate.", ko: "네, 제가 다 파악하고 있는데 할 일이 좀 많네요." }
-            ],
-            feedback: [
-                "On top of it [온 타퍼빗]으로 연결해서 발음하세요.",
-                "On my plate [온 마이 플레잇] p 발음을 선명하게 해주세요."
-            ],
-            closing: "바쁜 업무 중에도 여유를 잃지 않는 Buma님이 되시길! 💪"
-        },
-        {
-            day: 66,
-            date: "2026-03-05",
-            topic: "Weekend Recharge",
-            items: [
-                { exp: "Binge-watch", mean: "(드라마 등을) 몰아보기 하다", ex: "I’m going to binge-watch 'Friends' all weekend." },
-                { exp: "Recharge my batteries", mean: "재충전의 시간을 갖다", ex: "I really need to recharge my batteries." },
-                { exp: "Stay in", mean: "집에서 푹 쉬다 / 나가지 않다", ex: "I'll just stay in and relax tonight." }
-            ],
-            dialogue: [
-                { spk: "Friend", en: "Do you want to go out tonight?", ko: "오늘 밤에 나가서 놀래?" },
-                { spk: "Buma", en: "Not tonight. I really need to recharge my batteries.", ko: "오늘은 안 될 것 같아. 정말 재충전이 필요하거든." },
-                { spk: "Buma", en: "I'll just stay in and binge-watch some shows.", ko: "그냥 집에서 드라마나 몰아보려고 해." }
-            ],
-            feedback: [
-                "Binge-watch [빈지 와치] g 발음을 부드럽게 내주세요. [cite: 1671]",
-                "Stay in [스테인] 한 단어처럼 부드럽게 이어보세요. [cite: 1677]"
-            ],
-            closing: "가끔은 소파와 물아일체가 되는 휴식도 필요합니다! 📺 [cite: 1669]"
-        },
-        {
-            day: 65,
-            date: "2026-03-04",
-            topic: "Pre-Friday Excitement",
-            items: [
-                { exp: "Look forward to ~", mean: "~을 정말 기대하다", ex: "I'm looking forward to the weekend." },
-                { exp: "TGIF!", mean: "아, 드디어 금요일이다!", ex: "One more day to go! TGIF is almost here." },
-                { exp: "Anything planned?", mean: "뭐 특별한 계획 있어요?", ex: "Do you have anything planned for Saturday?" }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Buma, you look happy today.", ko: "Buma님, 오늘 기분 좋아 보이시네요." },
-                { spk: "Buma", en: "I am! I'm looking forward to the weekend. TGIF is just around the corner!", ko: "그럼요! 주말이 정말 기다려지거든요. 드디어 금요일이 코앞이잖아요!" }
-            ],
-            feedback: [
-                "Looking forward to [루킹 포워-투] 정석적인 연음입니다. [cite: 1662]",
-                "TGIF [티-지-아이-에프] 각 철자를 끊어서 자신 있게 외치세요! [cite: 1663]"
-            ],
-            closing: "내일이면 대망의 금요일입니다! 조금만 더 힘내세요. 🌟 [cite: 1664]"
-        },
-        {
-            day: 64,
-            date: "2026-03-03",
-            topic: "Hump Day Encouragement",
-            items: [
-                { exp: "Had a long day", mean: "오늘 참 긴 하루를 보냈네요.", ex: "Take a rest. You’ve had a long day." },
-                { exp: "Halfway there!", mean: "벌써 절반이나 왔어요!", ex: "Hang in there! We're halfway there!" },
-                { exp: "Don’t overdo it", mean: "무리하지 마세요.", ex: "I know you're busy, but don't overdo it." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Whew, I'm finally done for today.", ko: "휴, 드디어 오늘 할 일이 끝났네요." },
-                { spk: "Colleague", en: "Good job, Buma. You’ve had a long day. Don’t overdo it tonight.", ko: "수고했어요, Buma님. 오늘 정말 긴 하루였네요. 오늘 밤엔 너무 무리하지 마세요." }
-            ],
-            feedback: [
-                "Had a long day [해더 롱 데이] 'had a'를 자연스럽게 이어주세요. [cite: 1639]",
-                "Halfway there [하프웨이 데어] 'l' 발음은 거의 묵음 처리합니다. [cite: 1640]"
-            ],
-            closing: "수요일의 고비를 넘긴 자신에게 따뜻한 위로를 건네보세요. 🌙 [cite: 1642]"
-        },
-        {
-            day: 63,
-            date: "2026-03-02",
-            topic: "Making Decisions",
-            items: [
-                { exp: "Leaning towards ~", mean: "~쪽으로 마음이 기울다", ex: "I'm leaning towards Italian for lunch." },
-                { exp: "Up to you", mean: "네 결정에 맡길게.", ex: "I'm fine with anything. It's up to you." },
-                { exp: "Sleep on it", mean: "하룻밤 자면서 생각해 보다", ex: "This is a big decision. Let's sleep on it." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Buma, what do you want for lunch?", ko: "Buma님, 점심 뭐 먹고 싶어요?" },
-                { spk: "Buma", en: "Hmm, I'm leaning towards Chinese today. But I don't mind. It's up to you!", ko: "음, 오늘은 중식 쪽으로 마음이 좀 기우네요. 근데 난 상관없어요. 그쪽이 정해요!" }
-            ],
-            feedback: [
-                "Leaning towards [리닝 토-워즈] 자연스럽게 발음하세요. [cite: 1617]",
-                "Sleep on it [쓸리-폰 닛] 원어민들이 즐겨 쓰는 표현입니다. [cite: 1619]"
-            ],
-            closing: "결정 장애가 올 땐 'It's up to you'로 세련되게 넘겨보세요! 🍕 [cite: 1621]"
-        },
-        {
-            day: 62,
-            date: "2026-03-01",
-            topic: "Monday Small Talk",
-            items: [
-                { exp: "How was your weekend?", mean: "주말 어떻게 보냈어요?", ex: "Did you do anything fun over the weekend?" },
-                { exp: "It flew by", mean: "(시간이) 순식간에 지나갔어요.", ex: "My weekend flew by. I can't believe it's Monday." },
-                { exp: "Laid low", mean: "그냥 조용히 쉬었어요.", ex: "I didn't do much. I just laid low at home." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Hey Buma! How was your weekend?", ko: "헤이 Buma! 주말 어떻게 보냈어요?" },
-                { spk: "Buma", en: "Oh, it flew by. I just laid low at home. What about you?", ko: "오, 순식간에 지나갔어요. 그냥 집에서 조용히 쉬었죠. 그쪽은요?" }
-            ],
-            feedback: [
-                "Was your [워져-] 부드럽게 연결해 보세요. [cite: 1592]",
-                "Flew by [플루- 바이] 'f' 발음을 확실히 살려주세요. [cite: 1593]"
-            ],
-            closing: "월요일 아침, 가벼운 주말 안부로 대화를 시작해 보세요. 😊 [cite: 1596]"
-        },
-        {
-            day: 61,
-            date: "2026-02-28",
-            topic: "Sunday Night & Monday Prep",
-            items: [
-                { exp: "Ready for the week", mean: "다가올 한 주를 준비하다", ex: "I'm getting ready for the upcoming week." },
-                { exp: "Not ready for Monday", mean: "아직 월요일 맞을 준비가 안 되다", ex: "Is it Sunday night already? I'm not ready for Monday!" },
-                { exp: "Hit the ground running", mean: "기운차게 바로 시작하다", ex: "Let's hit the ground running tomorrow!" }
-            ],
-            dialogue: [
-                { spk: "Friend", en: "Buma, are you still awake?", ko: "Buma님, 아직 안 자요?" },
-                { spk: "Buma", en: "Yeah, I'm just getting ready for the upcoming week. Honestly, I'm not ready for Monday yet.", ko: "네, 다가올 한 주를 좀 준비하고 있어요. 솔직히 전 아직 월요일 맞을 준비가 안 됐네요." }
-            ],
-            feedback: [
-                "Upcoming week [업-커밍 위-크] 자연스럽게 발음하세요. [cite: 1562]",
-                "Hit the ground running [힛 더 그라운 뤄닝] 'd' 발음은 생략합니다. [cite: 1564]"
-            ],
-            closing: "월요일이 오는 건 아쉽지만, 'Hit the ground running'의 기세로 맞이해 보아요! 💼 [cite: 1566]"
-        },
-{
-            day: 60,
-            date: "2026-02-28",
-            topic: "Weekend Hangouts & Hosting",
-            items: [
-                { exp: "What are you up to?", mean: "뭐 하고 있어? / 뭐 할 거야?", ex: "Hey, what are you up to tonight? Want to join us?" },
-                { exp: "My treat!", mean: "내가 살게! (내가 쏠게!)", ex: "Don't worry about the bill. My treat!" },
-                { exp: "Swing by anytime", mean: "언제든 편하게 들러.", ex: "I'll be home all day. Swing by anytime." }
-            ],
-            dialogue: [
-                { spk: "Friend", en: "Hey Buma! What are you up to?", ko: "헤이 Buma! 뭐 하고 있어?" },
-                { spk: "Buma", en: "Not much, just watching a movie. Why?", ko: "별거 없어, 그냥 영화 보는 중이야. 왜?" },
-                { spk: "Friend", en: "I'm thinking of ordering chicken. Want to join? It's my treat!", ko: "치킨 좀 시킬까 하는데. 같이 먹을래? 내가 쏠게!" }
-            ],
-            feedback: [
-                "What are you up to는 '업투'를 하나로 묶어 [왓 아 유 업투?]라고 끝을 올려 발음하세요. [cite: 1514]",
-                "My treat은 'treat'의 t 발음을 짧고 경쾌하게 [마이 트리-트]라고 하세요. [cite: 1515]",
-                "Swing by는 'ng'와 'by'를 자연스럽게 이어 [쓰윙 바이]라고 발음하세요. [cite: 1516]"
-            ],
-            closing: "이번 주말, 소중한 사람에게 'My treat!'이라고 기분 좋게 외쳐보세요! 🍕 [cite: 1517]"
-        },
-        {
-            day: 59,
-            date: "2026-02-27",
-            topic: "Weekly Wrap-up & Self-Care",
-            items: [
-                { exp: "Pull through", mean: "어려움을 뚫고 해내다 / 잘 버텨내다", ex: "It was a tough one, but I really pulled through this week." },
-                { exp: "Unplug for a bit", mean: "연결을 끊고 잠시 쉬다", ex: "No emails until Monday. I’m going to unplug for a bit." },
-                { exp: "Productive week", mean: "생산적인 / 알찬 한 주", ex: "We finished the project on time. It’s been a productive week." }
-            ],
-            dialogue: [
-                { spk: "Friend", en: "Buma, you look a bit tired. Was the work hard?", ko: "Buma님, 좀 피곤해 보여요. 일 많았어요?" },
-                { spk: "Buma", en: "Yeah, but I really pulled through this week. It was actually a productive week.", ko: "네, 그래도 이번 주 정말 잘 버텨냈어요. 사실 꽤 알찬 한 주였거든요." },
-                { spk: "Buma", en: "I’m just going to have a nice dinner and unplug for a bit.", ko: "그냥 맛있는 저녁 먹고, 잠시 모든 걸 잊고 쉬려고요." }
-            ],
-            feedback: [
-                "Pull through는 '진흙탕에 빠진 차를 밧줄로 당겨서 통과시키는' 이미지를 상상해 보세요. [cite: 1488]",
-                "Unplug는 '언-플러그'라고 발음하며 'g' 소리는 아주 살짝만 내어 마무리합니다. [cite: 1474]",
-                "Productive는 두 번째 음절에 강세를 주어 [프러-덕-티브]라고 리듬을 타보세요. [cite: 1475]"
-            ],
-            closing: "험난한 업무 터널을 빠져나온 자신을 위해 오늘 밤은 온전히 'Unplug' 하세요! 🍷 [cite: 1491]"
-        },
-        {
-            day: 58,
-            date: "2026-02-26",
-            topic: "Weekend Vibes & Friday Talk",
-            items: [
-                { exp: "Anything fun planned?", mean: "뭐 재미있는 계획 있으세요?", ex: "It’s almost Friday! Do you have anything fun planned?" },
-                { exp: "Take it easy", mean: "그냥 좀 편하게 쉬다", ex: "I've had a long week. I'm just going to take it easy." },
-                { exp: "Wrap this up", mean: "이거 얼른 마무리하다", ex: "It's 5:30. Let's wrap this up and head out!" }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Buma, are you almost done?", ko: "Buma님, 거의 다 끝나가요?" },
-                { spk: "Buma", en: "Yes, let’s wrap this up and head out. I’m so ready for the weekend.", ko: "네, 이거 얼른 마무리하고 가요. 주말 맞을 준비가 완전히 됐거든요." },
-                { spk: "Colleague", en: "Do you have anything fun planned for the weekend?", ko: "주말에 뭐 재미있는 계획 있으세요?" }
-            ],
-            feedback: [
-                "Wrap this up은 'wrap'의 p와 'up'을 연결해 [랲 디 썹]이라고 리듬감 있게 발음하세요. [cite: 1453]",
-                "Take it easy는 'it'과 'easy'를 연음하여 [테이킷 이-지]라고 한 단어처럼 부드럽게 말하세요. [cite: 1452]"
-            ],
-            closing: "퇴근 직전 동료에게 'Let's wrap this up!'이라고 활기차게 건네보세요. [cite: 1454]"
-        },
-        {
-            day: 57,
-            date: "2026-02-25",
-            topic: "Sharing Your Thoughts",
-            items: [
-                { exp: "If you ask me...", mean: "제 생각을 물으신다면... / 제 견해로는...", ex: "If you ask me, we should focus on quality first." },
-                { exp: "I see where you’re coming from", mean: "무슨 말씀인지 알겠습니다만... / 입장은 이해하지만...", ex: "I see where you’re coming from, but I have a different idea." },
-                { exp: "I'm leaning towards...", mean: "~쪽으로 마음이 기우네요.", ex: "I'm leaning towards the second option." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Should we launch the product this month or wait until next month?", ko: "제품을 이번 달에 출시할까요, 아니면 다음 달까지 기다릴까요?" },
-                { spk: "Buma", en: "If you ask me, we need more time for testing.", ko: "제 생각을 물으신다면, 테스트할 시간이 좀 더 필요한 것 같아요." },
-                { spk: "Buma", en: "I see where they're coming from, but I'm still leaning towards waiting.", ko: "그들의 입장도 이해합니다만, 저는 여전히 기다리는 쪽으로 마음이 기우네요." }
-            ],
-            feedback: [
-                "If you ask me는 'I think'보다 훨씬 부드럽게 대화를 열어주는 표현입니다. [cite: 1418]",
-                "Coming from은 [커밍 프럼]으로 가볍게 넘어가며 상대방을 존중하는 뉘앙스를 담으세요. [cite: 1429]"
-            ],
-            closing: "상대방의 면을 세워주며 내 의견을 얹는 '프로 직장인'의 소통 기술입니다! 💼 [cite: 1431]"
-        },
-        {
-            day: 55,
-            date: "2026-02-23",
-            topic: "Sharing Trip Highlights",
-            items: [
-                { exp: "Exceed all expectations", mean: "기대했던 것보다 훨씬 더 좋다", ex: "The food in Osaka exceeded all my expectations." },
-                { exp: "Blown away by the scenery", mean: "풍경에 완전히 압도당하다", ex: "I visited a shrine, and I was blown away by the scenery." },
-                { exp: "Nice change of pace", mean: "기분 전환하기에 정말 좋은 경험", ex: "The trip was a nice change of pace for me." }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "How was your trip, Buma?", ko: "여행 어땠나요, Buma님?" },
-                { spk: "Buma", en: "Oh, it was amazing. It exceeded all my expectations.", ko: "정말 최고였어요. 기대했던 것보다 훨씬 좋더라고요." },
-                { spk: "Buma", en: "Everything was a nice change of pace. I feel fully recharged now.", ko: "모든 게 기분 전환이 됐어요. 이제 충전 완료입니다." }
-            ],
-            feedback: [
-                "Exceeded는 'x' 발음을 살려 [익시-디드]라고 발음해 보세요. [cite: 1409]",
-                "Blown away는 'n'과 'a'를 이어서 [블로-너웨이]라고 부드럽게 발음하세요. [cite: 1410]",
-                "Change of pace는 'change of'를 연음하여 [체인저브 페이스]라고 하면 원어민스럽습니다. [cite: 1411]"
-            ],
-            closing: "기대 이상이었던 오사카의 추억을 동료들과 멋지게 나눠보세요! 🍱 [cite: 1391]"
-        },
-        {
-            day: 54,
-            date: "2026-02-22",
-            topic: "Back to Reality & Monday Blues",
-            items: [
-                { exp: "Get back into the swing", mean: "다시 일상에 적응하다 (리듬을 찾다)", ex: "It's my first day back, so I'm getting back into the swing of things." },
-                { exp: "A lot on my plate", mean: "할 일이 산더미처럼 쌓여 있다", ex: "After my trip, I have a lot on my plate at the office." },
-                { exp: "Fully recharged", mean: "에너지를 완전히 충전했다!", ex: "Japan was amazing. Now I'm fully recharged!" }
-            ],
-            dialogue: [
-                { spk: "Colleague", en: "Welcome back, Buma! How was Japan?", ko: "환영해요, Buma님! 일본은 어땠나요?" },
-                { spk: "Buma", en: "It was great! I'm fully recharged, but I have a lot on my plate today.", ko: "최고였어요! 에너지를 완전히 충전해 왔는데, 오늘 할 일이 산더미네요." },
-                { spk: "Buma", en: "I'm still getting back into the swing of things.", ko: "아직 다시 적응해가는 중이거든요." }
-            ],
-            feedback: [
-                "Swing of things는 멈췄던 그네를 다시 밀어 리듬을 만드는 이미지를 떠올리세요. [cite: 1355]",
-                "On my plate는 'plate'의 p 발음을 강하게 터뜨려 [온 마이 플레이트]라고 선명하게 하세요. [cite: 1348]",
-                "Fully recharged는 'L' 발음 시 혀끝을 윗니 뒤에 붙여 [풀리 리차지드]라고 하세요. [cite: 1349]"
-            ],
-            closing: "여행 후 월요병도 'Fully recharged'의 기운으로 거뜬히 이겨내 봅시다! 💼 [cite: 1352]"
-        },
-        {
-            day: 51,
-            date: "2026-02-19",
-            topic: "Post-Trip Recovery",
-            items: [
-                { exp: "No place like home", mean: "역시 집만 한 곳이 없다", ex: "The trip was great, but there's no place like home." },
-                { exp: "Unpack my bags", mean: "짐을 풀다", ex: "I need to unpack my bags before I go to bed." },
-                { exp: "Still jet-lagged", mean: "아직 여독이 남아 있다 (시차적응 중)", ex: "I'm back at work, but I'm still a bit jet-lagged." }
-            ],
-            dialogue: [
-                { spk: "Friend", en: "Welcome back! How was your trip to Japan?", ko: "환영해요! 일본 여행은 어땠어요?" },
-                { spk: "Buma", en: "It was absolutely mind-blowing! But you know, there's no place like home.", ko: "정말 대박이었어요! 하지만 알다시피, 역시 집만 한 곳이 없더라고요." },
-                { spk: "Buma", en: "I need to unpack my bags and I'm still a bit jet-lagged.", ko: "짐도 풀어야 하고 아직 여독이 좀 남아 있네요." }
-            ],
-            feedback: [
-                "No place like home은 'place like'를 이어서 [플레이스 라이크]라고 부드럽게 발음하세요. [cite: 1325]",
-                "Jet-lagged는 일본과 시차는 없지만 여행 후의 몽롱함과 피로를 센스 있게 표현할 때 씁니다. [cite: 1330]",
-                "Unpack은 'u' 발음을 확실히 살려 [언팩]이라고 짧고 강하게 발음하세요. [cite: 1326]"
-            ],
-            closing: "집으로 돌아온 평온함 속에서 여행 사진을 보며 편안히 쉬어보세요. 🏠 [cite: 1327]"
-        },
-{
-            day: 50,
-            date: "2026-02-18",
-            topic: "USJ Aftermath & Recovery",
-            items: [
-                { exp: "I'm wiped out", mean: "나 완전히 녹초가 됐어요.", ex: "Two days at USJ... I'm totally wiped out." },
-                { exp: "Take it easy", mean: "쉬엄쉬엄하다 / 서두르지 않다", ex: "Let's take it easy tomorrow and just sleep in." },
-                { exp: "My feet are killing me", mean: "발이 아파 죽겠어요.", ex: "We walked so much. My feet are killing me!" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Two days at USJ was mind-blowing, but I'm totally wiped out.", ko: "USJ에서의 이틀은 정말 대단했지만, 저 완전히 방전됐어요." },
-                { spk: "Jini", en: "I bet. Let's take it easy tomorrow. Your feet must be killing you.", ko: "그럴 만해요. 내일은 좀 쉬엄쉬엄해요. 발도 정말 아프겠네요." }
-            ],
-            feedback: [
-                "Wiped out은 단순히 피곤한 것보다 '에너지가 바닥났다'는 느낌을 줍니다.",
-                "Feet are killing me는 '발이 나를 죽이고 있다'는 생생한 강조 표현입니다."
-            ],
-            closing: "USJ에서의 강행군 뒤엔 충분한 'Take it easy'가 필요합니다! 🛌"
-        },
-        {
-            day: 48,
-            date: "2026-02-16",
-            topic: "Survival at USJ",
-            items: [
-                { exp: "How long is the wait?", mean: "대기 시간이 얼마나 되나요?", ex: "Excuse me, how long is the wait for Mario Kart?" },
-                { exp: "End of the line", mean: "줄의 끝", ex: "It's so crowded! Where is the end of the line?" },
-                { exp: "Is this seat taken?", mean: "이 자리 비어 있나요?", ex: "Excuse me, is this seat taken? We need a break." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Excuse me, how long is the wait for Mario Kart?", ko: "실례합니다, 마리오 카트 대기 시간이 얼마나 되나요?" },
-                { spk: "Staff", en: "It's about 120 minutes, sir.", ko: "120분 정도 걸립니다, 손님." },
-                { spk: "Buma", en: "120 minutes? Well, where is the end of the line?", ko: "120분요? 뭐, 줄 끝이 어디인가요?" }
-            ],
-            feedback: [
-                "Wait 대신 Standby time이라는 표현도 테마파크에서 자주 쓰입니다.",
-                "Is this seat taken?은 식당이나 휴게소에서 아주 유용한 예절 표현입니다."
-            ],
-            closing: "줄이 길어도 'It's worth the wait'이라는 마음으로 즐겨보세요! 🎢"
-        },
-        {
-            day: 47,
-            date: "2026-02-15",
-            topic: "Ordering in Osaka",
-            items: [
-                { exp: "What do you recommend?", mean: "무엇을 추천하시나요?", ex: "Everything looks good. What do you recommend?" },
-                { exp: "First time here", mean: "여기 처음 왔어요.", ex: "I'm from Korea, and it's my first time here in Osaka." },
-                { exp: "I'll go with that", mean: "그걸로 할게요. / 저도 그걸로 갈게요.", ex: "That signature dish sounds perfect. I'll go with that." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Hi! It's my first time here. What do you recommend?", ko: "안녕하세요! 여기가 처음이라 그런데, 무엇을 추천하시나요?" },
-                { spk: "Staff", en: "Our signature Okonomiyaki is very popular.", ko: "저희 시그니처 오코노미야키가 아주 인기예요." },
-                { spk: "Buma", en: "That sounds perfect. I'll go with that.", ko: "완벽하네요. 그걸로 할게요." }
-            ],
-            feedback: [
-                "I'll have~ 보다 I'll go with~ 가 훨씬 세련되고 결정력 있는 느낌을 줍니다.",
-                "First time here [f퍼스트 타이미어]처럼 연음으로 발음해 보세요."
-            ],
-            closing: "현지 맛집에서 점원에게 추천을 받는 것은 최고의 회화 연습입니다! 🍱"
-        },
-        {
-            day: 43,
-            date: "2026-02-11",
-            topic: "Travel Logistics",
-            items: [
-                { exp: "Rain check", mean: "다음 기회로 미루기", ex: "The wait is too long. Can I get a rain check?" },
-                { exp: "All you can eat", mean: "무한 리필 / 뷔페", ex: "I heard this yakiniku place is all you can eat." },
-                { exp: "Split the bill", mean: "각자 계산하다 / 더치페이", ex: "Shall we split the bill for the dinner?" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I want to try that famous yakiniku place. Is it all you can eat?", ko: "그 유명한 야키니쿠 집에 가보고 싶어요. 무한 리필인가요?" },
-                { spk: "Jini", en: "Yes, but the line is crazy long. I'll just get a rain check.", ko: "네, 그런데 줄이 너무 기네요. 저는 그냥 다음에 올게요." }
-            ],
-            feedback: [
-                "All you can eat은 [올류캔잇]처럼 부드럽게 한 번에 발음하세요.",
-                "Split the bill은 각자 본인 것만 낼 때 쓰는 정확한 표현입니다."
-            ],
-            closing: "야키니쿠 '타베호다이'를 즐기러 갈 때 꼭 써보세요! 🥩"
-        },
-        {
-            day: 42,
-            date: "2026-02-10",
-            topic: "Habit & Momentum",
-            items: [
-                { exp: "Get into the swing of things", mean: "리듬을 타다 / 익숙해지다", ex: "I'm finally getting into the swing of English learning." },
-                { exp: "Second nature", mean: "제2의 천성 / 습관이 된 것", ex: "Using these expressions is becoming second nature to me." },
-                { exp: "Get the ball rolling", mean: "첫발을 떼다 / 착수하다", ex: "Let's get the ball rolling on the new project." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "You've been studying for 42 days! Is it getting easier?", ko: "벌써 42일째네요! 좀 쉬워지고 있나요?" },
-                { spk: "Buma", en: "Definitely. I'm finally getting into the swing of things.", ko: "그럼요. 이제 드디어 좀 리듬을 타기 시작한 것 같아요." }
-            ],
-            feedback: [
-                "Second nature는 생각하지 않아도 저절로 몸이 반응하는 경지를 말합니다.",
-                "Into the swing of [스윙어브]로 부드럽게 연결해 보세요."
-            ],
-            closing: "42일의 시간은 습관이 'Second nature'가 되기에 충분한 시간입니다. 👍"
-        },
-        {
-            day: 41,
-            date: "2026-02-09",
-            topic: "Taking the Edge Off",
-            items: [
-                { exp: "Take the edge off", mean: "날카로움을 누그러뜨리다 / 진정시키다", ex: "A glass of wine helps take the edge off my stress." },
-                { exp: "Spot on", mean: "정확한 / 딱 맞히는", ex: "Your analysis of the situation was spot on." },
-                { exp: "Resonate with", mean: "~의 공감을 불러일으키다", ex: "The movie really resonated with me." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I need a bike ride to take the edge off my work stress.", ko: "업무 스트레스를 좀 식히려면 자전거를 타야겠어요." },
-                { spk: "Jini", en: "Spot on! Exercise is the best way to relax.", ko: "정확해요! 운동이 휴식에는 최고죠." }
-            ],
-            feedback: [
-                "Take the edge off는 날카로운 모서리(edge)를 깎아 부드럽게 만든다는 이미지입니다.",
-                "Spot on은 Nailed it보다 '정확도'에 초점을 맞춘 칭찬입니다."
-            ],
-            closing: "스트레스의 날(Edge)을 깎아내는 Buma님만의 비결이 돋보이는 날입니다. 🚲"
-        },
-{
-            day: 40,
-            date: "2026-02-08",
-            topic: "Results & Achievements",
-            items: [
-                { exp: "Come to fruition", mean: "결실을 보다 / 성취되다", ex: "Our recruitment plan has finally come to fruition." },
-                { exp: "Win-win situation", mean: "양쪽 모두에게 이득이 되는 상황", ex: "It’s a win-win situation for both of us." },
-                { exp: "Fruitful", mean: "생산적인 / 유익한", ex: "We had a very fruitful discussion today." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "How was the meeting today, Buma?", ko: "오늘 회의는 어떠셨나요?" },
-                { spk: "Buma", en: "It was great! We had a very fruitful discussion. We found a win-win situation.", ko: "좋았어요! 아주 유익한 토론을 했고, 서로 이득이 되는 방안을 찾았습니다." }
-            ],
-            feedback: [
-                "Fruition은 [프루-이-션]으로 발음하며 '이'에 강세를 줍니다. [cite: 3211]",
-                "Win-win은 한 단어처럼 빠르게 이어주세요. [cite: 3212]"
-            ],
-            closing: "노력이 결실을 보는 'Fruitful'한 한 주가 되시길 바랍니다! [cite: 3215]"
-        },
-        {
-            day: 39,
-            date: "2026-02-07",
-            topic: "Preferences & Tastes",
-            items: [
-                { exp: "I’m a big fan of ~", mean: "나는 ~의 열렬한 팬이에요", ex: "I’m a big fan of hand-drip coffee." },
-                { exp: "Not my cup of tea", mean: "내 취향이 아니에요", ex: "Hiking is not my cup of tea." },
-                { exp: "I’m into ~", mean: "나는 ~에 푹 빠져 있어요", ex: "I’m really into high-performance electric cars." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Buma, are you interested in hiking?", ko: "Buma님, 등산에도 관심 있으신가요?" },
-                { spk: "Buma", en: "Not really. To be honest, hiking is not my cup of tea. I'm into cycling.", ko: "별로요. 솔직히 말해서 등산은 제 취향이 아니에요. 전 사이클에 빠져 있거든요." }
-            ],
-            feedback: [
-                "Fan의 'f'는 윗니로 아랫입술을 살짝 물어 발음하세요. [cite: 3188]",
-                "Cup of tea는 연결해서 [커퍼티]처럼 빠르게 발음하는 것이 자연스럽습니다. [cite: 3189]"
-            ],
-            closing: "취향을 밝힐 때 'I like' 대신 이 표현들을 써보세요! [cite: 3178]"
-        },
-        {
-            day: 38,
-            date: "2026-02-06",
-            topic: "Suggestions & Proposals",
-            items: [
-                { exp: "How does ~ sound?", mean: "~는 어때요? (의사 묻기)", ex: "How does a coffee break sound?" },
-                { exp: "I was wondering if...", mean: "혹시 ~할 수 있을까 해서요", ex: "I was wondering if we could meet in the middle." },
-                { exp: "Why don't we ~?", mean: "우리 ~하는 게 어때요?", ex: "Why don't we call it a day and go home?" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "I was wondering if we could finish our study early tonight.", ko: "혹시 오늘 밤엔 공부를 조금 일찍 마칠 수 있을까 해서요." },
-                { spk: "Buma", en: "That sounds perfect! Why don't we pick it up again on Monday?", ko: "좋아요! 월요일에 다시 이어서 하는 게 어때요?" }
-            ],
-            feedback: [
-                "I was wondering if는 정중하게 제안할 때 쓰는 마법의 문장입니다. [cite: 3115]",
-                "How does를 [하우 더]처럼 약하게 하고 Sound에 강세를 실으세요. [cite: 3124]"
-            ],
-            closing: "상대방에게 부담을 주지 않으면서 제안하는 세련된 대화법입니다. [cite: 3111]"
-        },
-        {
-            day: 37,
-            date: "2026-02-05",
-            topic: "Positive Reactions",
-            items: [
-                { exp: "You can say that again", mean: "내 말이 그 말이에요 (완전 동의)", ex: "The recruitment process is tiring. / You can say that again!" },
-                { exp: "You're on the right track", mean: "제대로 잘하고 있어요", ex: "I'm improving the system. / You're on the right track." },
-                { exp: "Couldn't be better", mean: "이보다 더 좋을 순 없어요", ex: "Everything is going smoothly. Couldn't be better." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I think this guide will save us a lot of time.", ko: "이 가이드가 우리 시간을 정말 많이 아껴줄 것 같아요." },
-                { spk: "Jini", en: "You can say that again. You're on the right track.", ko: "내 말이 그 말이에요. 방향을 아주 잘 잡고 계시네요." }
-            ],
-            feedback: [
-                "Couldn't be better에서 't' 발음을 거의 생략하고 부드럽게 굴려주세요. [cite: 3096]",
-                "You can say that again은 I agree보다 훨씬 강력한 공감의 표현입니다. [cite: 3083]"
-            ],
-            closing: "상대방을 격려하며 긍정적인 분위기를 만들 때 활용해 보세요! [cite: 3079]"
-        },
-        {
-            day: 36,
-            date: "2026-02-04",
-            topic: "Communication & Agreement",
-            items: [
-                { exp: "Be on the same page", mean: "생각이나 이해가 일치하다", ex: "Let's make sure we are all on the same page." },
-                { exp: "Meet in the middle", mean: "타협하다 / 절충하다", ex: "We have different ideas, so let's meet in the middle." },
-                { exp: "Point taken", mean: "무슨 말인지 알겠어요 / 일리가 있네요", ex: "Point taken. I’ll rethink that part." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "I think we should focus more on overseas recruitment.", ko: "이번에는 해외 채용에 더 집중해야 한다고 생각해요." },
-                { spk: "Buma", en: "I agree, but we have a limited budget.", ko: "동의하지만, 예산이 한정되어 있잖아요." },
-                { spk: "Jini", en: "Point taken. Then how about doing it online?", ko: "일리가 있네요. 그럼 온라인으로 진행하는 건 어떨까요?" }
-            ],
-            feedback: [
-                "Point taken은 Your point is taken에서 유래했습니다. [cite: 3037]",
-                "Meet in the middle은 연음하여 [미틴 더 미들]처럼 발음하세요. [cite: 3032]"
-            ],
-            closing: "의견 차이를 줄이고 합의를 이끌어낼 때 필수적인 표현들입니다! [cite: 3016]"
-        },
-        {
-            day: 35,
-            date: "2026-02-03",
-            topic: "Opinion & Change",
-            items: [
-                { exp: "Sleep on it", mean: "하룻밤 자면서 생각해 보다", ex: "I'm not sure yet. Let me sleep on it." },
-                { exp: "Change one's mind", mean: "생각을 바꾸다", ex: "I changed my mind about the car color." },
-                { exp: "Stick with (or to) ~", mean: "그대로 고수하다 / 지키다", ex: "I'll stick with my original plan." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Have you decided on the new recruitment schedule?", ko: "새로운 채용 일정 결정하셨나요?" },
-                { spk: "Buma", en: "Not yet. I need to sleep on it. I might stick with the April plan.", ko: "아직요. 하룻밤 더 생각해보고요. 아마 4월 안으로 가게 될 것 같아요." }
-            ],
-            feedback: [
-                "Stick to는 '경로를 벗어나지 않다', Stick with는 '선택을 유지하다'는 미세한 차이가 있습니다. [cite: 2977]",
-                "Sleep on it은 [슬리포닛]으로 연음하여 발음하세요. [cite: 2970]"
-            ],
-            closing: "신중한 결정을 내릴 때 'Sleep on it'이라고 정중히 말해 보세요. [cite: 2958]"
-        },
-        {
-            day: 34,
-            date: "2026-02-02",
-            topic: "Decision & Adaptation",
-            items: [
-                { exp: "Get the hang of ~", mean: "요령이 생기다 / 감을 잡다", ex: "I'm finally getting the hang of this robot vacuum." },
-                { exp: "On the fence", mean: "고민 중인 / 망설이는", ex: "I'm still on the fence about buying that jacket." },
-                { exp: "In the long run", mean: "결국에는 / 장기적으로 보면", ex: "It will save money in the long run." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I'm getting the hang of English study. But I'm on the fence about the jacket.", ko: "영어 공부에 감을 잡아가고 있어요. 근데 재킷 사는 건 아직 고민 중이에요." },
-                { spk: "Jini", en: "Well, good quality pays off in the long run.", ko: "음, 좋은 품질은 장기적으로 보면 값어치를 하죠." }
-            ],
-            feedback: [
-                "Pay off는 '성과를 거두다' 또는 '빚을 다 갚다'는 뜻이 있습니다. [cite: 2947]",
-                "On the fence의 'f' 발음은 아랫입술을 살짝 물고 해주세요. [cite: 2942]"
-            ],
-            closing: "처음엔 서툴러도 결국 'Get the hang of it' 하게 될 거예요! [cite: 2927]"
-        },
-        {
-            day: 33,
-            date: "2026-02-01",
-            topic: "Work & Execution",
-            items: [
-                { exp: "Get the ball rolling", mean: "일을 시작하다 / 착수하다", ex: "Let’s get the ball rolling on the new project." },
-                { exp: "Follow up on ~", mean: "후속 조치를 취하다 / 확인하다", ex: "I need to follow up on the recruitment process." },
-                { exp: "Keep me in the loop", mean: "상황을 계속 알려주다", ex: "Please keep me in the loop about any changes." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "How is the preparation for the recruitment going?", ko: "채용 준비는 어떻게 되어가나요?" },
-                { spk: "Buma", en: "I’m ready to get the ball rolling. I’ll keep you in the loop.", ko: "이제 착수할 준비가 됐어요. 상황을 계속 공유해 드릴게요." }
-            ],
-            feedback: [
-                "Follow up on은 [팔로워폰]에 가깝게 소리 내 보세요. [cite: 2908]",
-                "Up to speed는 '상황 파악이 된 상태'를, Follow up은 '실제 후속 행동'을 강조합니다. [cite: 2915]"
-            ],
-            closing: "정보의 공유가 중요한 업무에서 'Keep me in the loop'는 필수 표현입니다! [cite: 2911]"
-        },
-        {
-            day: 32,
-            date: "2026-01-31",
-            topic: "Hobbies & Leisure",
-            items: [
-                { exp: "I'm really into ~", mean: "~에 푹 빠져 있어요", ex: "I'm really into cycling these days." },
-                { exp: "Get some fresh air", mean: "바람 좀 쐬다 / 기분 전환하다", ex: "I need to go out and get some fresh air." },
-                { exp: "Lose track of time", mean: "시간 가는 줄 모르다", ex: "I lost track of time while making coffee." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "You look energetic today!", ko: "오늘 활기차 보이시네요!" },
-                { spk: "Buma", en: "I just went out to get some fresh air. I lost track of time riding my bike.", ko: "방금 바람 좀 쐬고 왔거든요. 자전거 타느라 시간 가는 줄도 몰랐네요." }
-            ],
-            feedback: [
-                "Lose track of time은 [루즈 트래커브 타임]으로 연음해 보세요. [cite: 2882]",
-                "반대말은 Keep track of time (시간을 계속 확인하다)입니다. [cite: 2886]"
-            ],
-            closing: "무언가에 푹 빠져 'Lose track of time' 하는 순간은 정말 행복하죠. [cite: 2876]"
-        },
-        {
-            day: 31,
-            date: "2026-01-30",
-            topic: "Late Friday Night",
-            items: [
-                { exp: "TGIF!", mean: "드디어 금요일이다!", ex: "TGIF! It's been a long week." },
-                { exp: "Let's call it a night", mean: "이제 자자 / 오늘은 이만 마무리하자", ex: "It's 11 PM. Let's call it a night." },
-                { exp: "Sleep in", mean: "늦잠 자다", ex: "I'm going to sleep in tomorrow." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Buma, you're studying even at 11 PM?", ko: "Buma님, 밤 11시인데도 공부하시나요?" },
-                { spk: "Buma", en: "I just wanted to say TGIF! I'm going to sleep in tomorrow.", ko: "그냥 '드디어 금요일'이라고 말하고 싶었어요! 내일은 늦잠 잘 거예요." }
-            ],
-            feedback: [
-                "Call it a night은 [콜-릿-어 나이트]로 부드럽게 이어 발음하세요. [cite: 2850]",
-                "Sleep in은 실수로 늦게 일어나는 oversleep과는 다릅니다. [cite: 2844]"
-            ],
-            closing: "금요일 밤, 한 주의 피로를 싹 풀고 내일은 푹 'Sleep in' 하세요! [cite: 2853]"
-        },
-{
-            day: 30,
-            date: "2026-01-29",
-            topic: "Feedback & Improvement",
-            items: [
-                { exp: "On the right track", mean: "제대로 잘하고 있어요", ex: "Don't worry, you're on the right track." },
-                { exp: "Room for improvement", mean: "개선할 여지(보완점)", ex: "There's some room for improvement in the budget." },
-                { exp: "Circle back to this", mean: "이 부분을 나중에 다시 이야기하다", ex: "Let's circle back to this later this afternoon." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Have you reviewed the new strategy document?", ko: "새로운 채용 전략 문서를 검토해 보셨나요?" },
-                { spk: "Buma", en: "Yes, I think you're on the right track. It looks very professional.", ko: "네, 방향을 잘 잡으신 것 같아요. 아주 전문적으로 보이네요." },
-                { spk: "Buma", en: "Well, there's some room for improvement in the budget section.", ko: "음, 예산 부분은 조금 더 보완할 여지가 있겠어요." },
-                { spk: "Buma", en: "I have another meeting. Let's circle back to this later.", ko: "다른 회의가 있어서요. 이 건은 나중에 다시 얘기합시다." }
-            ],
-            feedback: [
-                "On the right track 발음 시 'right'의 't'를 아주 짧게 끊어보세요. [온 더 라이-트랙]",
-                "Circle back은 한 단어처럼 붙여서 발음하면 훨씬 자연스럽습니다. [써클-백]"
-            ],
-            closing: "부드럽게 보완점을 지적하는 비즈니스 매너 표현들을 익혀보세요! [cite: 2750, 2753, 2756, 2765, 2766]"
-        },
-        {
-            day: 29,
-            date: "2026-01-28",
-            topic: "Down to the Wire",
-            items: [
-                { exp: "Down to the wire", mean: "마지막까지 결과를 알 수 없는", ex: "The interview process went down to the wire." },
-                { exp: "At the eleventh hour", mean: "마지막 순간에 / 아슬아슬하게", ex: "He sent his resume at the eleventh hour." },
-                { exp: "Not over until it's over", mean: "끝날 때까지 끝난 게 아니다", ex: "Don't give up! It's not over until it's over." }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "How is the final interview going?", ko: "최종 면접은 어떻게 돼가고 있나요?" },
-                { spk: "Buma", en: "It's really down to the wire. Both candidates are excellent.", ko: "정말 막판까지 가봐야 알 것 같아요. 두 후보자 모두 훌륭하거든요." },
-                { spk: "Jini", en: "I heard a new applicant applied at the eleventh hour.", ko: "어떤 지원자가 마지막 순간에 지원했다고 들었어요." }
-            ],
-            feedback: [
-                "Down to the wire는 19세기 경마 결승선의 철사(wire)에서 유래했습니다. [cite: 2726]",
-                "Eleventh hour는 [일레븐-싸워]처럼 'th'와 'hour'를 부드럽게 이어보세요. [cite: 2720]"
-            ],
-            closing: "긴박한 상황에서 'At the eleventh hour'는 정말 극적인 효과를 줍니다! [cite: 2713, 2733]"
-        },
-        {
-            day: 28,
-            date: "2026-01-27",
-            topic: "Get to the Point",
-            items: [
-                { exp: "Get to the point", mean: "본론으로 들어가다", ex: "Can you just get to the point?" },
-                { exp: "Play it by ear", mean: "상황 봐서 하다 / 임기응변", ex: "I don't have a plan yet, let's play it by ear." },
-                { exp: "Call it a day", mean: "오늘은 이만 마치자", ex: "I'm exhausted. Let's call it a day." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "It's getting late. Can you just get to the point?", ko: "시간이 늦었어. 그냥 본론만 말해줄래?" },
-                { spk: "Jini", en: "Okay. Let's just play it by ear tomorrow.", ko: "알겠어. 내일 그냥 상황 봐서 하자." }
-            ],
-            feedback: [
-                "Get to the point는 사무적인 느낌, Cut to the chase는 좀 더 급한 성격이 묻어납니다. [cite: 2703, 2705]",
-                "Call it a day는 모든 단어를 연음으로 부드럽게 이어주세요. [cite: 2699]"
-            ],
-            closing: "계획이 확정되지 않았을 때 'Play it by ear'는 아주 유용한 임기응변 표현이죠! [cite: 2688]"
-        },
-        {
-            day: 27,
-            date: "2026-01-26",
-            topic: "Work Principles",
-            items: [
-                { exp: "On the same page", mean: "같은 생각인 / 동의하는", ex: "Let's make sure we're all on the same page." },
-                { exp: "Rule of thumb", mean: "경험에 근거한 원칙", ex: "As a rule of thumb, always double-check the list." },
-                { exp: "Go the extra mile", mean: "특별히 더 노력하다", ex: "She always goes the extra mile to help others." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I want to make sure we are all on the same page.", ko: "우리 모두 같은 생각인지 확인하고 싶네요." },
-                { spk: "Jini", en: "As a rule of thumb, we should keep things simple.", ko: "경험상 원칙으로는, 일을 단순하게 처리하는 게 좋아요." }
-            ],
-            feedback: [
-                "Rule of thumb은 옛날 사람들이 엄지손가락 마디로 길이를 재던 것에서 유래했습니다. [cite: 2642]",
-                "발음 시 [루울-러브-썸]처럼 'of'를 'Rule'에 붙여보세요. [cite: 2651]"
-            ],
-            closing: "채용 업무에서 'Hire for attitude, train for skill' 같은 원칙을 써보시는 건 어떨까요? [cite: 2654]"
-        },
-        {
-            day: 26,
-            date: "2026-01-25",
-            topic: "Patience & Perspective",
-            items: [
-                { exp: "Hang in there", mean: "조금만 참아 / 버텨봐", ex: "I know it's hard, but hang in there!" },
-                { exp: "Cut someone some slack", mean: "~를 좀 봐주다 / 사정을 봐주다", ex: "Buma, cut yourself some slack." },
-                { exp: "In the long run", mean: "장기적으로 보면", ex: "It'll be worth it in the long run." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I'm so exhausted from studying every day.", ko: "매일 공부하는 게 너무 지치네요." },
-                { spk: "Jini", en: "Hang in there! It'll be worth it in the long run.", ko: "조금만 더 버텨봐요! 장기적으로 보면 다 가치가 있을 거예요." }
-            ],
-            feedback: [
-                "Slack은 느슨하게 늘어진 줄을 의미하며, 팽팽한 줄 대신 여유를 떼어 준다는 뜻입니다. [cite: 2618, 2620]",
-                "Hang in there 발음 시 [행-인-데어]처럼 'g'와 'i'를 살짝 연결해 보세요. [cite: 2611]"
-            ],
-            closing: "자신을 너무 몰아세우지 말고 'Cut yourself some slack' 하세요! [cite: 2623]"
-        },
-        {
-            day: 25,
-            date: "2026-01-24",
-            topic: "Shopping & Value",
-            items: [
-                { exp: "A steal", mean: "완전 횡재 / 거저나 다름없는 것", ex: "Only 50 dollars! It was a steal." },
-                { exp: "Cost a fortune", mean: "거금이 들다 / 엄청나게 비싸다", ex: "The hotel cost a fortune in peak season." },
-                { exp: "Rip-off", mean: "바가지 / 터무니없이 비싼 것", ex: "15 dollars for coffee? That's a total rip-off." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "The Osaka hotel cost a fortune because it's peak season.", ko: "성수기라 오사카 호텔에 거금이 들었어요." },
-                { spk: "Buma", en: "But USJ tickets were half price. It was a steal!", ko: "하지만 USJ 티켓은 반값이었죠. 완전 횡재였어요!" }
-            ],
-            feedback: [
-                "Rip-off는 주머니에서 무언가를 '확 뜯어내어(Rip off)' 훔치는 이미지에서 왔습니다. [cite: 2580]",
-                "발음 시 [리-포프]처럼 자연스럽게 이어서 말해보세요. [cite: 2576]"
-            ],
-            closing: "여행지에서 바가지를 썼을 때 속으로 'What a rip-off!'라고 외쳐보세요. [cite: 2589]"
-        },
-        {
-            day: 24,
-            date: "2026-01-23",
-            topic: "Real-life Reactions",
-            items: [
-                { exp: "I'm all ears", mean: "경청하고 있어 / 들을 준비 됐어", ex: "Tell me, I'm all ears." },
-                { exp: "Better late than never", mean: "늦더라도 하는 게 낫지", ex: "Sorry for the late reply, but better late than never." },
-                { exp: "Call it a day", mean: "오늘 일은 여기까지 하자", ex: "Let's call it a day and enjoy the Saturday!" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "I thought you were too busy to study!", ko: "바빠서 공부 못 하시는 줄 알았어요!" },
-                { spk: "Buma", en: "I missed last night, but better late than never.", ko: "어젯밤은 놓쳤지만, 안 하는 것보다 늦게라도 하는 게 낫잖아요." }
-            ],
-            feedback: [
-                "I'm all ears 발음 시 'm'과 'all'을 붙여 [아이몰-이어즈]라고 해보세요. [cite: 2563]",
-                "Call it a day는 1800년대 노동자들의 표현에서 유래했습니다. [cite: 2556]"
-            ],
-            closing: "동료의 고충을 들을 때 'I'm all ears'라고 하면 다정한 리더가 될 수 있습니다. [cite: 2551]"
-        },
-        {
-            day: 23,
-            date: "2026-01-22",
-            topic: "Progress & Results",
-            items: [
-                { exp: "Up in the air", mean: "아직 결정되지 않은 / 불확실한", ex: "Everything is still up in the air." },
-                { exp: "Get the ball rolling", mean: "일을 시작하다 / 착수하다", ex: "Let's get the ball rolling on the new project." },
-                { exp: "Cut to the chase", mean: "본론으로 바로 들어가다", ex: "Sorry, I'm busy. Let's cut to the chase." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Well, the location is still up in the air.", ko: "글쎄요, 장소가 아직 정해지지 않았어요." },
-                { spk: "Jini", en: "We need to hurry and get the ball rolling.", ko: "서둘러서 일을 시작해야겠어요." }
-            ],
-            feedback: [
-                "Get the ball rolling은 무거운 공을 처음에 미는 것이 가장 힘들다는 물리적 이미지에서 왔습니다. [cite: 2541, 2543]",
-                "Cut to the chase는 영화의 지루한 장면을 자르고 추격전으로 가라는 뜻입니다. [cite: 2515]"
-            ],
-            closing: "자전거를 타고 첫발을 내디딜 때처럼, 'First step to get the ball rolling' 하세요! [cite: 429]"
-        },
-        {
-            day: 22,
-            date: "2026-01-21",
-            topic: "Decisions & Communication",
-            items: [
-                { exp: "Call the shots", mean: "결정권을 갖다 / 지휘하다", ex: "In our office, the HR manager calls the shots." },
-                { exp: "Get the green light", mean: "허가/승인을 받다", ex: "We finally got the green light from the director." },
-                { exp: "Touch base", mean: "연락해서 상황을 확인하다", ex: "I'll touch base with you tomorrow morning." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Not yet. I'm waiting to get the green light from my boss.", ko: "아직요. 상사로부터 승인이 떨어지기를 기다리고 있어요." },
-                { spk: "Jini", en: "Does he always call the shots on those things?", ko: "그분이 항상 그런 일들에 대한 결정권을 갖고 계신가요?" }
-            ],
-            feedback: [
-                "Call the shots는 사격 훈련에서 명령을 내리는(Call) 사람이 진짜 대장이라는 뜻에서 유래했습니다. [cite: 2445]",
-                "Touch base는 야구 선수가 베이스를 밟듯 잠깐 연락한다는 뜻입니다. [cite: 2177, 2433]"
-            ],
-            closing: "아내분께 주도권을 드리는 'My wife calls the shots'라는 표현도 아주 유머러스하죠! [cite: 2450, 2451]"
-        },
-        {
-            day: 21,
-            date: "2026-01-20",
-            topic: "Busy Monday",
-            items: [
-                { exp: "Snowed under", mean: "일이 산더미처럼 쌓이다", ex: "I was completely snowed under with emails." },
-                { exp: "Back on track", mean: "다시 궤도에 오르다", ex: "I'm finally getting my schedule back on track." },
-                { exp: "Burn the candle at both ends", mean: "밤낮없이 무리하다", ex: "I've been burning the candle at both ends lately." }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Tell me about it. I was snowed under with work since morning.", ko: "말도 마세요. 아침부터 일이 산더미처럼 쌓여서 정신없었어요." },
-                { spk: "Jini", en: "Don't push too hard. You don't want to burn the candle at both ends.", ko: "너무 무리하지 마세요. 밤낮없이 무리하다 몸 상하면 안 되잖아요." }
-            ],
-            feedback: [
-                "Back on track은 기차가 선로(track) 위에(on) 딱 붙어 달리는 이미지를 상상하세요. [cite: 2420]",
-                "Snowed under [스노우-던더]를 부드럽게 이어서 발음해 보세요. [cite: 2415]"
-            ],
-            closing: "주말 지나고 흐트러진 루틴을 다시 'Back on track' 하는 월요일 되시길! [cite: 2416]"
-        },
-{
-            day: 20,
-            date: "2026-01-19",
-            topic: "Monday Workflow",
-            items: [
-                { exp: "Snowed under", mean: "일이 산더미처럼 쌓이다 [cite: 383]", ex: "I was completely snowed under with emails. [cite: 385]" },
-                { exp: "Back on track", mean: "다시 궤도에 오르다 [cite: 386]", ex: "Everything is back on track now. [cite: 409]" },
-                { exp: "Burn the candle at both ends", mean: "밤낮없이 무리하다 [cite: 389]", ex: "I’ve been burning the candle at both ends lately. [cite: 391]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Buma, you seem very focused today. Was it a busy Monday? [cite: 351]", ko: "Buma님, 오늘 굉장히 집중해 보이시네요. 바쁜 월요일이었나요? [cite: 351]" },
-                { spk: "Buma", en: "Tell me about it. I was snowed under with work since this morning. [cite: 352]", ko: "말도 마세요. 아침부터 일이 산더미처럼 쌓여서 정신없었어요. [cite: 352]" },
-                { spk: "Jini", en: "Oh no, don't push yourself too hard. You don't want to burn the candle at both ends. [cite: 353, 354]", ko: "아이고, 너무 무리하지 마세요. 밤낮없이 무리하다가 몸 상하면 안 되잖아요. [cite: 354]" }
-            ],
-            feedback: [
-                "Back to track 보다는 Back on track이 정확한 표현입니다. [cite: 402]",
-                "기차가 선로(Track) 위에(on) 딱 붙어 달리는 이미지를 떠올리세요. [cite: 404, 405]",
-                "Snowed under [스노우-던더]를 부드럽게 이어보세요. [cite: 399]"
-            ],
-            closing: "주말 지나고 흐트러진 루틴을 다시 'Back on track' 하는 하루 되세요! [cite: 398]"
-        },
-        {
-            day: 19,
-            date: "2026-01-18",
-            topic: "Sunday Relaxation",
-            items: [
-                { exp: "Veg out", mean: "멍하니 쉬다 [cite: 366]", ex: "I just vegged out on the sofa all day. [cite: 368]" },
-                { exp: "Recharge my batteries", mean: "재충전하다 [cite: 369]", ex: "I need this evening to recharge my batteries. [cite: 371]" },
-                { exp: "Sleep in", mean: "의도적으로 늦잠을 자다 [cite: 372]", ex: "It’s Sunday! I slept in until 10 AM. [cite: 373, 374]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Did you do anything special in the afternoon? [cite: 335]", ko: "오후엔 뭐 특별한 거 하셨나요? [cite: 335]" },
-                { spk: "Buma", en: "No, I just vegged out on the sofa watching Netflix. [cite: 336]", ko: "아뇨, 그냥 소파에서 넷플릭스 보면서 멍하니 쉬었어요. [cite: 336]" },
-                { spk: "Buma", en: "Exactly. I really needed to recharge my batteries. [cite: 338]", ko: "맞아요. 정말 재충전이 필요했거든요. [cite: 338]" }
-            ],
-            feedback: [
-                "Vegged out은 [베쥐-다웃]처럼 부드럽게 연음됩니다. [cite: 382]",
-                "Sleep in은 실수로 늦게 일어나는 Oversleep과는 다른 의미입니다. [cite: 331]"
-            ],
-            closing: "가끔은 아무것도 안 하는 'Veg out'이 최고의 계획이죠. [cite: 337]"
-        },
-        {
-            day: 18,
-            date: "2026-01-17",
-            topic: "Weekend Flexibility",
-            items: [
-                { exp: "Go with the flow", mean: "흐름에 맡기다 [cite: 273]", ex: "I don’t have any plans. I’ll just go with the flow. [cite: 274, 275]" },
-                { exp: "Catch up on...", mean: "밀린 ~을 하다 [cite: 275]", ex: "I need to catch up on some sleep. [cite: 277]" },
-                { exp: "Call it a day", mean: "오늘 일은 여기까지 하다 [cite: 278]", ex: "Let's call it a day and get some rest. [cite: 280]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Any plans for tomorrow? [cite: 287]", ko: "내일 계획 있으신가요? [cite: 287]" },
-                { spk: "Buma", en: "Not really. I’ll just go with the flow. [cite: 288]", ko: "딱히요. 그냥 상황 봐서 흐름에 맡기려고요. [cite: 288]" },
-                { spk: "Buma", en: "I also need to catch up on some Tesla news. [cite: 290]", ko: "밀린 테슬라 뉴스도 좀 봐야 해요. [cite: 290]" }
-            ],
-            feedback: [
-                "Go with the flow는 물 흐르는 대로 가듯 편안함과 유연함이 핵심입니다. [cite: 309, 311]",
-                "Catch up on은 [캐-쳐-뻔]처럼 한 단어처럼 이어서 발음하세요. [cite: 303, 346]"
-            ],
-            closing: "계획 없이 발길 닿는 대로 'Go with the flow' 하는 주말 되세요! [cite: 312]"
-        },
-        {
-            day: 17,
-            date: "2026-01-16",
-            topic: "Technology & Innovation",
-            items: [
-                { exp: "State-of-the-art", mean: "최첨단의 [cite: 295]", ex: "It’s truly state-of-the-art technology. [cite: 296]" },
-                { exp: "Game changer", mean: "상황을 완전히 바꿔놓는 것 [cite: 297]", ex: "Tesla is a real game changer. [cite: 299]" },
-                { exp: "Keep an eye on...", mean: "~을 계속 주시하다 [cite: 300]", ex: "I’m keeping an eye on it every day. [cite: 302]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Are you using FSD? [cite: 284]", ko: "자율주행(FSD) 쓰고 계신가요? [cite: 284]" },
-                { spk: "Buma", en: "Yes, it’s truly state-of-the-art. [cite: 285]", ko: "네, 이건 정말 최첨단 기술이에요. [cite: 285]" },
-                { spk: "Jini", en: "I agree. Tesla is a real game changer. [cite: 286]", ko: "동감이에요. 테슬라는 정말 혁신적이죠. [cite: 286]" }
-            ],
-            feedback: [
-                "Art는 과거에 '그림'이 아닌 '숙련된 기술(Skill)'을 의미했습니다. [cite: 305, 306]",
-                "State-of-the-art는 현재 기술이 도달한 최고점을 뜻합니다. [cite: 311]"
-            ],
-            closing: "테슬라 주가나 뉴스 소식을 'Keep an eye on' 하는 재미가 쏠쏠하시겠어요! [cite: 301]"
-        },
-        {
-            day: 16,
-            date: "2026-01-15",
-            topic: "British Slang & Fatigue",
-            items: [
-                { exp: "Fancy a...?", mean: "~할래? / ~하고 싶어? [cite: 229]", ex: "Fancy a cup of tea, Buma? [cite: 231]" },
-                { exp: "I'm knackered", mean: "완전히 녹초가 됐어 [cite: 232]", ex: "I had a long day. I'm knackered. [cite: 234, 235]" },
-                { exp: "Not my cup of tea", mean: "내 취향이 아니야 [cite: 235]", ex: "They're not my cup of tea. [cite: 237]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "Fancy a cup of tea, Buma? [cite: 201]", ko: "차 한잔할래요? [cite: 201]" },
-                { spk: "Buma", en: "I had a long day at work. I'm knackered. [cite: 205]", ko: "회사에서 긴 하루를 보냈어요. 녹초가 됐네요. [cite: 205]" }
-            ],
-            feedback: [
-                "Knackered는 [내-커드]라고 발음하며 K는 묵음입니다. [cite: 213, 242]",
-                "Give it a go는 '시도는 한번 해보자'는 영국인들이 사랑하는 표현입니다. [cite: 221, 252]"
-            ],
-            closing: "정말 에너지가 0%일 때 'I'm knackered'라고 외쳐보세요! [cite: 209]"
-        },
-        {
-            day: 15,
-            date: "2026-01-14",
-            topic: "Routine & Favorites",
-            items: [
-                { exp: "Same as always", mean: "늘 그렇듯 똑같아요 [cite: 200]", ex: "Same as always. I had a cup of coffee. [cite: 202]" },
-                { exp: "I'm just kidding", mean: "농담이에요 [cite: 203]", ex: "Haha, I'm just kidding. [cite: 205]" },
-                { exp: "My go-to...", mean: "내가 즐겨 찾는 / 최애의 [cite: 206]", ex: "Warm ginger tea is my go-to remedy. [cite: 223]" }
-            ],
-            dialogue: [
-                { spk: "Jini", en: "What is your go-to drink when you have a cold? [cite: 208]", ko: "감기 걸렸을 때 즐겨 마시는 게 뭐예요? [cite: 208]" },
-                { spk: "Buma", en: "My go-to drink is warm ginger tea with honey. [cite: 209]", ko: "따뜻한 생강차에 꿀을 넣어서 주로 마셔요. [cite: 209]" }
-            ],
-            feedback: [
-                "My go-to fruit is oranges 보다는 Oranges are my go-to fruit이 더 자연스럽습니다. [cite: 214, 218]",
-                "I'm just kidding 발음 시 Just의 t를 생략하고 [저스 키딩]이라고 해보세요. [cite: 211]"
-            ],
-            closing: "고민 없이 선택하는 Buma님만의 'Go-to' 리스트를 만들어 보세요. [cite: 207]"
-        },
-        {
-            day: 14,
-            date: "2026-01-13",
-            topic: "Appreciation & Compliments",
-            items: [
-                { exp: "Thanks for having my back", mean: "제 편이 되어주셔서 감사해요 [cite: 166]", ex: "Things were tough, but thanks for having my back. [cite: 172]" },
-                { exp: "You’ve outdone yourself", mean: "이번엔 정말 역대급이에요 [cite: 167]", ex: "You’ve outdone yourself with this meal! [cite: 160]" },
-                { exp: "I'm so glad we're spending time together", mean: "함께해서 정말 좋아요 [cite: 169]", ex: "I'm so glad we're spending time together like this. [cite: 173]" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Mom, you’ve outdone yourself with this meal! [cite: 170]", ko: "엄마, 오늘 저녁 정말 맛있어요. 진짜 역대급이에요! [cite: 170]" },
-                { spk: "Buma", en: "Actually, things were a bit tough, but thanks for having my back. [cite: 172]", ko: "사실 일이 좀 힘들었는데, 제 편이 되어주셔서 정말 감사해요. [cite: 172]" }
-            ],
-            feedback: [
-                "You nailed it!은 '완벽하게 해냈어'라는 칭찬 슬랭입니다. [cite: 183]",
-                "Outdone yourself 발음 시 '아웃던-녀-셀프'처럼 연음으로 이어주세요. [cite: 180]"
-            ],
-            closing: "주변 사람들에게 'Thanks for having my back'이라며 고마움을 전해보세요. [cite: 167]"
-        },
-        {
-            day: 13,
-            date: "2026-01-12",
-            topic: "Team Synchronization",
-            items: [
-                { exp: "Bring me up to speed", mean: "최신 정보를 알려달라 [cite: 137]", ex: "Could you bring me up to speed on this? [cite: 137]" },
-                { exp: "On the same page", mean: "같은 생각을 하고 있는 [cite: 138]", ex: "It seems we’re on the same page. [cite: 144]" },
-                { exp: "Touch base", mean: "잠깐 연락해서 상황을 보다 [cite: 140]", ex: "Let's touch base later this week. [cite: 140]" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "Could you bring me up to speed on this before the meeting? [cite: 142]", ko: "회의 전에 진행 상황을 좀 알려주실 수 있나요? [cite: 142]" },
-                { spk: "Colleague", en: "Perfect. Let's touch base later this week. [cite: 144]", ko: "완벽해요. 이번 주 후반에 다시 이야기해요. [cite: 144]" }
-            ],
-            feedback: [
-                "Up to speed는 달리는 자동차나 러닝머신에 보조를 맞추는 이미지에서 유래했습니다. [cite: 145, 146]",
-                "Touch base는 야구 선수가 베이스를 밟듯 잠깐 소식을 전한다는 뜻입니다. [cite: 152, 162]"
-            ],
-            closing: "팀원들과 같은 곳을 보고 있다면 'We are on the same page'라고 확신을 주세요! [cite: 139]"
-        },
-        {
-            day: 12,
-            date: "2026-01-11",
-            topic: "Personal Feelings",
-            items: [
-                { exp: "I'm over you", mean: "난 이제 미련 없어 [cite: 119]", ex: "Yeah, I'm over him. [cite: 126]" },
-                { exp: "What's not to like?", mean: "싫어할 이유가 없잖아 [cite: 121]", ex: "The material is fun. What’s not to like? [cite: 128]" },
-                { exp: "It’s not a big deal", mean: "별일 아니야 [cite: 123]", ex: "It's really not a big deal. [cite: 126]" }
-            ],
-            dialogue: [
-                { spk: "Buma", en: "I love it! The teacher is great and the material is fun. What’s not to like? [cite: 128]", ko: "정말 좋아요! 선생님도 훌륭하시고 자료도 재밌고요. 안 좋아할 이유가 없죠! [cite: 128]" }
-            ],
-            feedback: [
-                "What's not to like?는 단점이 하나도 없다는 사실을 강조하는 반어법입니다. [cite: 131, 132]",
-                "프렌즈의 조이가 레이첼의 고기 잼 디저트를 먹으며 했던 명대사입니다. [cite: 135, 136]"
-            ],
-            closing: "상대방이 걱정할 때 'It's not a big deal'이라고 쿨하게 안심시켜 주세요. [cite: 124]"
-        },
-        {
-            day: 11,
-            date: "2026-01-10",
-            topic: "Office Communication",
-            items: [
-                { exp: "Keep me in the loop", mean: "나에게 계속 알려줘 [cite: 101]", ex: "Keep me in the loop on any changes. [cite: 108]" },
-                { exp: "I’m not following", mean: "이해가 잘 안 돼요 [cite: 103]", ex: "Wait, I’m not following. [cite: 109]" },
-                { exp: "Better late than never", mean: "안 하는 것보다 늦게라도 하는 게 낫지 [cite: 104]", ex: "Well, better late than never. [cite: 111]" }
-            ],
-            dialogue: [
-                { spk: "A", en: "Actually, I added a few more tasks for next week. [cite: 109]", ko: "사실 다음 주 업무를 몇 개 더 추가했어요. [cite: 109]" },
-                { spk: "B", en: "Wait, I’m not following. Why are there more tasks? [cite: 110]", ko: "잠깐만요, 이해가 안 가네요. 왜 업무가 더 늘어난 거죠? [cite: 110]" }
-            ],
-            feedback: [
-                "Loop는 정보가 공유되는 '순환 고리'를 의미합니다. [cite: 120]",
-                "In the loop는 정보가 공유되는 핵심 그룹에 포함되어 상황을 계속 파악하고 있다는 뜻입니다. [cite: 121]"
-            ],
-            closing: "정보의 소외를 막기 위해 동료에게 'Keep me in the loop'라고 요청해 보세요! [cite: 117]"
-        },
-            {
-                day: 10,
-                date: "Lesson 10",
-                topic: "Weekend Plans & Traffic",
-                items: [
-                    { exp: "Stay in and order in", mean: "집에서 배달시켜 먹으며 쉬다", ex: "Let's just stay in and order in tonight." },
-                    { exp: "Movie marathon", mean: "영화 몰아서 보기", ex: "Let's have a movie marathon this weekend." },
-                    { exp: "Hit the road early", mean: "차 막히기 전에 일찍 출발하다", ex: "We should hit the road early to beat the traffic." }
-                ],
-                dialogue: [
-                    { spk: "Buma", en: "I'm so exhausted. Let’s just stay in and order in tonight.", ko: "너무 지쳤어. 오늘 밤은 집에서 배달시켜 먹자." },
-                    { spk: "Family", en: "Great! Let's have a movie marathon then.", ko: "좋아! 그럼 영화 몰아서 보자." }
-                ],
-                feedback: ["'Hit the road'는 출발하다라는 아주 자연스러운 표현입니다."],
-                closing: "금요일 저녁, 가족들과 편하게 쉬며 쓰기 좋은 표현들이에요!"
-            },
-            {
-                day: 9,
-                date: "Day 9",
-                topic: "Support & Encouragement",
-                items: [
-                    { exp: "I'm on your side", mean: "난 네 편이야", ex: "Whatever happens, remember I'm on your side." },
-                    { exp: "Keep your chin up", mean: "기운 내 / 고개 숙이지 마", ex: "Even if it's tough, keep your chin up!" },
-                    { exp: "It's worth a try", mean: "해볼 만한 가치가 있어", ex: "Changing your route might be fun. It's worth a try!" }
-                ],
-                dialogue: [],
-                feedback: ["'Take your time'은 서두르지 말라는 다정한 표현입니다."],
-                closing: "직장 동료나 친구에게 따뜻한 격려를 건네보세요."
-            },
-            {
-                day: 8,
-                date: "Day 8",
-                topic: "Daily Vitality",
-                items: [
-                    { exp: "Brighten up my day", mean: "나의 하루를 밝혀주다 (기분 좋게 함)", ex: "A hot cup of coffee always brightens up my day." },
-                    { exp: "A breath of fresh air", mean: "신선한 공기 같은 존재 / 활력소", ex: "My bike ride is a breath of fresh air." },
-                    { exp: "Treat myself to...", mean: "나 자신에게 ~을 대접/선물하다", ex: "I want to treat myself to a nice dinner tonight." }
-                ],
-                dialogue: [],
-                feedback: [],
-                closing: "바쁜 일상 속에서도 나를 미소 짓게 하는 것들을 떠올려 보세요."
-            },
-            {
-                day: 7,
-                date: "Day 7",
-                topic: "Extreme Happiness",
-                items: [
-                    { exp: "Full of beans", mean: "에너지가 넘쳐 / 의욕 충만", ex: "I'm full of beans thanks to the good news." },
-                    { exp: "Best of both worlds", mean: "일거양득 / 두 마리 토끼", ex: "I feel like I have the best of both worlds now." },
-                    { exp: "On cloud nine", mean: "세상을 다 가진 기분 / 너무 행복함", ex: "I'm on cloud nine!" }
-                ],
-                dialogue: [
-                    { spk: "Jini", en: "How do you feel about the project?", ko: "프로젝트 끝낸 기분이 어때요?" },
-                    { spk: "Buma", en: "I'm on cloud nine! I have the best of both worlds.", ko: "날아갈 것 같아요! 두 마리 토끼를 다 잡은 기분이죠." }
-                ],
-                feedback: ["'Cloud nine'은 기상학에서 가장 높이 치솟은 9번 구름에서 유래했습니다."],
-                closing: "말이 콩(beans)을 먹고 힘이 넘치는 모습에서 유래한 표현도 재미있죠?"
-            },
-            {
-                day: 6,
-                date: "Day 6",
-                topic: "Being Busy & Rescheduling",
-                items: [
-                    { exp: "I'm swamped", mean: "눈코 뜰 새 없이 바빠", ex: "I'd love to, but I'm swamped with work today." },
-                    { exp: "Take a rain check", mean: "다음 기회로 미루다", ex: "I'm so sorry. Can I take a rain check?" },
-                    { exp: "Make it up to you", mean: "나중에 보답하다 / 만회하다", ex: "I'll make it up to you next weekend!" }
-                ],
-                dialogue: [
-                    { spk: "Jini", en: "Do you want to go to a new cafe tonight?", ko: "오늘 밤에 새로 생긴 카페 같이 갈래요?" },
-                    { spk: "Buma", en: "I'm swamped. Can I take a rain check?", ko: "일이 너무 많네요. 다음에 같이 가면 안 될까요?" }
-                ],
-                feedback: ["'Swamp'는 늪이라는 뜻으로, 일이 늪처럼 나를 덮쳤을 때 씁니다."],
-                closing: "약속을 거절할 땐 'Rain check'으로 부드럽게 표현해 보세요."
-            },
-            {
-                day: 5,
-                date: "Day 5",
-                topic: "Uncertainty & Focus",
-                items: [
-                    { exp: "Up in the air", mean: "아직 미정이야 / 확실하지 않아", ex: "It's still up in the air because of my work." },
-                    { exp: "Get a head start", mean: "남보다 미리 시작해 우위를 점하다", ex: "You should get a head start on booking a hotel." },
-                    { exp: "Cut to the chase", mean: "본론으로 들어가다 / 핵심만 말하다", ex: "Let's cut to the chase—which car is better?" }
-                ],
-                dialogue: [
-                    { spk: "Jini", en: "Have you decided on your vacation plan?", ko: "휴가 계획 정하셨나요?" },
-                    { spk: "Buma", en: "Not yet. It's still up in the air.", ko: "아직요. 업무 때문에 미정이에요." }
-                ],
-                feedback: ["'Cut to the chase'는 헐리우드 영화의 지루한 장면을 자르고 추격전으로 가라는 데서 유래했습니다."],
-                closing: "빙빙 돌리지 말고 본론만! 비즈니스에서 아주 유용합니다."
-            },
-            {
-                day: 4,
-                date: "Day 4",
-                topic: "Heavy Workload",
-                items: [
-                    { exp: "I'm tied up", mean: "(바빠서) 꼼짝 못 해", ex: "I'd love to help, but I'm tied up with a project." },
-                    { exp: "A lot on my plate", mean: "할 일이 산더미 같아", ex: "Yeah, I have a lot on my plate this week." },
-                    { exp: "Get right on it", mean: "지금 바로 시작/처리할게요", ex: "I'll get right on it as soon as I finish this!" }
-                ],
-                dialogue: [
-                    { spk: "Jini", en: "Could you help me with the list?", ko: "리스트 만드는 것 좀 도와줄 수 있어요?" },
-                    { spk: "Buma", en: "I'm tied up right now, but I'll get right on it later.", ko: "지금 꼼짝 못 하는 상황인데, 끝나자마자 바로 할게요." }
-                ],
-                feedback: ["'Busy'보다 특정 일에 매여 있다는 점을 강조할 때 씁니다."],
-                closing: "책임져야 할 일이 많을 땐 '접시 위(plate)' 표현을 써보세요."
-            },
-            {
-                day: 3,
-                date: "Day 3",
-                topic: "Memory & Updates",
-                items: [
-                    { exp: "Slipped my mind", mean: "깜빡했어 / 잊어버렸어", ex: "Oops, it slipped my mind. Let me check real quick." },
-                    { exp: "On the fence", mean: "결정을 못 내리겠어 / 중립적이야", ex: "I'm on the fence. The new place looks great, but..." },
-                    { exp: "Keep you posted", mean: "계속 소식을 알려줄게", ex: "I'll keep you posted on what people say!" }
-                ],
-                dialogue: [
-                    { spk: "Friend", en: "Are we eating at the usual place?", ko: "늘 가던 곳에서 먹을까?" },
-                    { spk: "You", en: "I'm on the fence. I'll keep you posted.", ko: "아직 고민 중이야. 결정되면 알려줄게." }
-                ],
-                feedback: ["'I'm torn'보다는 조금 더 상황을 지켜본다는 느낌이 강합니다."],
-                closing: "진행 상황을 공유하겠다는 약속은 신뢰의 핵심이죠!"
-            },
-            {
-                day: 2,
-                date: "2026-01-01",
-                topic: "Choice & Dilemma",
-                items: [
-                    { exp: "I'm torn", mean: "갈등 중이야 / 갈팡질팡해", ex: "I'm torn between pizza and sushi." },
-                    { exp: "It's a toss-up", mean: "반반이야 / 우열을 가리기 힘들어", ex: "Both sound great. It's a toss-up, really." },
-                    { exp: "Leaning towards", mean: "~쪽으로 마음이 기울어", ex: "I'm leaning towards sushi today." }
-                ],
-                dialogue: [
-                    { spk: "A", en: "Have you decided what to eat?", ko: "뭐 먹을지 결정했어?" },
-                    { spk: "B", en: "I'm torn. It's a toss-up between A and B.", ko: "고민되네. A랑 B랑 거의 반반이야." }
-                ],
-                feedback: ["동전을 던져서 결정해야 할 만큼 비슷할 때 'toss-up'을 씁니다."],
-                closing: "확정은 아니지만 마음이 갈 때 'leaning'을 활용해 보세요."
-            },
-            {
-                day: 1,
-                date: "Intro",
-                topic: "Daily Routine Basics",
-                items: [
-                    { exp: "Have a long day", mean: "고된 하루를 보내다", ex: "I had a long day at work, so I'm just going to relax." },
-                    { exp: "Grab a bite", mean: "간단히 먹다", ex: "Let's grab a bite to eat before the movie starts." },
-                    { exp: "Turn in", mean: "잠자리에 들다", ex: "I'm exhausted, so I think I'll turn in early tonight." }
-                ],
-                dialogue: [],
-                feedback: [],
-                closing: "우리의 학습이 시작된 역사적인 첫 장입니다!"
+            // 헤어컷 D-day 및 주차 계산 로직
+            if (res.data.hairCutDate) {
+              const pastDate = new Date(res.data.hairCutDate);
+              const today = new Date();
+              pastDate.setHours(0,0,0,0);
+              today.setHours(0,0,0,0);
+              
+              const diffTime = today.getTime() - pastDate.getTime();
+              const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+              const diffWeeks = Math.floor(diffDays / 7) + 1;
+              
+              if (diffDays >= 0) {
+                document.getElementById('hair-data').innerText = `D+${diffDays} (${diffWeeks}주차)`;
+              } else {
+                document.getElementById('hair-data').innerText = "예약일";
+              }
+              document.getElementById('hairDateVal').value = res.data.hairCutDate;
+            } else {
+              document.getElementById('hair-data').innerText = "입력 필요";
             }
-        ];
-
-        function render() {
-            const container = document.getElementById('listContainer');
-            
-            container.innerHTML = studyData.map(day => `
-                <div class="bg-slate-800 rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-700">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="bg-blue-900 text-blue-200 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Day ${day.day}</span>
-                        <span class="text-sm text-slate-400 font-medium">${day.date}</span>
-                    </div>
-                    
-                    <h2 class="text-xl font-bold text-center text-slate-100 mb-8 italic">"${day.topic}"</h2>
-                    
-                    <div class="grid grid-cols-3 gap-3 mb-10">
-                        ${(day.items || []).map(item => `
-                            <div class="vocab-box" onclick="this.classList.toggle('active')">
-                                <span class="text-blue-400 font-bold text-sm md:text-base leading-tight">${item.exp}</span>
-                                <div class="hidden-content text-left">
-                                    <p class="text-xs font-bold text-slate-200 mb-1">${item.mean}</p>
-                                    <p class="text-[10px] text-slate-300 italic font-mono leading-relaxed bg-slate-700 p-2 rounded-lg">${item.ex}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <div class="space-y-8">
-                        ${day.dialogue && day.dialogue.length > 0 ? `
-                        <section>
-                            <h3 class="section-title text-base">🗨️ Dialogue</h3>
-                            <div class="bg-slate-700 p-5 rounded-2xl space-y-4 border border-slate-600">
-                                ${day.dialogue.map(d => `
-                                    <div class="flex gap-3">
-                                        <span class="font-bold text-xs ${d.spk === 'Jini' ? 'text-pink-400' : 'text-blue-400'} w-10 shrink-0">${d.spk}</span>
-                                        <div class="text-sm">
-                                            <p class="text-slate-200 font-semibold">${d.en}</p>
-                                            <p class="text-slate-400 text-xs mt-1">${d.ko}</p>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </section>` : ''}
-
-                        ${day.feedback && day.feedback.length > 0 ? `
-                        <section>
-                            <h3 class="section-title text-base">🎙️ Pronunciation & Feedback</h3>
-                            <ul class="list-disc list-inside text-sm text-slate-300 space-y-2 px-2 leading-relaxed">
-                                ${day.feedback.map(f => `<li>${f}</li>`).join('')}
-                            </ul>
-                        </section>` : ''}
-
-                        <section class="pt-6 border-t border-dashed border-slate-600">
-                            <div class="text-center">
-                                <p class="text-orange-400 text-sm font-medium">💡 ${day.closing}</p>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 박스 클릭 핸들러
-        document.addEventListener('click', function(e) {
-            const box = e.target.closest('.vocab-box');
-            if (box) {
-                const content = box.querySelector('.hidden-content');
-                content.style.display = box.classList.contains('active') ? 'block' : 'none';
-            }
+          }
         });
+    }
 
-        render();
-    </script>
+    window.onload = loadData;
+
+    function runAction(action) {
+      const targetId = action === 'addFuel' ? 'fuel-data' : 'robot-data';
+      document.getElementById(targetId).innerText = "...";
+      
+      const noCacheUrl = `${GAS_URL}?action=${action}&t=${new Date().getTime()}`;
+      
+      fetch(noCacheUrl)
+        .then(response => response.json())
+        .then(res => {
+          if (res.message.includes('사용하셨습니다') || res.message.includes('알람을 보내드립니다')) {
+            alert(res.message);
+          }
+          loadData(); 
+        });
+    }
+
+    function runCarWash() {
+      const amount = document.getElementById('washAmount').value;
+      if (!amount) return alert('금액을 입력하세요.');
+      
+      document.getElementById('wash-data').innerText = "...";
+      const noCacheUrl = `${GAS_URL}?action=useCarWash&amount=${amount}&t=${new Date().getTime()}`;
+      
+      fetch(noCacheUrl)
+        .then(response => response.json())
+        .then(res => {
+          if (res.message.includes('부족합니다')) {
+            alert(res.message);
+          }
+          document.getElementById('washAmount').value = ''; 
+          loadData(); 
+        });
+    }
+
+    function runHairCut() {
+      const dateVal = document.getElementById('hairDateVal').value;
+      if (!dateVal) return alert('날짜를 선택하세요.');
+
+      document.getElementById('hair-data').innerText = "...";
+      const noCacheUrl = `${GAS_URL}?action=setHairCut&dateVal=${dateVal}&t=${new Date().getTime()}`;
+
+      fetch(noCacheUrl)
+        .then(response => response.json())
+        .then(res => {
+          loadData();
+        });
+    }
+  </script> 
+
 </body>
 </html>
