@@ -8,158 +8,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
-
-        /* =========================================
-           테마 색상 정의 (CSS Variables)
-           ========================================= */
-        :root {
-            /* 기본: 다크 모드 (어둡고 차분한 느낌) */
-            --bg-body: #0f172a;           /* slate-900 */
-            --bg-box: #1e293b;            /* slate-800 */
-            --text-main: #cbd5e1;         /* slate-300 */
-            --text-heading: #f8fafc;      /* slate-50 */
-            --border-box: #334155;        /* slate-700 */
-            --stats-color: #60a5fa;       /* blue-400 */
-            --accent-active: #60a5fa;
-            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-
-        body.light-mode {
-            /* 활성화: 밝은 모드 (명랑하고 다채로운 느낌) */
-            --bg-body: #fdfbf6;           /* 아주 연한 크림 화이트 (밝고 따뜻함) */
-            --bg-box: #ffffff;            /* 순백색 박스 */
-            --text-main: #475569;         /* slate-600 */
-            --text-heading: #1e1b4b;      /* indigo-950 (진한 네이비 블루) */
-            --border-box: #e0f2fe;        /* sky-100 (연한 파스텔 블루) */
-            --stats-color: #ec4899;       /* pink-500 (명랑한 포인트 색상) */
-            --accent-active: #3b82f6;      /* blue-500 */
-            --box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.07); /* 아주 연한 파란색 그림자 */
-        }
-
-        /* =========================================
-           기본 스타일 적용
-           ========================================= */
-        body { 
-            font-family: 'Pretendard', sans-serif; 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            /* 테마 변경 시 부드러운 전환 효과 */
-            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-            -webkit-tap-highlight-color: transparent; 
-        }
-
-        /* 메인 제목 스타일 (HTML의 Tailwind 클래스보다 우선 적용) */
-        h1.main-title { 
-            color: var(--text-heading) !important; 
-            transition: color 0.4s ease;
-        }
-
-        /* 통계(Stats) 스타일 */
-        #stats {
-            color: var(--stats-color) !important;
-            transition: color 0.4s ease;
-        }
-
-        /* 단어장 박스 기본 상태 */
-        .vocab-box { 
-            transition: all 0.3s ease-in-out; 
-            border: 2px solid var(--border-box); 
-            cursor: pointer; 
-            height: 120px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            border-radius: 1.25rem; 
-            padding: 12px; 
-            background-color: var(--bg-box); 
-            box-shadow: var(--box-shadow);
-        }
+        /* 눈이 편안한 어두운 배경 및 텍스트 색상 */
+        body { font-family: 'Pretendard', sans-serif; background-color: #0f172a; color: #cbd5e1; -webkit-tap-highlight-color: transparent; }
         
-        /* 박스 활성화(클릭) 상태 */
-        .vocab-box.active { 
-            height: auto; 
-            border-color: var(--accent-active); 
-            background-color: var(--bg-body); /* 배경색과 통일감을 줌 */
-            box-shadow: 0 10px 20px rgba(96, 165, 250, 0.15);
-        }
+        /* 단어장 박스 기본 및 활성화 상태 (다크 테마) */
+        .vocab-box { transition: all 0.2s ease-in-out; border: 2px solid #334155; cursor: pointer; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-radius: 1.25rem; padding: 12px; background-color: #1e293b; }
+        .vocab-box.active { height: auto; border-color: #60a5fa; background-color: #0f172a; }
         
-        /* 숨겨진 콘텐츠 area */
-        .hidden-content { 
-            display: none; 
-            margin-top: 12px; 
-            width: 100%; 
-            border-top: 1px solid var(--border-box); 
-            padding-top: 0.75rem; 
-        }
-        
-        /* 섹션 소제목 (예: 의미, 예문) */
-        .section-title { 
-            border-left: 4px solid var(--accent-active); 
-            padding-left: 10px; 
-            font-weight: 700; 
-            color: var(--text-heading); 
-            margin-bottom: 1rem; 
-            transition: color 0.4s ease;
-        }
+        /* 기존 pt-3 오타를 padding-top: 0.75rem; 으로 수정 */
+        .hidden-content { display: none; margin-top: 12px; width: 100%; border-top: 1px solid #334155; padding-top: 0.75rem; }
+        .section-title { border-left: 4px solid #60a5fa; padding-left: 10px; font-weight: 700; color: #f8fafc; margin-bottom: 1rem; }
     </style>
 </head> 
-<body class="p-4 md:p-8 pb-20">
+    <body class="p-4 md:p-8 pb-20">
     <div class="max-w-3xl mx-auto">
-        <header class="flex flex-col mb-10">
+        <header class="flex flex-col mb-8">
             
             <div class="w-full flex justify-center">
-                <h1 class="main-title text-3xl md:text-5xl font-extrabold whitespace-nowrap tracking-tighter text-center">
-                    ☕ My Daily English
+                <h1 class="text-2xl md:text-4xl font-bold text-slate-100 whitespace-nowrap tracking-tight text-center">
+                    ☕ My Daily English Study
                 </h1>
             </div>
 
-            <div id="stats" class="w-full text-right font-black text-xl md:text-2xl mt-3 tracking-tight"></div>
+            <div id="stats" class="w-full text-right text-blue-400 font-black text-lg md:text-2xl mt-2"></div>
             
         </header>
 
-        <div id="listContainer" class="space-y-12">
-            <div class="vocab-box active">
-                <div class="text-2xl font-bold">serendipity</div>
-                <div class="text-sm opacity-70">뜻밖의 기쁨</div>
-                <div class="hidden-content" style="display:block;">
-                    <div class="section-title">Meaning</div>
-                    <p>Finding something good without looking for it.</p>
-                </div>
-            </div>
-            </div>
+        <div id="listContainer" class="space-y-12"></div>
     </div>
 
 
     <script>
-        // =========================================
-        // 낮/밤 시간에 따른 테마 자동 변경 스크립트
-        // =========================================
-        function applyThemeBasedOnTime() {
-            const now = new Date();
-            const hour = now.getHours();
-            
-            // 낮 시간 설정: 오전 7시 ~ 오후 6시 59분 (7:00 ~ 18:59)
-            const isDayTime = hour >= 7 && hour < 19;
-            
-            if (isDayTime) {
-                // 낮이면 밝은 모드 클래스 추가
-                document.body.classList.add('light-mode');
-            } else {
-                // 밤이면 밝은 모드 클래스 제거 (기본 다크 모드)
-                document.body.classList.remove('light-mode');
-            }
-        }
-
-        // 1. 페이지가 로드될 때 즉시 실행
-        applyThemeBasedOnTime();
-        
-        // 2. 1분마다 시간을 체크하여 실시간으로 테마 변경
-        setInterval(applyThemeBasedOnTime, 60000);
-
-        // (기존 학습 데이터 렌더링 스크립트는 이 아래에 작성하시면 됩니다.)
-        
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
@@ -2310,7 +2189,7 @@
                 closing: "우리의 학습이 시작된 역사적인 첫 장입니다!"
             }
         ];
-        
+
         function render() {
             const container = document.getElementById('listContainer');
             
