@@ -8,27 +8,78 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon(abc).png">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="EnglishLesson">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
-        /* 눈이 편안한 어두운 배경 및 텍스트 색상 */
-        body { font-family: 'Pretendard', sans-serif; background-color: #0f172a; color: #cbd5e1; -webkit-tap-highlight-color: transparent; }
         
-        /* 단어장 박스 기본 및 활성화 상태 (다크 테마) */
-        .vocab-box { transition: all 0.2s ease-in-out; border: 2px solid #334155; cursor: pointer; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-radius: 1.25rem; padding: 12px; background-color: #1e293b; }
-        .vocab-box.active { height: auto; border-color: #60a5fa; background-color: #0f172a; }
+        /* 벚꽃 핑크 테마 배경 및 텍스트 색상 */
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background-color: #fdf2f8; /* 벚꽃 느낌의 연한 핑크 배경 */
+            color: #475569; /* 눈이 편안한 부드러운 다크 그레이 텍스트 */
+            -webkit-tap-highlight-color: transparent; 
+        }
         
-        /* 기존 pt-3 오타를 padding-top: 0.75rem; 으로 수정 */
-        .hidden-content { display: none; margin-top: 12px; width: 100%; border-top: 1px solid #334155; padding-top: 0.75rem; }
-        .section-title { border-left: 4px solid #60a5fa; padding-left: 10px; font-weight: 700; color: #f8fafc; margin-bottom: 1rem; }
+        /* 단어장 박스 기본 및 활성화 상태 (화이트 & 핑크 포인트) */
+        .vocab-box { 
+            transition: all 0.2s ease-in-out; 
+            border: 2px solid #fbcfe8; /* 귀여운 연핑크 테두리 */
+            cursor: pointer; 
+            height: 120px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            border-radius: 1.25rem; 
+            padding: 12px; 
+            background-color: #ffffff; /* 깔끔한 화이트 배경 */
+            box-shadow: 0 4px 10px rgba(244, 114, 182, 0.1); /* 은은한 핑크빛 그림자 */
+        }
+        .vocab-box.active { 
+            height: auto; 
+            border-color: #f472b6; /* 클릭 시 진해지는 핑크 테두리 */
+            background-color: #fff5f7; /* 아주 연한 핑크빛 배경으로 전환 */
+        }
+        
+        /* 숨겨진 내용과 구분선 색상 변경 */
+        .hidden-content { 
+            display: none; 
+            margin-top: 12px; 
+            width: 100%; 
+            border-top: 1px dashed #fbcfe8; /* 실선 대신 점선으로 부드럽게 표현 */
+            padding-top: 0.75rem; 
+        }
+        .section-title { 
+            border-left: 4px solid #f472b6; /* 핑크색 포인트 바 */
+            padding-left: 10px; 
+            font-weight: 700; 
+            color: #334155; 
+            margin-bottom: 1rem; 
+        }
     </style>
 </head>
-<body>
-    </body>
+<body class="p-4 md:p-8 pb-20">
+    <div class="max-w-3xl mx-auto">
+        <header class="flex flex-col mb-8">
+            
+            <div class="w-full flex justify-center">
+                <h1 class="text-2xl md:text-4xl font-bold text-pink-500 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
+                    🌸 My Daily English Study
+                </h1>
+            </div>
+
+            <div id="stats" class="w-full text-right text-pink-400 font-black text-lg md:text-2xl mt-2"></div>
+            
+        </header>
+
+        <div id="listContainer" class="space-y-12"></div>
+    </div>
+</body>
 </html>
 
     <body class="p-4 md:p-8 pb-20">
