@@ -24,29 +24,7 @@
             -webkit-tap-highlight-color: transparent; 
         }
         
-        /* 단어장 박스 기본 및 활성화 상태 (화이트 & 핑크 포인트) */
-        .vocab-box { 
-            transition: all 0.2s ease-in-out; 
-            border: 2px solid #fbcfe8; 
-            cursor: pointer; 
-            height: 120px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            border-radius: 1.25rem; 
-            padding: 12px; 
-            background-color: #ffffff; 
-            box-shadow: 0 4px 10px rgba(244, 114, 182, 0.1); 
-        }
-        .vocab-box.active { 
-            height: auto; 
-            border-color: #f472b6; 
-            background-color: #fff5f7; 
-        }
-        
-        /* 숨겨진 내용과 구분선 색상 변경 */
+        /* 숨겨진 내용과 구분선 */
         .hidden-content { 
             display: none; 
             margin-top: 12px; 
@@ -66,16 +44,16 @@
            동적으로 생성되는 박스 강제 밝게 변경 & 디테일 수정
            --------------------------------------------------- */
            
-        /* 전체 네모박스 화이트 톤 적용 -> 눈이 편안한 따뜻한 아이보리 톤으로 변경 */
+        /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤으로 변경 */
         #listContainer > div {
-            background-color: #fdfbf7 !important; /* 눈의 피로를 덜어주는 은은한 아이보리 */
-            border: 2px solid #fbcfe8 !important; /* 연핑크 테두리는 그대로 유지 */
+            background-color: #fdfbf7 !important; 
+            border: 2px solid #fbcfe8 !important; 
             border-radius: 1.25rem !important;
-            box-shadow: 0 4px 10px rgba(244, 114, 182, 0.08) !important; /* 그림자도 살짝 더 부드럽게 조정 */
+            box-shadow: 0 4px 10px rgba(244, 114, 182, 0.08) !important; 
             color: #475569 !important;
         }
 
-        /* Dialogue 등 어두운 배경(bg-slate 등)을 연핑크로 강제 변경 */
+        /* Dialogue 등 어두운 배경을 연핑크로 강제 변경 */
         #listContainer [class*="bg-slate-"],
         #listContainer [class*="bg-gray-"],
         #listContainer [class*="bg-[#"] {
@@ -92,39 +70,42 @@
             color: #334155 !important;
         }
 
-        /* [추가] DAY 118 등 뱃지(둥근 요소, 파란 배경 등) 배경색 변경 */
+        /* DAY 118 등 뱃지(둥근 요소, 파란 배경 등) 색상 변경 */
         #listContainer [class*="bg-blue-"], 
         #listContainer [class*="bg-indigo-"],
         #listContainer .rounded-full {
-            background-color: #fbcfe8 !important; /* 화사한 핑크 배경 */
-            color: #9d174d !important; /* 시인성 높은 딥베리 핑크 글자 */
+            background-color: #fbcfe8 !important;
+            color: #9d174d !important;
             font-weight: 800 !important;
         }
 
-        /* [추가] DAY 아래 소제목 색상 변경 (눈이 편안하고 가독성 좋은 색) */
+        /* DAY 아래 소제목 색상 변경 */
         #listContainer .text-sm,
         #listContainer .text-xs,
         #listContainer [class*="text-slate-400"],
         #listContainer [class*="text-gray-400"],
         #listContainer [class*="text-gray-500"] {
-            color: #475569 !important; /* 핑크 배경에 잘 어울리는 슬레이트 그레이 */
+            color: #475569 !important;
             font-weight: 600 !important;
         }
     </style>
 </head>
-<body class="px-4 pb-20 md:px-8" style="padding-top: calc(env(safe-area-inset-top) + 1rem);">
-    <div class="max-w-3xl mx-auto">
-        <header class="flex flex-col mb-3">
+<body class="pb-20">
+
+    <header class="sticky top-0 z-50 bg-[#fdf2f8]/90 backdrop-blur-md border-b border-pink-100 shadow-sm" style="padding-top: calc(env(safe-area-inset-top) + 1rem);">
+        <div class="max-w-3xl mx-auto px-4 md:px-8 pb-3">
             <div class="w-full flex justify-center">
                 <h1 class="text-2xl md:text-4xl font-bold text-pink-500 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
                     🌸 My Daily English Study
                 </h1>
             </div>
             <div id="stats" class="w-full text-right text-pink-400 font-black text-lg md:text-2xl mt-1"></div>
-        </header>
+        </div>
+    </header>
 
+    <main class="max-w-3xl mx-auto px-4 md:px-8 mt-6">
         <div id="listContainer" class="space-y-12"></div>
-    </div>
+    </main>
 
     <script>
         const observer = new MutationObserver((mutations) => {
@@ -139,7 +120,6 @@
                     let node;
                     while ((node = walker.nextNode())) {
                         if (node.nodeValue.includes('💬') || node.nodeValue.includes('🗨️')) {
-                            // 글풍선 이모티콘을 찾아서 빈칸으로 교체
                             node.nodeValue = node.nodeValue.replace(/[💬🗨️]/g, '').trim();
                         }
                     }
