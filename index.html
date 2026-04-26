@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
         
         /* 벚꽃 핑크 테마 배경 및 텍스트 색상 */
         body { 
@@ -40,7 +40,7 @@
         }
 
         /* ---------------------------------------------------
-           동적으로 생성되는 박스 강제 밝게 변경
+           동적으로 생성되는 박스 디자인 수정
            --------------------------------------------------- */
            
         /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤 */
@@ -52,11 +52,11 @@
             color: #475569 !important;
         }
 
-        /* Dialogue 등 어두운 배경을 연핑크로 강제 변경 */
+        /* [수정됨] Dialogue 및 예문 박스 배경색 변경 (연핑크 -> 화이트) */
         #listContainer [class*="bg-slate-"],
         #listContainer [class*="bg-gray-"],
         #listContainer [class*="bg-[#"] {
-            background-color: #fff5f7 !important;
+            background-color: #ffffff !important; /* 3가지 표현 박스와 동일한 화이트 */
             border: 1px solid #fbcfe8 !important;
             color: #334155 !important;
         }
@@ -69,7 +69,7 @@
             color: #334155 !important;
         }
 
-        /* DAY 118 등 뱃지(둥근 요소, 파란 배경 등) 색상 변경 */
+        /* DAY 118 등 뱃지 색상 */
         #listContainer [class*="bg-blue-"], 
         #listContainer [class*="bg-indigo-"],
         #listContainer .rounded-full {
@@ -78,7 +78,7 @@
             font-weight: 800 !important;
         }
 
-        /* DAY 아래 소제목 색상 변경 */
+        /* DAY 아래 소제목 색상 */
         #listContainer .text-sm,
         #listContainer .text-xs,
         #listContainer [class*="text-slate-400"],
@@ -89,14 +89,13 @@
         }
 
         /* ---------------------------------------------------
-           [수정] 하루 세 가지 표현(단어장 박스) 핑크/화이트 테마
+           하루 세 가지 표현(단어장 박스) 핑크/화이트 테마
            --------------------------------------------------- */
         
-        /* 박스 배경 및 테두리 (네이비 -> 화이트 & 핑크 테두리) */
         #listContainer .vocab-box {
             transition: all 0.2s ease-in-out !important;
-            background-color: #ffffff !important; /* 눈이 편안한 깔끔한 화이트 */
-            border: 2px solid #fbcfe8 !important; /* 큰 박스와 같은 연핑크 테두리 */
+            background-color: #ffffff !important; 
+            border: 2px solid #fbcfe8 !important; 
             border-radius: 1.25rem !important;
             cursor: pointer !important;
             height: 120px;
@@ -110,31 +109,27 @@
         }
         #listContainer .vocab-box.active {
             height: auto;
-            background-color: #fff5f7 !important; /* 클릭 시 아주 연한 핑크 배경 */
-            border-color: #f472b6 !important; /* 클릭 시 진한 핑크 테두리로 강조 */
+            background-color: #fff5f7 !important; 
+            border-color: #f472b6 !important; 
         }
 
-        /* 박스 내부 텍스트 색상을 어두운 회색으로 변경하여 가독성 확보 */
+        /* 일반 텍스트 및 강조 텍스트 색상 */
         #listContainer .vocab-box,
         #listContainer .vocab-box * {
             color: #475569 !important;
         }
+        #listContainer .vocab-box strong,
         #listContainer .vocab-box .text-slate-100,
-        #listContainer .vocab-box [class*="text-slate-100"],
-        #listContainer .vocab-box [class*="text-slate-200"],
-        #listContainer .vocab-box .text-white,
-        #listContainer .vocab-box strong {
-            color: #334155 !important;
-            font-weight: 700 !important;
+        #listContainer .vocab-box .text-white {
+            color: #9d174d !important; 
+            font-weight: 800 !important;
         }
         
-        /* 기존 파란색 포인트 글씨들을 예쁜 핑크색으로 변경 */
         #listContainer .vocab-box .text-blue-400,
         #listContainer .vocab-box [class*="text-blue-"] {
-            color: #ec4899 !important; 
+            color: #be185d !important; 
         }
 
-        /* 숨겨진 내용 구분선을 연핑크 점선으로 변경 */
         #listContainer .vocab-box .hidden-content {
             border-top: 1px dashed #fbcfe8 !important;
         }
@@ -145,11 +140,11 @@
     <header class="sticky top-0 z-50 bg-[#fdf2f8]/90 backdrop-blur-md border-b border-pink-100 shadow-sm" style="padding-top: calc(env(safe-area-inset-top) + 1rem);">
         <div class="max-w-3xl mx-auto px-4 md:px-8 pb-3">
             <div class="w-full flex justify-center">
-                <h1 class="text-2xl md:text-4xl font-bold text-pink-500 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
+                <h1 class="text-2xl md:text-4xl font-extrabold text-rose-700 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
                     🌸 My Daily English Study
                 </h1>
             </div>
-            <div id="stats" class="w-full text-right text-pink-400 font-black text-lg md:text-2xl mt-1"></div>
+            <div id="stats" class="w-full text-right text-rose-400 font-black text-lg md:text-2xl mt-1"></div>
         </div>
     </header>
 
