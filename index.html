@@ -29,7 +29,6 @@
             display: none; 
             margin-top: 12px; 
             width: 100%; 
-            border-top: 1px dashed #fbcfe8; 
             padding-top: 0.75rem; 
         }
         .section-title { 
@@ -41,10 +40,10 @@
         }
 
         /* ---------------------------------------------------
-           동적으로 생성되는 박스 강제 밝게 변경 & 디테일 수정
+           동적으로 생성되는 박스 강제 밝게 변경
            --------------------------------------------------- */
            
-        /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤으로 변경 */
+        /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤 */
         #listContainer > div {
             background-color: #fdfbf7 !important; 
             border: 2px solid #fbcfe8 !important; 
@@ -87,6 +86,57 @@
         #listContainer [class*="text-gray-500"] {
             color: #475569 !important;
             font-weight: 600 !important;
+        }
+
+        /* ---------------------------------------------------
+           [수정] 하루 세 가지 표현(단어장 박스) 핑크/화이트 테마
+           --------------------------------------------------- */
+        
+        /* 박스 배경 및 테두리 (네이비 -> 화이트 & 핑크 테두리) */
+        #listContainer .vocab-box {
+            transition: all 0.2s ease-in-out !important;
+            background-color: #ffffff !important; /* 눈이 편안한 깔끔한 화이트 */
+            border: 2px solid #fbcfe8 !important; /* 큰 박스와 같은 연핑크 테두리 */
+            border-radius: 1.25rem !important;
+            cursor: pointer !important;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+            box-shadow: 0 2px 6px rgba(244, 114, 182, 0.05) !important;
+        }
+        #listContainer .vocab-box.active {
+            height: auto;
+            background-color: #fff5f7 !important; /* 클릭 시 아주 연한 핑크 배경 */
+            border-color: #f472b6 !important; /* 클릭 시 진한 핑크 테두리로 강조 */
+        }
+
+        /* 박스 내부 텍스트 색상을 어두운 회색으로 변경하여 가독성 확보 */
+        #listContainer .vocab-box,
+        #listContainer .vocab-box * {
+            color: #475569 !important;
+        }
+        #listContainer .vocab-box .text-slate-100,
+        #listContainer .vocab-box [class*="text-slate-100"],
+        #listContainer .vocab-box [class*="text-slate-200"],
+        #listContainer .vocab-box .text-white,
+        #listContainer .vocab-box strong {
+            color: #334155 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* 기존 파란색 포인트 글씨들을 예쁜 핑크색으로 변경 */
+        #listContainer .vocab-box .text-blue-400,
+        #listContainer .vocab-box [class*="text-blue-"] {
+            color: #ec4899 !important; 
+        }
+
+        /* 숨겨진 내용 구분선을 연핑크 점선으로 변경 */
+        #listContainer .vocab-box .hidden-content {
+            border-top: 1px dashed #fbcfe8 !important;
         }
     </style>
 </head>
