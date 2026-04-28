@@ -37,7 +37,7 @@
             margin-bottom: 1rem; 
         }
 
-        /* 박스 디자인 수정 */
+        /* 박스 디자인 */
         #listContainer > div {
             background-color: #fdfbf7 !important; 
             border: 2px solid #fbcfe8 !important; 
@@ -119,39 +119,55 @@
             border-top: 1px dashed #fbcfe8 !important;
         }
 
-        /* 직접 터치해서 움직일 수 있는 커스텀 스크롤 핸들 팝업 */
+        /* 스크롤 UI */
         #scrollPopup {
             position: fixed;
             right: 0;
-            top: 15%; /* 초기 위치 */
+            top: 15%; 
             transform: translateY(-50%);
-            background-color: rgba(244, 114, 182, 0.95);
+            background-color: rgba(244, 114, 182, 0.85); 
             color: white;
-            padding: 8px 8px 8px 16px;
+            padding: 10px 6px 10px 8px;
             border-radius: 9999px 0 0 9999px;
-            font-weight: 800;
-            font-size: 0.875rem;
-            box-shadow: -2px 2px 10px rgba(244, 114, 182, 0.25);
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.2s ease;
+            box-shadow: -2px 2px 10px rgba(244, 114, 182, 0.15);
             z-index: 100;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 0; 
             cursor: grab;
-            touch-action: none; /* 드래그 시 브라우저 기본 동작 방지 */
+            touch-action: none; 
+            transition: top 0.1s ease-out, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, gap 0.3s ease;
         }
-        #scrollPopup:active {
+        
+        #scrollPopup.dragging {
+            background-color: rgba(244, 114, 182, 1);
+            padding: 8px 10px 8px 16px;
+            gap: 8px; 
+            box-shadow: -2px 4px 12px rgba(244, 114, 182, 0.4);
             cursor: grabbing;
         }
-        /* 드래그 가능함을 보여주는 점 3개 UI */
+
+        #popupDate {
+            font-weight: 800;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+        }
+
+        #scrollPopup.dragging #popupDate {
+            max-width: 100px; 
+            opacity: 1;
+        }
+
         .drag-dots {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            opacity: 0.8;
-            margin-left: 4px;
-            margin-right: 2px;
+            gap: 3px;
+            opacity: 0.9;
+            padding: 0 2px;
         }
         .drag-dots span {
             width: 4px;
@@ -160,7 +176,6 @@
             border-radius: 50%;
         }
 
-        /* 상단 고정 헤더 안전 영역 처리 */
         .sticky-search-header {
             position: sticky;
             top: 0;
@@ -203,7 +218,10 @@
     </div>
 
     <script>
-        // 1. 아이콘 제거 MutationObserver
+        // 새로고침 시 최초 한 번만 스크롤을 복원하기 위한 플래그
+        let hasRestoredScroll = false;
+
+        // 1. 아이콘 제거 및 자동 스크롤 복원 Observer
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.addedNodes.length) {
@@ -218,6 +236,27 @@
                         if (node.nodeValue.includes('💬') || node.nodeValue.includes('🗨️')) {
                             node.nodeValue = node.nodeValue.replace(/[💬🗨️]/g, '').trim();
                         }
+                    }
+
+                    // [추가됨] 컨텐츠가 로드되었을 때 마지막 학습 위치로 스크롤 복원
+                    if (!hasRestoredScroll) {
+                        const savedDay = localStorage.getItem('lastStudiedDay');
+                        if (savedDay) {
+                            // 렌더링될 시간을 살짝 기다린 후 이동 (0.3초)
+                            setTimeout(() => {
+                                const items = Array.from(listContainer.children);
+                                const targetItem = items.find(item => {
+                                    // 정규식으로 해당 DAY가 포함된 박스 찾기
+                                    const regex = new RegExp(`DAY\\s*${savedDay}(?!\\d)`, 'i');
+                                    return regex.test(item.textContent);
+                                });
+
+                                if (targetItem) {
+                                    targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }, 300);
+                        }
+                        hasRestoredScroll = true; // 복원 완료 처리
                     }
                 }
             });
@@ -244,13 +283,11 @@
             });
         });
 
-        // 3. 커스텀 스크롤 드래그 및 날짜 연동 기능
+        // 3. 커스텀 스크롤 기능
         const scrollPopup = document.getElementById('scrollPopup');
         const popupDate = document.getElementById('popupDate');
-        let scrollTimeout;
         let isDragging = false;
 
-        // 현재 화면에 보이는 카드의 날짜 계산
         function updatePopupDate() {
             const items = Array.from(listContainer.children);
             let closestItem = null;
@@ -260,7 +297,6 @@
                 if (item.style.display === 'none') return;
                 
                 const rect = item.getBoundingClientRect();
-                // 화면 중앙 부근에 위치한 요소를 찾기 위한 기준값
                 const distance = Math.abs(rect.top - (window.innerHeight / 2));
                 
                 if (distance < minDistance) {
@@ -273,6 +309,10 @@
                 const dayMatch = closestItem.textContent.match(/DAY\s*(\d+)/i);
                 if (dayMatch) {
                     const dayNumber = parseInt(dayMatch[1], 10);
+                    
+                    // [추가됨] 화면 중앙에 위치한 DAY 숫자를 브라우저 로컬 스토리지에 저장
+                    localStorage.setItem('lastStudiedDay', dayNumber);
+
                     const baseDate = new Date('2025-12-30T00:00:00');
                     baseDate.setDate(baseDate.getDate() + dayNumber);
                     
@@ -287,60 +327,41 @@
             }
         }
 
-        // 스크롤 위치에 맞춰 팝업의 top 위치 동기화
         function updatePopupPosition() {
             if (isDragging) return;
             const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
             if (scrollableHeight <= 0) return;
             
             const scrollPercent = window.scrollY / scrollableHeight;
-            // 팝업이 화면 밖으로 나가지 않도록 최소 15%, 최대 85% 구간 내에서만 움직임
-            const topPos = 15 + (scrollPercent * 70);
+            const topPos = 15 + (scrollPercent * 70); 
             scrollPopup.style.top = `${topPos}%`;
         }
 
-        // 일반 브라우저 스크롤 감지
         window.addEventListener('scroll', () => {
             if (listContainer.children.length === 0) return;
-            
             updatePopupDate();
             updatePopupPosition();
-
-            scrollPopup.style.opacity = '1';
-            
-            if (!isDragging) {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    scrollPopup.style.opacity = '0';
-                }, 1200);
-            }
         });
 
-        // ======= 터치 & 드래그 이벤트 (팝업을 직접 움직여서 스크롤) =======
         function handleDragStart(e) {
             if (listContainer.children.length === 0) return;
             isDragging = true;
-            scrollPopup.style.opacity = '1';
-            scrollPopup.style.transform = 'translateY(-50%) scale(1.05)';
-            clearTimeout(scrollTimeout);
+            scrollPopup.classList.add('dragging'); 
+            updatePopupDate();
         }
 
         function handleDragMove(e) {
             if (!isDragging) return;
-            e.preventDefault(); // 기본 터치 스크롤 방지
+            e.preventDefault(); 
             
-            // 터치 또는 마우스의 Y 좌표 추출
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const windowH = window.innerHeight;
             
-            // 화면 상단 15% ~ 하단 85% 구간을 0~1 비율로 계산
             let percent = (clientY - (windowH * 0.15)) / (windowH * 0.7);
-            percent = Math.max(0, Math.min(1, percent)); // 0과 1 사이로 제한
+            percent = Math.max(0, Math.min(1, percent));
             
-            // 팝업 핸들 위치 업데이트
             scrollPopup.style.top = `${15 + percent * 70}%`;
             
-            // 실제 페이지 스크롤 위치 동기화
             const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
             window.scrollTo(0, scrollableHeight * percent);
             
@@ -350,18 +371,13 @@
         function handleDragEnd() {
             if (!isDragging) return;
             isDragging = false;
-            scrollPopup.style.transform = 'translateY(-50%) scale(1)';
-            scrollTimeout = setTimeout(() => {
-                scrollPopup.style.opacity = '0';
-            }, 1200);
+            scrollPopup.classList.remove('dragging');
         }
 
-        // 모바일 터치 이벤트 연결
         scrollPopup.addEventListener('touchstart', handleDragStart, { passive: false });
         document.addEventListener('touchmove', handleDragMove, { passive: false });
         document.addEventListener('touchend', handleDragEnd);
         
-        // PC 마우스 이벤트 연결 (테스트용)
         scrollPopup.addEventListener('mousedown', handleDragStart);
         document.addEventListener('mousemove', handleDragMove);
         document.addEventListener('mouseup', handleDragEnd);
