@@ -42,7 +42,7 @@
         /* ---------------------------------------------------
            동적으로 생성되는 박스 디자인 수정
            --------------------------------------------------- */
-           
+            
         /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤 */
         #listContainer > div {
             background-color: #fdfbf7 !important; 
@@ -52,11 +52,11 @@
             color: #475569 !important;
         }
 
-        /* [수정됨] Dialogue 및 예문 박스 배경색 변경 (연핑크 -> 화이트) */
+        /* Dialogue 및 예문 박스 배경색 변경 */
         #listContainer [class*="bg-slate-"],
         #listContainer [class*="bg-gray-"],
         #listContainer [class*="bg-[#"] {
-            background-color: #ffffff !important; /* 3가지 표현 박스와 동일한 화이트 */
+            background-color: #ffffff !important;
             border: 1px solid #fbcfe8 !important;
             color: #334155 !important;
         }
@@ -133,6 +133,25 @@
         #listContainer .vocab-box .hidden-content {
             border-top: 1px dashed #fbcfe8 !important;
         }
+
+        /* 커스텀 스크롤 팝업 스타일 */
+        #scrollPopup {
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(244, 114, 182, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
     </style>
 </head>
 <body class="pb-20">
@@ -144,15 +163,26 @@
                     🌸 My Daily English Study
                 </h1>
             </div>
-            <div id="stats" class="w-full text-right text-rose-400 font-black text-lg md:text-2xl mt-1"></div>
+            
+            <div class="mt-4 relative">
+                <input type="text" id="searchInput" placeholder="검색어를 입력하세요 (예: expression, 단어...)" 
+                       class="w-full bg-white border-2 border-pink-200 text-slate-600 text-sm md:text-base rounded-full pl-11 pr-4 py-2.5 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all shadow-sm">
+                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-pink-300"></i>
+            </div>
+            
+            <div id="stats" class="w-full text-right text-rose-400 font-black text-lg md:text-2xl mt-1 hidden"></div>
         </div>
     </header>
 
-    <main class="max-w-3xl mx-auto px-4 md:px-8 mt-6">
-        <div id="listContainer" class="space-y-12"></div>
+    <main class="max-w-3xl mx-auto px-4 md:px-8 mt-6 relative">
+        <div id="listContainer" class="space-y-12">
+            </div>
     </main>
 
-    <script>
+    <div id="scrollPopup">DAY -</div>
+
+<script>
+        // 1. 아이콘 제거 MutationObserver
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.addedNodes.length) {
@@ -176,6 +206,75 @@
         if (listContainer) {
             observer.observe(listContainer, { childList: true, subtree: true });
         }
+
+        // 2. 텍스트 검색 기능
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase().trim();
+            const items = Array.from(listContainer.children);
+
+            items.forEach(item => {
+                const textContent = item.textContent.toLowerCase();
+                if (textContent.includes(keyword)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // 3. 스크롤 위치 감지 및 날짜 팝업 기능 (수정됨)
+        const scrollPopup = document.getElementById('scrollPopup');
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            if (listContainer.children.length === 0) return;
+
+            scrollPopup.style.opacity = '1';
+
+            const items = Array.from(listContainer.children);
+            let closestItem = null;
+            let minDistance = Infinity;
+
+            items.forEach(item => {
+                if (item.style.display === 'none') return;
+                
+                const rect = item.getBoundingClientRect();
+                const distance = Math.abs(rect.top);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestItem = item;
+                }
+            });
+
+            if (closestItem) {
+                // 'DAY 숫자' 패턴을 찾아 그룹($1)으로 숫자만 추출
+                const dayMatch = closestItem.textContent.match(/DAY\s*(\d+)/i);
+                
+                if (dayMatch) {
+                    const dayNumber = parseInt(dayMatch[1], 10);
+                    
+                    // 기준일 설정: Day 1이 2025년 12월 31일이 되도록 하루 전인 12월 30일을 기준(base)으로 잡음
+                    const baseDate = new Date('2025-12-30T00:00:00');
+                    baseDate.setDate(baseDate.getDate() + dayNumber);
+                    
+                    // YYYY-MM-DD 포맷으로 변환
+                    const yyyy = baseDate.getFullYear();
+                    const mm = String(baseDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(baseDate.getDate()).padStart(2, '0');
+                    
+                    scrollPopup.textContent = `${yyyy}-${mm}-${dd}`;
+                } else {
+                    scrollPopup.textContent = "STUDY"; 
+                }
+            }
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                scrollPopup.style.opacity = '0';
+            }, 800);
+        });
     </script>
 </body>
 </html>
