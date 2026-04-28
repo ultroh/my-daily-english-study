@@ -16,7 +16,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
         
-        /* 벚꽃 핑크 테마 배경 및 텍스트 색상 */
         body { 
             font-family: 'Pretendard', sans-serif; 
             background-color: #fdf2f8; 
@@ -24,7 +23,6 @@
             -webkit-tap-highlight-color: transparent; 
         }
         
-        /* 숨겨진 내용과 구분선 */
         .hidden-content { 
             display: none; 
             margin-top: 12px; 
@@ -39,11 +37,7 @@
             margin-bottom: 1rem; 
         }
 
-        /* ---------------------------------------------------
-           동적으로 생성되는 박스 디자인 수정
-           --------------------------------------------------- */
-            
-        /* 전체 네모박스: 눈이 편안한 따뜻한 아이보리 톤 */
+        /* 박스 디자인 수정 */
         #listContainer > div {
             background-color: #fdfbf7 !important; 
             border: 2px solid #fbcfe8 !important; 
@@ -52,7 +46,6 @@
             color: #475569 !important;
         }
 
-        /* Dialogue 및 예문 박스 배경색 변경 */
         #listContainer [class*="bg-slate-"],
         #listContainer [class*="bg-gray-"],
         #listContainer [class*="bg-[#"] {
@@ -61,7 +54,6 @@
             color: #334155 !important;
         }
 
-        /* 기본 흰색 텍스트들을 진한 회색으로 변경 */
         #listContainer [class*="text-slate-100"],
         #listContainer [class*="text-slate-200"],
         #listContainer [class*="text-slate-300"],
@@ -69,7 +61,6 @@
             color: #334155 !important;
         }
 
-        /* DAY 118 등 뱃지 색상 */
         #listContainer [class*="bg-blue-"], 
         #listContainer [class*="bg-indigo-"],
         #listContainer .rounded-full {
@@ -78,7 +69,6 @@
             font-weight: 800 !important;
         }
 
-        /* DAY 아래 소제목 색상 */
         #listContainer .text-sm,
         #listContainer .text-xs,
         #listContainer [class*="text-slate-400"],
@@ -87,10 +77,6 @@
             color: #475569 !important;
             font-weight: 600 !important;
         }
-
-        /* ---------------------------------------------------
-           하루 세 가지 표현(단어장 박스) 핑크/화이트 테마
-           --------------------------------------------------- */
         
         #listContainer .vocab-box {
             transition: all 0.2s ease-in-out !important;
@@ -113,7 +99,6 @@
             border-color: #f472b6 !important; 
         }
 
-        /* 일반 텍스트 및 강조 텍스트 색상 */
         #listContainer .vocab-box,
         #listContainer .vocab-box * {
             color: #475569 !important;
@@ -134,43 +119,74 @@
             border-top: 1px dashed #fbcfe8 !important;
         }
 
-        /* 커스텀 스크롤 팝업 스타일 */
+        /* 직접 터치해서 움직일 수 있는 커스텀 스크롤 핸들 팝업 */
         #scrollPopup {
             position: fixed;
-            right: 16px;
-            top: 50%;
+            right: 0;
+            top: 15%; /* 초기 위치 */
             transform: translateY(-50%);
-            background-color: rgba(244, 114, 182, 0.9);
+            background-color: rgba(244, 114, 182, 0.95);
             color: white;
-            padding: 8px 16px;
-            border-radius: 9999px;
+            padding: 8px 8px 8px 16px;
+            border-radius: 9999px 0 0 9999px;
             font-weight: 800;
             font-size: 0.875rem;
-            box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
+            box-shadow: -2px 2px 10px rgba(244, 114, 182, 0.25);
             opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.2s ease;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: grab;
+            touch-action: none; /* 드래그 시 브라우저 기본 동작 방지 */
+        }
+        #scrollPopup:active {
+            cursor: grabbing;
+        }
+        /* 드래그 가능함을 보여주는 점 3개 UI */
+        .drag-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            opacity: 0.8;
+            margin-left: 4px;
+            margin-right: 2px;
+        }
+        .drag-dots span {
+            width: 4px;
+            height: 4px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        /* 상단 고정 헤더 안전 영역 처리 */
+        .sticky-search-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(253, 242, 248, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid #fce7f3;
+            padding-top: max(env(safe-area-inset-top), 12px);
+            padding-bottom: 12px;
         }
     </style>
 </head>
 <body class="pb-20">
 
-    <header class="sticky top-0 z-50 bg-[#fdf2f8]/90 backdrop-blur-md border-b border-pink-100 shadow-sm" style="padding-top: calc(env(safe-area-inset-top) + 1rem);">
-        <div class="max-w-3xl mx-auto px-4 md:px-8 pb-3">
-            <div class="w-full flex justify-center">
-                <h1 class="text-2xl md:text-4xl font-extrabold text-rose-700 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
-                    🌸 My Daily English Study
-                </h1>
-            </div>
-            
-            <div class="mt-4 relative">
-                <input type="text" id="searchInput" placeholder="검색어를 입력하세요 (예: expression, 단어...)" 
-                       class="w-full bg-white border-2 border-pink-200 text-slate-600 text-sm md:text-base rounded-full pl-11 pr-4 py-2.5 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all shadow-sm">
-                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-pink-300"></i>
-            </div>
-            
-            <div id="stats" class="w-full text-right text-rose-400 font-black text-lg md:text-2xl mt-1 hidden"></div>
+    <div class="w-full flex justify-center pb-2 bg-[#fdf2f8]" style="padding-top: calc(env(safe-area-inset-top) + 1.5rem);">
+        <h1 class="text-2xl md:text-4xl font-extrabold text-rose-700 whitespace-nowrap tracking-tight text-center drop-shadow-sm">
+            🌸 My Daily English Study
+        </h1>
+    </div>
+
+    <header class="sticky-search-header px-4 md:px-8 shadow-sm">
+        <div class="max-w-3xl mx-auto relative">
+            <input type="text" id="searchInput" placeholder="검색어를 입력하세요" 
+                   class="w-full bg-white border-2 border-pink-200 text-slate-600 text-sm md:text-base rounded-full pl-11 pr-4 py-2.5 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all shadow-sm">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-pink-300"></i>
         </div>
     </header>
 
@@ -179,9 +195,14 @@
             </div>
     </main>
 
-    <div id="scrollPopup">DAY -</div>
+    <div id="scrollPopup">
+        <span id="popupDate">DAY -</span>
+        <div class="drag-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
 
-<script>
+    <script>
         // 1. 아이콘 제거 MutationObserver
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -223,15 +244,14 @@
             });
         });
 
-        // 3. 스크롤 위치 감지 및 날짜 팝업 기능 (수정됨)
+        // 3. 커스텀 스크롤 드래그 및 날짜 연동 기능
         const scrollPopup = document.getElementById('scrollPopup');
+        const popupDate = document.getElementById('popupDate');
         let scrollTimeout;
+        let isDragging = false;
 
-        window.addEventListener('scroll', () => {
-            if (listContainer.children.length === 0) return;
-
-            scrollPopup.style.opacity = '1';
-
+        // 현재 화면에 보이는 카드의 날짜 계산
+        function updatePopupDate() {
             const items = Array.from(listContainer.children);
             let closestItem = null;
             let minDistance = Infinity;
@@ -240,7 +260,8 @@
                 if (item.style.display === 'none') return;
                 
                 const rect = item.getBoundingClientRect();
-                const distance = Math.abs(rect.top);
+                // 화면 중앙 부근에 위치한 요소를 찾기 위한 기준값
+                const distance = Math.abs(rect.top - (window.innerHeight / 2));
                 
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -249,32 +270,101 @@
             });
 
             if (closestItem) {
-                // 'DAY 숫자' 패턴을 찾아 그룹($1)으로 숫자만 추출
                 const dayMatch = closestItem.textContent.match(/DAY\s*(\d+)/i);
-                
                 if (dayMatch) {
                     const dayNumber = parseInt(dayMatch[1], 10);
-                    
-                    // 기준일 설정: Day 1이 2025년 12월 31일이 되도록 하루 전인 12월 30일을 기준(base)으로 잡음
                     const baseDate = new Date('2025-12-30T00:00:00');
                     baseDate.setDate(baseDate.getDate() + dayNumber);
                     
-                    // YYYY-MM-DD 포맷으로 변환
                     const yyyy = baseDate.getFullYear();
                     const mm = String(baseDate.getMonth() + 1).padStart(2, '0');
                     const dd = String(baseDate.getDate()).padStart(2, '0');
                     
-                    scrollPopup.textContent = `${yyyy}-${mm}-${dd}`;
+                    popupDate.textContent = `${yyyy}-${mm}-${dd}`;
                 } else {
-                    scrollPopup.textContent = "STUDY"; 
+                    popupDate.textContent = "STUDY"; 
                 }
             }
+        }
 
+        // 스크롤 위치에 맞춰 팝업의 top 위치 동기화
+        function updatePopupPosition() {
+            if (isDragging) return;
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (scrollableHeight <= 0) return;
+            
+            const scrollPercent = window.scrollY / scrollableHeight;
+            // 팝업이 화면 밖으로 나가지 않도록 최소 15%, 최대 85% 구간 내에서만 움직임
+            const topPos = 15 + (scrollPercent * 70);
+            scrollPopup.style.top = `${topPos}%`;
+        }
+
+        // 일반 브라우저 스크롤 감지
+        window.addEventListener('scroll', () => {
+            if (listContainer.children.length === 0) return;
+            
+            updatePopupDate();
+            updatePopupPosition();
+
+            scrollPopup.style.opacity = '1';
+            
+            if (!isDragging) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    scrollPopup.style.opacity = '0';
+                }, 1200);
+            }
+        });
+
+        // ======= 터치 & 드래그 이벤트 (팝업을 직접 움직여서 스크롤) =======
+        function handleDragStart(e) {
+            if (listContainer.children.length === 0) return;
+            isDragging = true;
+            scrollPopup.style.opacity = '1';
+            scrollPopup.style.transform = 'translateY(-50%) scale(1.05)';
             clearTimeout(scrollTimeout);
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging) return;
+            e.preventDefault(); // 기본 터치 스크롤 방지
+            
+            // 터치 또는 마우스의 Y 좌표 추출
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const windowH = window.innerHeight;
+            
+            // 화면 상단 15% ~ 하단 85% 구간을 0~1 비율로 계산
+            let percent = (clientY - (windowH * 0.15)) / (windowH * 0.7);
+            percent = Math.max(0, Math.min(1, percent)); // 0과 1 사이로 제한
+            
+            // 팝업 핸들 위치 업데이트
+            scrollPopup.style.top = `${15 + percent * 70}%`;
+            
+            // 실제 페이지 스크롤 위치 동기화
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            window.scrollTo(0, scrollableHeight * percent);
+            
+            updatePopupDate();
+        }
+
+        function handleDragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            scrollPopup.style.transform = 'translateY(-50%) scale(1)';
             scrollTimeout = setTimeout(() => {
                 scrollPopup.style.opacity = '0';
-            }, 800);
-        });
+            }, 1200);
+        }
+
+        // 모바일 터치 이벤트 연결
+        scrollPopup.addEventListener('touchstart', handleDragStart, { passive: false });
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+        
+        // PC 마우스 이벤트 연결 (테스트용)
+        scrollPopup.addEventListener('mousedown', handleDragStart);
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
     </script>
 </body>
 </html>
