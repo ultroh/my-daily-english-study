@@ -218,6 +218,9 @@
     </div>
 
     <script>
+        // 모바일 브라우저의 자체 스크롤 복원 기능을 수동(manual)으로 변경
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
         // 새로고침 시 최초 한 번만 스크롤을 복원하기 위한 플래그
         let hasRestoredScroll = false;
 
