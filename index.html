@@ -135,7 +135,8 @@
         }
 
         /* 펼쳐지는 콘텐츠 구분선 */
-        #listContainer .vocab-box .hidden-content {
+        #listContainer .vocab-box .hidden-content,
+        #listContainer .expression-box .hidden-content {
             border-top: 1px dashed #cbd5e1 !important; /* slate-300 */
         }
 
@@ -244,9 +245,25 @@
                 </div>
                 <h2 class="section-title">Today's Key Sentences</h2>
                 <div class="space-y-3 text-lg text-slate-700">
-                    <p>1. Make yourself at home.</p>
-                    <p>2. It's on the tip of my tongue.</p>
-                    <p>3. I'm feeling under the weather.</p>
+                    <!-- 클릭 시 예문이 확장되도록 expression-box 클래스와 hidden-content 추가 -->
+                    <div class="expression-box cursor-pointer p-2 -mx-2 rounded hover:bg-slate-50 transition-colors">
+                        <p class="font-semibold">1. Make yourself at home.</p>
+                        <div class="hidden-content text-sm text-slate-500 mt-2 pt-2">
+                            예문: Please, come in and make yourself at home. <br>(들어오셔서 편하게 계세요.)
+                        </div>
+                    </div>
+                    <div class="expression-box cursor-pointer p-2 -mx-2 rounded hover:bg-slate-50 transition-colors">
+                        <p class="font-semibold">2. It's on the tip of my tongue.</p>
+                        <div class="hidden-content text-sm text-slate-500 mt-2 pt-2">
+                            예문: What was the movie called? It's on the tip of my tongue. <br>(그 영화 제목이 뭐였지? 입가에 맴도네.)
+                        </div>
+                    </div>
+                    <div class="expression-box cursor-pointer p-2 -mx-2 rounded hover:bg-slate-50 transition-colors">
+                        <p class="font-semibold">3. I'm feeling under the weather.</p>
+                        <div class="hidden-content text-sm text-slate-500 mt-2 pt-2">
+                            예문: I think I need to rest. I'm feeling under the weather. <br>(쉬어야 할 것 같아. 컨디션이 안 좋아.)
+                        </div>
+                    </div>
                 </div>
                 
                 <h2 class="section-title mt-8">Vocabulary</h2>
@@ -324,14 +341,26 @@
             observer.observe(listContainer, { childList: true, subtree: true });
         }
 
-        // Vocab Box 클릭 이벤트 (예시 데이터 동작용, 실제 데이터 바인딩시 해당 로직 필요)
+        // Vocab Box 및 주요 표현(expression-box) 클릭 이벤트 통합
         listContainer.addEventListener('click', (e) => {
+            // 단어장 박스 동작
             const vocabBox = e.target.closest('.vocab-box');
             if (vocabBox) {
                 vocabBox.classList.toggle('active');
                 const content = vocabBox.querySelector('.hidden-content');
                 if (content) {
                     content.style.display = vocabBox.classList.contains('active') ? 'block' : 'none';
+                }
+                return;
+            }
+
+            // 하루 3가지 표현 동작
+            const expressionBox = e.target.closest('.expression-box');
+            if (expressionBox) {
+                const content = expressionBox.querySelector('.hidden-content');
+                if (content) {
+                    const isVisible = content.style.display === 'block';
+                    content.style.display = isVisible ? 'none' : 'block';
                 }
             }
         });
