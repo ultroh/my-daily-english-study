@@ -192,7 +192,7 @@
 <body class="pb-20">
 
     <div class="w-full flex justify-center pb-2 bg-[#f8fafc]" style="padding-top: calc(env(safe-area-inset-top) + 1.5rem);">
-        <h1 class="text-2xl md:text-4xl font-extrabold text-[#204c8a] whitespace-nowrap tracking-tight text-center drop-shadow-sm" onclick="location.reload();">
+        <h1 class="text-2xl md:text-4xl font-extrabold text-[#204c8a] whitespace-nowrap tracking-tight text-center drop-shadow-sm cursor-pointer" onclick="location.reload();">
             📖 My Daily English Study
         </h1>
     </div>
@@ -207,7 +207,8 @@
 
     <main class="max-w-3xl mx-auto px-4 md:px-8 mt-6 relative">
         <div id="listContainer" class="space-y-12">
-            </div>
+            <!-- 리스트 컨텐츠 영역 -->
+        </div>
     </main>
 
     <div id="scrollPopup">
@@ -220,6 +221,11 @@
     <script>
         // 모바일 브라우저의 자체 스크롤 복원 기능을 수동(manual)으로 변경
         if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
+        // [추가] 리프레시 직전에 현재 화면의 정확한 스크롤 픽셀 위치를 기억해 둠
+        window.addEventListener('beforeunload', () => {
+            sessionStorage.setItem('exactScrollY', window.scrollY);
+        });
 
         // 새로고침 시 최초 한 번만 스크롤을 복원하기 위한 플래그
         let hasRestoredScroll = false;
@@ -241,15 +247,21 @@
                         }
                     }
 
-                    // [추가됨] 컨텐츠가 로드되었을 때 마지막 학습 위치로 스크롤 복원
+                    // [수정] 컨텐츠가 로드되었을 때 위치 복원 (픽셀 단위 고정 우선 적용)
                     if (!hasRestoredScroll) {
+                        const exactScrollY = sessionStorage.getItem('exactScrollY');
                         const savedDay = sessionStorage.getItem('lastStudiedDay');
-                        if (savedDay) {
-                            // 렌더링될 시간을 살짝 기다린 후 이동 (0.3초)
+
+                        if (exactScrollY !== null) {
+                            // 리프레시 후: 기억해둔 좌표로 딜레이 없이 그 자리 그대로 고정
+                            setTimeout(() => {
+                                window.scrollTo(0, parseInt(exactScrollY, 10));
+                            }, 50);
+                        } else if (savedDay) {
+                            // 최초 로드 시 (exactScrollY가 없을 때): 마지막 학습 DAY 박스로 이동
                             setTimeout(() => {
                                 const items = Array.from(listContainer.children);
                                 const targetItem = items.find(item => {
-                                    // 정규식으로 해당 DAY가 포함된 박스 찾기
                                     const regex = new RegExp(`DAY\\s*${savedDay}(?!\\d)`, 'i');
                                     return regex.test(item.textContent);
                                 });
@@ -313,7 +325,7 @@
                 if (dayMatch) {
                     const dayNumber = parseInt(dayMatch[1], 10);
                     
-                    // [추가됨] 화면 중앙에 위치한 DAY 숫자를 세션 스토리지에 저장
+                    // 화면 중앙에 위치한 DAY 숫자를 세션 스토리지에 저장
                     sessionStorage.setItem('lastStudiedDay', dayNumber);
 
                     const baseDate = new Date('2025-12-30T00:00:00');
