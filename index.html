@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>My Daily English Lesson</title>
     
+    <!-- 아이콘도 추후에 블루/그린 톤으로 변경하시는 것을 추천합니다 -->
     <link rel="apple-touch-icon" href="images/apple-touch-icon(english).png">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,10 +17,19 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
         
+        /* 
+           새로운 컬러 팔레트 정의:
+           - 배경: #F8F9FA (매우 밝은 회색, 눈의 피로 감소) 또는 #FCFAF7 (아주 연한 베이지)
+           - 주 강조색 (Primary): #0369A1 (차분한 블루 - sky-700)
+           - 보조 강조색 (Secondary): #0F766E (차분한 그린/청록 - teal-700)
+           - 텍스트: #334155 (slate-700, 완전한 검은색보다 부드러움)
+           - 박스 테두리: #E2E8F0 (slate-200)
+        */
+
         body { 
             font-family: 'Pretendard', sans-serif; 
-            background-color: #fdf2f8; 
-            color: #475569; 
+            background-color: #F8F9FA; /* 회색조 배경으로 변경 */
+            color: #334155; 
             -webkit-tap-highlight-color: transparent; 
         }
         
@@ -30,59 +40,64 @@
             padding-top: 0.75rem; 
         }
         .section-title { 
-            border-left: 4px solid #f472b6; 
+            border-left: 4px solid #0369A1; /* 핑크 -> 전문적인 블루 */
             padding-left: 10px; 
             font-weight: 700; 
-            color: #334155; 
+            color: #1E293B; /* slate-800 */
             margin-bottom: 1rem; 
         }
 
-        /* 박스 디자인 */
+        /* 학습 카드 박스 디자인 */
         #listContainer > div {
-            background-color: #fdfbf7 !important; 
-            border: 2px solid #fbcfe8 !important; 
-            border-radius: 1.25rem !important;
-            box-shadow: 0 4px 10px rgba(244, 114, 182, 0.08) !important; 
-            color: #475569 !important;
-        }
-
-        #listContainer [class*="bg-slate-"],
-        #listContainer [class*="bg-gray-"],
-        #listContainer [class*="bg-[#"] {
-            background-color: #ffffff !important;
-            border: 1px solid #fbcfe8 !important;
+            background-color: #ffffff !important; /* 순백색으로 변경하여 가독성 확보 */
+            border: 1px solid #E2E8F0 !important; /* 얇고 연한 회색 테두리 */
+            border-radius: 1rem !important; /* 약간 더 모던하게 반지름 조절 */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important; /* 매우 은은한 그림자 */
             color: #334155 !important;
         }
 
+        /* 카드 내부 섹션 테두리 */
+        #listContainer [class*="bg-slate-"],
+        #listContainer [class*="bg-gray-"],
+        #listContainer [class*="bg-[#"] {
+            background-color: #f1f5f9 !important; /* slate-100 */
+            border: 1px solid #E2E8F0 !important;
+            color: #1E293B !important;
+        }
+
+        /* 밝은 텍스트 색상 보정 */
         #listContainer [class*="text-slate-100"],
         #listContainer [class*="text-slate-200"],
         #listContainer [class*="text-slate-300"],
         #listContainer [class*="text-white"] {
-            color: #334155 !important;
+            color: #1E293B !important; /* 어두운 색으로 반전 */
         }
 
+        /* 중요 태그/뱃지 (예: DAY 표시) */
         #listContainer [class*="bg-blue-"], 
         #listContainer [class*="bg-indigo-"],
         #listContainer .rounded-full {
-            background-color: #fbcfe8 !important;
-            color: #9d174d !important;
-            font-weight: 800 !important;
+            background-color: #e0f2fe !important; /* sky-100 */
+            color: #0369A1 !important; /* sky-700 */
+            font-weight: 700 !important;
         }
 
+        /* 보조 텍스트 (설명 등) */
         #listContainer .text-sm,
         #listContainer .text-xs,
         #listContainer [class*="text-slate-400"],
         #listContainer [class*="text-gray-400"],
         #listContainer [class*="text-gray-500"] {
-            color: #475569 !important;
-            font-weight: 600 !important;
+            color: #64748B !important; /* slate-500 */
+            font-weight: 500 !important;
         }
         
+        /* 단어장/표현 박스 (Vocab Box) */
         #listContainer .vocab-box {
             transition: all 0.2s ease-in-out !important;
             background-color: #ffffff !important; 
-            border: 2px solid #fbcfe8 !important; 
-            border-radius: 1.25rem !important;
+            border: 1px solid #E2E8F0 !important; 
+            border-radius: 1rem !important;
             cursor: pointer !important;
             height: 120px;
             display: flex;
@@ -91,45 +106,50 @@
             align-items: center;
             text-align: center;
             padding: 12px;
-            box-shadow: 0 2px 6px rgba(244, 114, 182, 0.05) !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
         }
+        /* 클릭하여 활성화된 상태 */
         #listContainer .vocab-box.active {
             height: auto;
-            background-color: #fff5f7 !important; 
-            border-color: #f472b6 !important; 
+            background-color: #f0fdfa !important; /* teal-50 (매우 연한 청록색) */
+            border-color: #5eead4 !important; /* teal-300 */
         }
 
+        /* Vocab Box 내부 텍스트 */
         #listContainer .vocab-box,
         #listContainer .vocab-box * {
-            color: #475569 !important;
+            color: #334155 !important;
         }
+        /* 영단어/주요 표현 강하게 */
         #listContainer .vocab-box strong,
         #listContainer .vocab-box .text-slate-100,
         #listContainer .vocab-box .text-white {
-            color: #9d174d !important; 
-            font-weight: 800 !important;
+            color: #0F766E !important; /* teal-700 (집중도를 높이는 그린) */
+            font-weight: 700 !important;
         }
         
+        /* 특정 파란색 텍스트 클래스 대응 */
         #listContainer .vocab-box .text-blue-400,
         #listContainer .vocab-box [class*="text-blue-"] {
-            color: #be185d !important; 
+            color: #0369A1 !important; /* sky-700 */
         }
 
+        /* 펼쳐지는 콘텐츠 구분선 */
         #listContainer .vocab-box .hidden-content {
-            border-top: 1px dashed #fbcfe8 !important;
+            border-top: 1px dashed #cbd5e1 !important; /* slate-300 */
         }
 
-        /* 스크롤 UI */
+        /* 우측 스크롤 인디케이터 UI (날짜 표시) */
         #scrollPopup {
             position: fixed;
             right: 0;
             top: 15%; 
             transform: translateY(-50%);
-            background-color: rgba(244, 114, 182, 0.85); 
+            background-color: rgba(30, 41, 59, 0.85); /* slate-800, 반투명 어두운색 */
             color: white;
             padding: 10px 6px 10px 8px;
             border-radius: 9999px 0 0 9999px;
-            box-shadow: -2px 2px 10px rgba(244, 114, 182, 0.15);
+            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -139,22 +159,25 @@
             transition: top 0.1s ease-out, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, gap 0.3s ease;
         }
         
+        /* 드래그 중일 때 */
         #scrollPopup.dragging {
-            background-color: rgba(244, 114, 182, 1);
+            background-color: rgba(3, 105, 161, 1); /* sky-700 (완전 불투명 블루) */
             padding: 8px 10px 8px 16px;
             gap: 8px; 
-            box-shadow: -2px 4px 12px rgba(244, 114, 182, 0.4);
+            box-shadow: -2px 4px 12px rgba(3, 105, 161, 0.3);
             cursor: grabbing;
         }
 
+        /* 날짜 텍스트 */
         #popupDate {
-            font-weight: 800;
+            font-weight: 700;
             font-size: 0.875rem;
             white-space: nowrap;
             max-width: 0;
             opacity: 0;
             overflow: hidden;
             transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            color: #e0f2fe; /* sky-100 */
         }
 
         #scrollPopup.dragging #popupDate {
@@ -162,11 +185,12 @@
             opacity: 1;
         }
 
+        /* 드래그 손잡이 점 3개 */
         .drag-dots {
             display: flex;
             flex-direction: column;
             gap: 3px;
-            opacity: 0.9;
+            opacity: 0.7;
             padding: 0 2px;
         }
         .drag-dots span {
@@ -176,14 +200,15 @@
             border-radius: 50%;
         }
 
+        /* 상단 고정 검색바 영역 */
         .sticky-search-header {
             position: sticky;
             top: 0;
             z-index: 50;
-            background-color: rgba(253, 242, 248, 0.95);
+            background-color: rgba(248, 249, 250, 0.95); /* 바디 배경색과 통일, 반투명 */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border-bottom: 1px solid #fce7f3;
+            border-bottom: 1px solid #E2E8F0;
             padding-top: max(env(safe-area-inset-top), 12px);
             padding-bottom: 12px;
         }
@@ -191,25 +216,56 @@
 </head>
 <body class="pb-20">
 
-    <div class="w-full flex justify-center pb-2 bg-[#fdf2f8]" style="padding-top: calc(env(safe-area-inset-top) + 1.5rem);">
-        <h1 class="text-2xl md:text-4xl font-extrabold text-rose-700 whitespace-nowrap tracking-tight text-center drop-shadow-sm" onclick="location.reload();">
-            🌸 My Daily English Study
+    <!-- 최상단 타이틀 영역 -->
+    <div class="w-full flex justify-center pb-2 bg-[#F8F9FA]" style="padding-top: calc(env(safe-area-inset-top) + 1.5rem);">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 whitespace-nowrap tracking-tight text-center drop-shadow-sm" onclick="location.reload();">
+            <!-- 이모지도 핑크색 벛꽃에서 차분한 책으로 변경 -->
+            📘 My Daily English Study
         </h1>
     </div>
 
+    <!-- 검색바 영역 -->
     <header class="sticky-search-header px-4 md:px-8 shadow-sm">
         <div class="max-w-3xl mx-auto relative">
-            <input type="text" id="searchInput" placeholder="검색어를 입력하세요" 
-                   class="w-full bg-white border-2 border-pink-200 text-slate-600 text-sm md:text-base rounded-full pl-11 pr-4 py-2.5 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all shadow-sm">
-            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-pink-300"></i>
+            <input type="text" id="searchInput" placeholder="학습 내용 검색..." 
+                   class="w-full bg-white border border-slate-300 text-slate-700 text-sm md:text-base rounded-full pl-11 pr-4 py-2.5 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-all shadow-inner">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
         </div>
     </header>
 
+    <!-- 메인 콘텐츠 영역 (데이터가 여기에 삽입됨) -->
     <main class="max-w-3xl mx-auto px-4 md:px-8 mt-6 relative">
-        <div id="listContainer" class="space-y-12">
+        <div id="listContainer" class="space-y-10">
+            <!-- 예시 데이터: 실제 구동시에는 삭제되거나 JS에 의해 대체됩니다 -->
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="rounded-full px-4 py-1 text-sm bg-blue-100 text-blue-700 font-bold">DAY 1</span>
+                    <span class="text-sm text-slate-400">2026-01-01</span>
+                </div>
+                <h2 class="section-title">Today's Key Sentences</h2>
+                <div class="space-y-3 text-lg text-slate-700">
+                    <p>1. Make yourself at home.</p>
+                    <p>2. It's on the tip of my tongue.</p>
+                    <p>3. I'm feeling under the weather.</p>
+                </div>
+                
+                <h2 class="section-title mt-8">Vocabulary</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="vocab-box active">
+                        <strong>under the weather</strong>
+                        <div class="hidden-content">몸 상태가 좋지 않은</div>
+                    </div>
+                    <div class="vocab-box">
+                        <strong>at home</strong>
+                        <div class="hidden-content">편안한, 집에 있는 것처럼</div>
+                    </div>
+                </div>
             </div>
+             <!-- 예시 데이터 끝 -->
+        </div>
     </main>
 
+    <!-- 스크롤 인디케이터 -->
     <div id="scrollPopup">
         <span id="popupDate">DAY -</span>
         <div class="drag-dots">
@@ -218,10 +274,10 @@
     </div>
 
     <script>
-        // 모바일 브라우저의 자체 스크롤 복원 기능을 수동(manual)으로 변경
+        // --- 기존 JS 로직 유지 (스크롤 상태 저장 기능 포함) ---
+
         if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 
-        // 새로고침 시 최초 한 번만 스크롤을 복원하기 위한 플래그
         let hasRestoredScroll = false;
 
         // 1. 아이콘 제거 및 자동 스크롤 복원 Observer
@@ -241,15 +297,13 @@
                         }
                     }
 
-                    // [추가됨] 컨텐츠가 로드되었을 때 마지막 학습 위치로 스크롤 복원
+                    // 컨텐츠가 로드되었을 때 마지막 학습 위치로 스크롤 복원
                     if (!hasRestoredScroll) {
                         const savedDay = sessionStorage.getItem('lastStudiedDay');
                         if (savedDay) {
-                            // 렌더링될 시간을 살짝 기다린 후 이동 (0.3초)
                             setTimeout(() => {
                                 const items = Array.from(listContainer.children);
                                 const targetItem = items.find(item => {
-                                    // 정규식으로 해당 DAY가 포함된 박스 찾기
                                     const regex = new RegExp(`DAY\\s*${savedDay}(?!\\d)`, 'i');
                                     return regex.test(item.textContent);
                                 });
@@ -259,7 +313,7 @@
                                 }
                             }, 300);
                         }
-                        hasRestoredScroll = true; // 복원 완료 처리
+                        hasRestoredScroll = true; 
                     }
                 }
             });
@@ -269,6 +323,18 @@
         if (listContainer) {
             observer.observe(listContainer, { childList: true, subtree: true });
         }
+
+        // Vocab Box 클릭 이벤트 (예시 데이터 동작용, 실제 데이터 바인딩시 해당 로직 필요)
+        listContainer.addEventListener('click', (e) => {
+            const vocabBox = e.target.closest('.vocab-box');
+            if (vocabBox) {
+                vocabBox.classList.toggle('active');
+                const content = vocabBox.querySelector('.hidden-content');
+                if (content) {
+                    content.style.display = vocabBox.classList.contains('active') ? 'block' : 'none';
+                }
+            }
+        });
 
         // 2. 텍스트 검색 기능
         const searchInput = document.getElementById('searchInput');
@@ -293,6 +359,7 @@
 
         function updatePopupDate() {
             const items = Array.from(listContainer.children);
+            if(items.length === 0) return;
             let closestItem = null;
             let minDistance = Infinity;
 
@@ -313,9 +380,10 @@
                 if (dayMatch) {
                     const dayNumber = parseInt(dayMatch[1], 10);
                     
-                    // [추가됨] 화면 중앙에 위치한 DAY 숫자를 세션 스토리지에 저장
+                    // 화면 중앙에 위치한 DAY 숫자를 세션 스토리지에 저장
                     sessionStorage.setItem('lastStudiedDay', dayNumber);
 
+                    // 기준일: 2025-12-30 (기존 로직 유지)
                     const baseDate = new Date('2025-12-30T00:00:00');
                     baseDate.setDate(baseDate.getDate() + dayNumber);
                     
@@ -336,7 +404,7 @@
             if (scrollableHeight <= 0) return;
             
             const scrollPercent = window.scrollY / scrollableHeight;
-            const topPos = 15 + (scrollPercent * 70); 
+            const topPos = 15 + (scrollPercent * 70); // 15% ~ 85% 범위 이동
             scrollPopup.style.top = `${topPos}%`;
         }
 
@@ -346,6 +414,7 @@
             updatePopupPosition();
         });
 
+        // 드래그 핸들러
         function handleDragStart(e) {
             if (listContainer.children.length === 0) return;
             isDragging = true;
@@ -360,6 +429,7 @@
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const windowH = window.innerHeight;
             
+            // 드래그 가능 범위 계산 (상단 15% ~ 하단 15% 제외)
             let percent = (clientY - (windowH * 0.15)) / (windowH * 0.7);
             percent = Math.max(0, Math.min(1, percent));
             
@@ -377,6 +447,7 @@
             scrollPopup.classList.remove('dragging');
         }
 
+        // 터치 및 마우스 이벤트 바인딩
         scrollPopup.addEventListener('touchstart', handleDragStart, { passive: false });
         document.addEventListener('touchmove', handleDragMove, { passive: false });
         document.addEventListener('touchend', handleDragEnd);
