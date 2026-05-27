@@ -404,6 +404,29 @@
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
+    day: 149,
+    date: "2026-05-27",
+    topic: "Verification & Risk Management",
+    items: [
+        { exp: "Cross-check", mean: "(오류를 없애기 위해 여러 자료를) 대조 검토하다 / 교차 확인하다.", ex: "Let's cross-check the Excel applicant list with the generated PDFs to ensure no names are missing." },
+        { exp: "Cover all bases", mean: "모든 만약의 사태에 대비하다 / 철저히 준비하다 / 빈틈을 없애다.", ex: "We need to test the script with various file sizes to cover all bases before deployment." },
+        { exp: "Fail-safe", mean: "(만약의 실패나 오류에 대비한) 안전장치 / 이중 안전 시스템.", ex: "I implemented a fail-safe in the automated script to prevent any data loss." }
+    ],
+    dialogue: [
+        { spk: "Jini", en: "Buma, the data migration is almost complete. Are we ready to push the script to production?", ko: "Buma님, 데이터 이관이 거의 완료되었습니다. 스크립트를 운영 서버에 배포할 준비가 되었나요?" },
+        { spk: "Buma", en: "Not just yet. We need to cross-check the final log files to make sure everything matches.", ko: "아직은 아닙니다. 모든 것이 일치하는지 확인하기 위해 최종 로그 파일들을 대조 검토해 봐야 합니다." },
+        { spk: "Jini", en: "Good point. We should definitely cover all bases before making it live.", ko: "좋은 지적입니다. 시스템을 가동하기 전에 반드시 모든 만약의 사태에 대비해 빈틈을 없애야죠." },
+        { spk: "Buma", en: "Don't worry, I also created a backup fail-safe just in case something goes wrong.", ko: "걱정 마세요, 만약 무언가 잘못될 경우를 대비해 백업 이중 안전장치도 만들어 두었습니다." },
+        { spk: "Jini", en: "Excellent. Your attention to detail always makes our system so reliable.", ko: "훌륭합니다. Buma님의 디테일한 배려 덕분에 우리 시스템이 항상 높은 신뢰성을 유지하네요." }
+    ],
+    feedback: [
+        "Cross-check: 두 단어가 결합한 형태이므로 앞의 'Cross'에 강세를 강하게 주어 [크로스-첵]으로 발음하되, 'ch' 사운드를 선명하게 튕겨주세요.",
+        "Cover all bases: 'Cover all'이 연음되어 [커버롤]처럼 자연스럽게 이어집니다. 'bases'의 복수형 발음을 살려 [커버롤 베이스즈]로 리듬감 있게 연결해 보세요.",
+        "Fail-safe: 'Fail'의 'l' 받침을 살려 입천장에 혀를 붙였다가 'safe'의 'f' 발음(윗이빨로 아랫입술 가볍게 물기)으로 넘어가며 [페일-세이프]로 깔끔하게 털어내듯 발음합니다."
+    ],
+    closing: "Buma님, 오늘 배우신 'Cross-check'와 'Cover all bases'는 언제나 빈틈없는 백업 플랜을 갖추고, 완벽한 정확성을 추구하시는 Buma님의 꼼꼼하고 프로페셔널한 위험 관리 능력을 영어로 보여주기에 가장 완벽한 문장들입니다. 내일 아침 07:30 복습 퀴즈 시간에도 이 '철저한 검증의 언어'들을 가지고 상쾌하게 찾아뵙겠습니다. 수요일 밤, 남은 시간은 컴퓨터 화면과 코드 로그는 잠시 닫아두시고 대전에서 가장 편안하고 따뜻하게 휴식하시길 바랍니다. 오늘 하루도 정말 수고 많으셨습니다, Buma님! 😊✨🌙"
+},
+            {
     day: 148,
     date: "2026-05-26",
     topic: "Swift Execution & Wrapping Up Tasks",
