@@ -403,66 +403,55 @@
     <script>
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
-            {
-    "day": 185,
-    "date": "2026-07-02",
-    "topic": "Dynamic Resilience & Strategic Acceptance",
-    "items": [
-        { "exp": "Bounce back", "mean": "(타격·실패·정체 상태에서) 빠르게 회복하다 / 원래 궤도로 다시 튕겨 올라오다.", "ex": "The server crashed this morning, but thanks to the backup script, it bounced back immediately." },
-        { "exp": "Meet someone halfway", "mean": "~와 타협하다 / 절충점을 찾다 / 상대방의 입장을 유연하게 양보하며 수용하다.", "ex": "To expedite the project, we agreed to meet the accounting team halfway on the budget layout." },
-        { "exp": "Take it in stride", "mean": "(예기치 못한 문제·어려움을) 당황하지 않고 대수롭지 않게 받아들이다 / 유연하게 넘기다.", "ex": "Buma faces unexpected system updates every week, but he always takes them in stride." }
+{
+    day: 185,
+    date: "2026-07-02",
+    topic: "Dynamic Resilience & Strategic Acceptance",
+    items: [
+        { exp: "Bounce back", mean: "(타격·실패·정체 상태에서) 빠르게 회복하다 / 원래 궤도로 다시 튕겨 올라오다.", ex: "The server crashed this morning, but thanks to the backup script, it bounced back immediately." },
+        { exp: "Meet someone halfway", mean: "~와 타협하다 / 절충점을 찾다 / 상대방의 입장을 유연하게 양보하며 수용하다.", ex: "To expedite the project, we agreed to meet the accounting team halfway on the budget layout." },
+        { exp: "Take it in stride", mean: "(예기치 못한 문제·어려움을) 당황하지 않고 대수롭지 않게 받아들이다 / 유연하게 넘기다.", ex: "Buma faces unexpected system updates every week, but he always takes them in stride." }
     ],
-    "dialogue": [
-        { "spk": "Jini", "en": "Buma, the administrative integration suffered a temporary log error this afternoon, and the HR manager seemed quite frustrated.", "ko": "Buma님, 오늘 오후 행정 통합 시스템에 일시적인 로그 오류가 발생해서 인사팀 매니저가 꽤 답답해했습니다." },
-        { "spk": "Buma", "en": "I know. But our validation architecture is highly resilient, so the entire interface bounced back within ten minutes.", "ko": "알고 있습니다. 하지만 우리의 검증 아키텍처는 복원력이 매우 뛰어나기 때문에, 전체 인터페이스가 10분 만에 원래 정상 궤도로 빠르게 복구되었습니다." },
-        { "spk": "Jini", "en": "That's amazing. Your quick response really saved the day. But we still need to resolve their complaints about the data access levels.", "ko": "놀랍군요. 빠른 대응 덕분에 위기를 넘겼습니다. 하지만 데이터 접근 권한에 대한 그들의 불만 사항은 여전히 해결해야 합니다." },
-        { "spk": "Buma", "en": "Right. I will review their policy constraints and try to meet them halfway tomorrow morning.", "ko": "그렇습니다. 내일 아침 그들의 보안 규정 제한 사항들을 검토하고, 그들의 입장을 유연하게 수용하여 최적의 절충점을 찾아보겠습니다." },
-        { "spk": "Jini", "en": "It’s tough to handle these sudden interface errors and complaints at the same time. Aren’t you stressed?", "ko": "이런 갑작스러운 인터페이스 오류와 민원을 동시에 처리하는 게 쉽지 않을 텐데, 스트레스받지 않으시나요?" },
-        { "spk": "Buma", "en": "Not at all. In development, you learn to take these bugs in stride. It's just part of the optimization routine.", "ko": "전혀요. 개발을 하다 보면 이런 버그들은 당황하지 않고 대수롭지 않게 넘기는 법을 배우게 됩니다. 그저 최적화 루틴의 일부일 뿐이니까요." }
+    dialogue: [
+        { spk: "Jini", en: "Buma, the administrative integration suffered a temporary log error this afternoon, and the HR manager seemed quite frustrated.", ko: "Buma님, 오늘 오후 행정 통합 시스템에 일시적인 로그 오류가 발생해서 인사팀 매니저가 꽤 답답해했습니다." },
+        { spk: "Buma", en: "I know. But our validation architecture is highly resilient, so the entire interface bounced back within ten minutes.", ko: "알고 있습니다. 하지만 우리의 검증 아키텍처는 복원력이 매우 뛰어나기 때문에, 전체 인터페이스가 10분 만에 원래 정상 궤도로 빠르게 복구되었습니다." },
+        { spk: "Jini", en: "That's amazing. Your quick response really saved the day. But we still need to resolve their complaints about the data access levels.", ko: "놀랍군요. 빠른 대응 덕분에 위기를 넘겼습니다. 하지만 데이터 접근 권한에 대한 그들의 불만 사항은 여전히 해결해야 합니다." },
+        { spk: "Buma", en: "Right. I will review their policy constraints and try to meet them halfway tomorrow morning.", ko: "그렇습니다. 내일 아침 그들의 보안 규정 제한 사항들을 검토하고, 그들의 입장을 유연하게 수용하여 최적의 절충점을 찾아보겠습니다." },
+        { spk: "Jini", en: "It’s tough to handle these sudden interface errors and complaints at the same time. Aren’t you stressed?", ko: "이런 갑작스러운 인터페이스 오류와 민원을 동시에 처리하는 게 쉽지 않을 텐데, 스트레스받지 않으시나요?" },
+        { spk: "Buma", en: "Not at all. In development, you learn to take these bugs in stride. It's just part of the optimization routine.", ko: "전혀요. 개발을 하다 보면 이런 버그들은 당황하지 않고 대수롭지 않게 넘기는 법을 배우게 됩니다. 그저 최적화 루틴의 일부일 뿐이니까요." }
     ],
-    "feedback": [
+    feedback: [
         "Bounce back: 'Bounce'의 끝 사운드와 'back'의 b 사운드가 연이어 붙으면서 강력한 탄성을 자아냅니다. [바운스 백]에서 'back'을 짧고 강하게 튕기듯 발음해 보세요. 일시적 정체를 딛고 순식간에 올라오는 시스템의 역동적인 복원력이 소리에 그대로 실리게 됩니다.",
         "Meet someone halfway: 'meet'과 'halfway'의 모음 구조가 대단히 깔끔하게 연결됩니다. 'halfway'의 half[해-잎]에 확실한 액센트를 주어 [미트 썸원 해-잎웨이]로 부드럽게 발음해 보세요. 갈등을 해결하기 위해 먼저 손을 내미는 세련된 중재자의 아우라가 완성됩니다.",
-        "Take it in stride: 'Take it in'이 하나의 단어처럼 매끄럽게 연음되어 [테이키틴]이 되고, 가장 중요한 단어인 'stride'의 i 사운드를 낮고 길게 긁어주며 [테이키틴 스트롸이-드]로 발음해 보세요. 장애물 앞에서도 보폭을 흩트리지 않는 베테랑의 거대한 평정심과 여유가 어조에 완벽하게 묻어납니다. We had a minor log error today, but our platform will bounce back immediately. Let's take it in stride and meet the team halfway on their sudden requests. 오늘 사소한 로그 오류가 있었지만, 우리의 플랫폼은 즉시 정상 궤도로 복구될 것입니다. 당황하지 말고 대수롭지 않게 넘기면서, 그들의 갑작스러운 요청에 대해 유연하게 절충점을 찾아봅시다."
+        "Take it in stride: 'Take it in'이 하나의 단어처럼 매끄럽게 연음되어 [테이키틴]이 되고, 가장 중요한 단어인 'stride'의 i 사운드를 낮고 길게 긁어주며 [테이키틴 스트롸이-드]로 발음해 보세요. 장애물 앞에서도 보폭을 흩트리지 않는 베테랑의 거대한 평정심과 여유가 어조에 완벽하게 묻어납니다."
     ],
-    "closing": "Buma님, 오늘 학습하신 \"Bounce back\"과 \"Take it in stride\"는 주말을 앞두고 마주하는 다양한 업무적 스트레스와 예기치 못한 데이터 변수들 앞에서, Buma님이 가진 베테랑으로서의 압도적인 평정심과 시스템의 강력한 복원력을 프로의 언어로 증명해 줄 최고의 무기들입니다. 내일 금요일 아침 07:30 복습 퀴즈 시간에도 마침내 주말권으로 진입하는 상쾌한 출근길을 가장 지적이고 청량한 성취감으로 열어젖히실 수 있도록, Buma님의 분석적 결에 정교하게 맞춘 프리미엄 아침 퀴즈와 함께 찾아뵙겠습니다. 목요일 밤입니다. 내일 금요일 하루만 멋지게 리드하면 온전한 휴식이 기다리고 있으니, 오늘 밤은 복잡한 로그 에러나 정책 조율 생각은 완전히 튕겨내시고(Bounce back), 아내분과 함께 세상에서 가장 안락하고 깊은 안식 취하시길 바랍니다. 오늘 저녁 레슨도 참으로 깊이 있고 즐거웠습니다, Buma님! 굿나잇! 😊✨📊💻🔧🥊🛡️⚖️🌙"
-},
-{
-day: 185,
-date: "2026-07-02",
-topic: "Dynamic Resilience & Strategic Acceptance",
-items: [
-{ exp: "Bounce back", mean: "(타격·실패·정체 상태에서) 빠르게 회복하다 / 원래 궤도로 다시 튕겨 올라오다.", ex: "The server crashed this morning, but thanks to the backup script, it bounced back immediately." },
-{ exp: "Meet someone halfway", mean: "~와 타협하다 / 절충점을 찾다 / 상대방의 입장을 유연하게 양보하며 수용하다.", ex: "To expedite the project, we agreed to meet the accounting team halfway on the budget layout." },
-{ exp: "Take it in stride", mean: "(예기치 못한 문제·어려움을) 당황하지 않고 대수롭지 않게 받아들이다 / 유연하게 넘기다.", ex: "Buma faces unexpected system updates every week, but he always takes them in stride." }
-],
-dialogue: [
-{ spk: "Jini", en: "Buma, the administrative integration suffered a temporary log error this afternoon, and the HR manager seemed quite frustrated.", ko: "Buma님, 오늘 오후 행정 통합 시스템에 일시적인 로그 오류가 발생해서 인사팀 매니저가 꽤 답답해했습니다." },
-{ spk: "Buma", en: "I know. But our validation architecture is highly resilient, so the entire interface bounced back within ten minutes.", ko: "알고 있습니다. 하지만 우리의 검증 아키텍처는 복원력이 매우 뛰어나기 때문에, 전체 인터페이스가 10분 만에 원래 정상 궤도로 빠르게 복구되었습니다." },
-{ spk: "Jini", en: "That's amazing. Your quick response really saved the day. But we still need to resolve their complaints about the data access levels.", ko: "놀랍군요. 빠른 대응 덕분에 위기를 넘겼습니다. 하지만 데이터 접근 권한에 대한 그들의 불만 사항은 여전히 해결해야 합니다." },
-{ spk: "Buma", en: "Right. I will review their policy constraints and try to meet them halfway tomorrow morning.", ko: "그렇습니다. 내일 아침 그들의 보안 규정 제한 사항들을 검토하고, 그들의 입장을 유연하게 수용하여 최적의 절충점을 찾아보겠습니다." },
-{ spk: "Jini", en: "It’s tough to handle these sudden interface errors and complaints at the same time. Aren’t you stressed?", ko: "이런 갑작스러운 인터페이스 오류와 민원을 동시에 처리하는 게 쉽지 않을 텐데, 스트레스받지 않으시나요?" },
-{ spk: "Buma", en: "Not at all. In development, you learn to take these bugs in stride. It's just part of the optimization routine.", ko: "전혀요. 개발을 하다 보면 이런 버그들은 당황하지 않고 대수롭지 않게 넘기는 법을 배우게 됩니다. 그저 최적화 루틴의 일부일 뿐이니까요." }
-],
-feedback: [
-"Bounce back: 'Bounce'의 끝 사운드와 'back'의 b 사운드가 연이어 붙으면서 강력한 탄성을 자아냅니다. [바운스 백]에서 'back'을 짧고 강하게 튕기듯 발음해 보세요. 일시적 정체를 딛고 순식간에 올라오는 시스템의 역동적인 복원력이 소리에 그대로 실리게 됩니다.",
-"Meet someone halfway: 'meet'과 'halfway'의 모음 구조가 대단히 깔끔하게 연결됩니다. 'halfway'의 half[해-잎]에 확실한 액센트를 주어 [미트 썸원 해-잎웨이]로 부드럽게 발음해 보세요. 갈등을 해결하기 위해 먼저 손을 내미는 세련된 중재자의 아우라가 완성됩니다.",
-"Take it in stride: 'Take it in'이 하나의 단어처럼 매끄럽게 연음되어 [테이키틴]이 되고, 가장 중요한 단어인 'stride'의 i 사운드를 낮고 길게 긁어주며 [테이키틴 스트롸이-드]로 발음해 보세요. 장애물 앞에서도 보폭을 흩트리지 않는 베테랑의 거대한 평정심과 여유가 어조에 완벽하게 묻어납니다."
-],
-closing: "Buma님, 오늘 학습하신 "Bounce back"과 "Take it in stride"는 주말을 앞두고 마주하는 다양한 업무적 스트레스와 예기치 못한 데이터 변수들 앞에서, Buma님이 가진 베테랑으로서의 압도적인 평정심과 시스템의 강력한 복원력을 프로의 언어로 증명해 줄 최고의 무기들입니다. 내일 금요일 아침 07:30 복습 퀴즈 시간에도 마침내 주말권으로 진입하는 상쾌한 출근길을 가장 지적이고 청량한 성취감으로 열어젖히실 수 있도록, Buma님의 분석적 결에 정교하게 맞춘 프리미엄 아침 퀴즈와 함께 찾아뵙겠습니다. 목요일 밤입니다. 내일 금요일 하루만 멋지게 리드하면 온전한 휴식이 기다리고 있으니, 오늘 밤은 복잡한 로그 에러나 정책 조율 생각은 완전히 튕겨내시고(Bounce back), 아내분과 함께 세상에서 가장 안락하고 깊은 안식 취하시길 바랍니다. 오늘 저녁 레슨도 참으로 깊이 있고 즐거웠습니다, Buma님! 굿나잇! 😊✨📊💻🔧🥊🛡️⚖️🌙"
+    closing: "Buma님, 오늘 학습하신 'Bounce back'과 'Take it in stride'는 주말을 앞두고 마주하는 다양한 업무적 스트레스와 예기치 못한 데이터 변수들 앞에서, Buma님이 가진 베테랑으로서의 압도적인 평정심과 시스템의 강력한 복원력을 프로의 언어로 증명해 줄 최고의 무기들입니다. 내일 금요일 아침 07:30 복습 퀴즈 시간에도 마침내 주말권으로 진입하는 상쾌한 출근길을 가장 지적이고 청량한 성취감으로 열어젖히실 수 있도록, Buma님의 분석적 결에 정교하게 맞춘 프리미엄 아침 퀴즈와 함께 찾아뵙겠습니다. 목요일 밤입니다. 내일 금요일 하루만 멋지게 리드하면 온전한 휴식이 기다리고 있으니, 오늘 밤은 복잡한 로그 에러나 정책 조율 생각은 완전히 튕겨내시고(Bounce back), 아내분과 함께 세상에서 가장 안락하고 깊은 안식 취하시길 바랍니다. 오늘 저녁 레슨도 참으로 깊이 있고 즐거웠습니다, Buma님! 굿나잇! 😊✨📊💻🔧🥊🛡️⚖️🌙We had a minor log error today, but our platform will bounce back immediately. Let's take it in stride and meet the team halfway on their sudden requests.
+오늘 사소한 로그 오류가 있었지만, 우리의 플랫폼은 즉시 정상 궤도로 복구될 것입니다. 당황하지 말고 대수롭지 않게 넘기면서, 그들의 갑작스러운 요청에 대해 유연하게 절충점을 찾아봅시다."
 },
             {
     day: 184,
     date: "2026-07-01",
     topic: "Strategic Patience & Architectural Extension",
     items: [
-        { exp: "Bide one's time", mean: "(가장 적절한 타이밍이 오기를) 서두르지 않고 차분히 때를 기다리다.", ex: "No, let's bide our time until the weekend layout is confirmed." },
-        { exp: "Extrapolate", mean: "(기존의 데이터·원칙을 바탕으로) 추론하다 / 확장하여 적용하다.", ex: "I think we can extrapolate our current core validation logic to cover their data." },
-        { exp: "Smooth over", mean: "(갈등·오해·마찰 등을) 원만하게 해결하다 / 부드럽게 수습하다.", ex: " I will meet with their manager tomorrow to smooth over any operational concerns." }
+        { exp: "Bide one's time", mean: "(가장 적절한 타이밍이 오기를) 서두르지 않고 차분히 때를 기다리다.", ex: "We should bide our time until the system traffic stabilizes before running the update." },
+        { exp: "Extrapolate", mean: "(기존의 데이터·원칙을 바탕으로) 추론하다 / 확장하여 적용하다.", ex: "We can extrapolate from last year's recruitment data to improve this year's automated screening tool." },
+        { exp: "Smooth over", mean: "(갈등·오해·마찰 등을) 원만하게 해결하다 / 부드럽게 수습하다.", ex: "His diplomatic approach helped to smooth over the misunderstanding between the two departments." }
     ],
-    dialogue: [],
-    feedback: [],
-    closing: "Buma님, 오늘 목요일 하루는 완벽한 타이밍을 선제적으로 포착하시고(Bide one's time), 구축해 두신 무결한 표준을 새로운 과제에 멋지게 확장하시며(Extrapolate), 마주하는 모든 인간관계의 마찰음을 매끄럽게 조율하시는(Smooth over) 최고의 하루가 되시길 바랍니다. 오늘 출근길도 안전하게 이동하시고, 정답은 오전 업무 중에 여유가 생기실 때 언제든 천천히 남겨주세요. 오늘 하루도 스마트하게 리드해 가세요, Buma님! 화이팅입니다! 😊✨📊💻🔧🎯📈🧼☕ We can extrapolate from our core platform to support other teams. I will meet them tomorrow to smooth over their concerns, but let's bide our time before the final integration. 우리는 다른 팀들을 지원하기 위해 우리의 핵심 플랫폼으로부터 정교하게 확장 적용할 수 있습니다. 그들의 우려 사항을 원만하게 해결하기 위해 내일 그들을 만나겠지만, 최종 통합을 하기 전까지는 서두르지 말고 차분히 때를 기다립시다."
+    dialogue: [
+        { spk: "Jini", en: "Buma, the management wants to expand our web app's database architecture to include other administrative teams by next week.", ko: "Buma님, 경영진에서 우리 웹 앱의 데이터베이스 아키텍처를 다음 주까지 다른 행정 팀들까지 포함하도록 확장하기를 원합니다." },
+        { spk: "Buma", en: "Interesting. I think we can extrapolate our current core validation logic to cover their data forms as well.", ko: "흥미롭군요. 우리의 현재 핵심 검증 로직을 확장 적용하면 그들의 데이터 양식도 충분히 커버할 수 있을 것 같습니다." },
+        { spk: "Jini", en: "That would save a lot of time. But the accounting team seems a bit hesitant about this sudden integration.", ko: "그렇게 되면 시간을 정말 많이 아낄 수 있겠네요. 하지만 회계 팀은 이번 갑작스러운 통합에 대해 약간 주저하는 눈치입니다." },
+        { spk: "Buma", en: "Don't worry. I will meet with their manager tomorrow to smooth over any operational concerns.", ko: "걱정하지 마세요. 내일 그쪽 매니저를 만나서 운영상의 우려 사항들을 원만하게 수습하고 해결하겠습니다." },
+        { spk: "Jini", en: "Perfect. Should we start transferring the system logs right after the meeting?", ko: "완벽합니다. 회의가 끝나는 대로 바로 시스템 로그 이전을 시작할까요?" },
+        { spk: "Buma", en: "No, let's bide our time until the weekend layout is confirmed. We need the server load to be at its lowest.", ko: "아닙니다, 주말 레이아웃이 확정될 때까지 서두르지 말고 차분히 때를 기다립시다. 서버 부하가 가장 낮은 타이밍이 필요하니까요." }
+    ],
+    feedback: [
+        "Bide one's time: 'Bide'의 d 사운드가 소유격 'one's'와 만나면서 자연스럽게 부드러워져 [바이드 원즈 타임]이 됩니다. 'time'의 첫 음절을 낮고 길게 깔아주듯 발음하면, 완벽한 타이밍을 포착하려는 전략가의 묵직한 인내심이 소리에 그대로 묻어납니다.",
+        "Extrapolate: 4음절의 정교한 고급 단어입니다. 두 번째 음절인 tra[츄래]에 가장 강력한 강세가 들어갑니다. 앞의 ex를 가볍게 던지고 [익스-츄뤠-폴레이트]라고 리드미컬하게 발음해 보세요. 이 단어가 가진 데이터 공학적인 세련미가 극대화됩니다.",
+        "Smooth over: 'Smooth'의 끝 발음인 유성음 th[ð] 사운드가 뒤의 모음 'over'와 연음되면서 [스무-도버]처럼 매끄럽게 연결됩니다. 숨을 끊지 않고 하나의 단어처럼 부드럽게 흘려줄 때, 갈등을 매끄럽게 문질러 가라앉히는 표현 본연의 물리적 감각이 어조에 완벽하게 살아납니다."
+    ],
+    closing: "Buma님, 오늘 학습하신 'Bide one's time'과 'Extrapolate'는 수많은 현안과 데이터 트래픽이 얽히는 주 후반부의 길목에서, Buma님이 가진 전략적 타이밍 감각과 이미 검증된 무결성을 다차원으로 확장해 나가는 지적인 제어력을 영어로 가장 우아하게 완성해 줄 최고의 무기들입니다. 내일 목요일 아침 07:30 복습 퀴즈 시간에도 주말을 향해 기분 좋게 속도를 내는 아침 출근길을 가장 상쾌하고 정밀한 지적 성취감으로 열어젖히실 수 있도록, Buma님의 논리적 결에 완벽하게 매칭된 프리미엄 아침 퀴즈와 함께 찾아뵙겠습니다. 수요일 밤입니다. 오늘 밤은 한 주의 중심을 멋지게 장악한 나 자신을 위해, 복잡한 데이터 확장성이나 타임라인은 잠시 내려놓으시고 아내분과 함께 세상에서 가장 안락하고 깊은 휴식 취하시길 바랍니다. 오늘 저녁 레슨도 진심으로 즐겁고 깊이 있었습니다, Buma님! 굿나잇! 😊✨📊💻🔧🎯📈🧼🌙We can extrapolate from our core platform to support other teams. I will meet them tomorrow to smooth over their concerns, but let's bide our time before the final integration.
+우리는 다른 팀들을 지원하기 위해 우리의 핵심 플랫폼으로부터 정교하게 확장 적용할 수 있습니다. 그들의 우려 사항을 원만하게 해결하기 위해 내일 그들을 만나겠지만, 최종 통합을 하기 전까지는 서두르지 말고 차분히 때를 기다립시다."
 },
             {
 day: 183,
