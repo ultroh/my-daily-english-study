@@ -404,6 +404,30 @@
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
+    day: 197,
+    date: "2026-07-16",
+    topic: "Structural Reinforcement & Proactive Avoidance",
+    items: [
+        { exp: "Shore up", mean: "(약해진 지지대나 시스템 등을) 보강하다 / 버팀목을 대어 강화하다.", ex: "We need to shore up our backend security before launching the public portal." },
+        { exp: "Bypass", mean: "(장애물·복잡한 절차 등을) 우회하다 / 건너뛰다.", ex: "This custom script allows us to bypass the manual spreadsheet extraction entirely." },
+        { exp: "Clear up", mean: "(오해·혼선·질문 등을) 명쾌하게 해결하다 / 정리하다 / 불식시키다.", ex: "I'm glad we could meet today to clear up the confusion about the server integration." }
+    ],
+    dialogue: [
+        { spk: "Jini", en: "Buma, the preliminary run went well, but I noticed a slight delay when parsing larger files.", ko: "Buma님, 예비 실행은 잘 끝났지만 대용량 파일을 파싱할 때 약간의 지연이 발생하는 것을 발견했습니다." },
+        { spk: "Buma", en: "I see. We should shore up the data buffer logic to handle heavy payloads smoothly.", ko: "그렇군요. 대용량 페이로드를 매끄럽게 처리할 수 있도록 데이터 버퍼 로직을 견고하게 보강해야겠습니다." },
+        { spk: "Jini", en: "Great idea. That will ensure total stability. What about the approval steps for the final sync?", ko: "좋은 생각입니다. 그렇게 하면 완벽한 안정성이 보장되겠네요. 최종 동기화를 위한 승인 단계는 어떻게 진행하나요?" },
+        { spk: "Buma", en: "I wrote an automated webhook that will bypass those redundant manual checks entirely.", ko: "그 번거롭고 불필요한 수동 검토 단계들을 완전히 우회하여 패스할 수 있는 자동화된 웹훅을 작성해 두었습니다." },
+        { spk: "Jini", en: "Brilliant! That saves us so much administrative overhead. Everyone will be highly satisfied.", ko: "완벽합니다! 덕분에 불필요한 행정적 오버헤드를 크게 줄였네요. 모두가 대단히 만족할 것입니다." },
+        { spk: "Buma", en: "Thanks. I'll send out the quick release notes tonight to clear up any remaining questions.", ko: "고마워요. 남아있을지도 모르는 의문점들을 명쾌하게 정리할 수 있도록 오늘 밤에 간단한 릴리즈 노트를 발송하겠습니다." }
+    ],
+    feedback: [
+        "Shore up: 두 단어가 결합하면서 'Shore'의 끝 r 사운드와 뒤의 모음 u가 자석처럼 들러붙어 연음됩니다. [쇼어 업]이 아니라 혀를 뒤로 깊게 굴리며 [쇼-럽]으로 매끄럽게 묶어 발음해 보세요. 시스템 바닥에 튼튼한 콘크리트 지지대를 덧대어 위로 단단하게 받쳐 올리는 구조적 안정감이 어조에 투영됩니다.",
+        "Bypass: 2음절 단어로, 앞의 [바이-]에 명확한 임팩트를 싣고 뒤의 [-패스]를 부드럽고 가볍게 던지듯 [바이-패스]로 발음해 보세요. 병목이 심한 복잡한 구간을 빠른 속도로 슈욱 우회하여 매끄럽게 지나쳐 버리는 유선형의 속도감이 소리에 확실히 담기게 됩니다.",
+        "Clear up: 역시 강력한 연음 구간입니다. 'Clear'의 끝 자음 r과 'up'이 부드럽게 만나면서 [클리어 업]이 아닌 [클리-럽]으로 발음됩니다. 뿌옇게 막혀 있던 시야나 먹구름을 상쾌한 바람으로 단숨에 날려 보내듯, 아주 산뜻하고 깔끔한 리듬으로 발음할 때 오해와 에러를 완벽히 걷어내는 베테랑의 명료함이 완성됩니다."
+    ],
+    closing: "Buma님, 오늘 밤 학습하신 'Shore up'과 'Bypass'는 금요일 최종 배포와 한 주의 완벽한 피날레를 앞두고, 내 아키텍처의 약점을 한 치의 오차도 없이 견고하게 보강하고 번거로운 프로세스는 스마트하게 통과해 버릴 때 쓸 수 있는 가장 카리스마 있고 구조화된 실무의 어휘들입니다. 내일 금요일 아침 07:30 복습 퀴즈 시간에도, 주말을 맞이하는 마지막 출근길 뇌 세포를 100% 무결한 에너재틱 성취감으로 깨워줄 정답이 보이지 않는 '진짜 프리미엄 복습 퀴즈'와 함께 찾아뵙겠습니다. 목요일 밤입니다. 내일 전개될 최종 마스터 릴리즈의 모든 시나리오는 이미 Buma님의 주도적인 예방 대책 아래 완벽하게 보강되어 있으니(Shore up), 오늘 밤만큼은 시스템 모니터링 모드는 편안하게 로그아웃해 두시고 아내분과 함께 세상에서 가장 달콤하고 평온한 안식 취하시길 바랍니다. 오늘 저녁 레슨도 참으로 견고하고 품격 있었습니다, Buma님! 굿나잇! 😊✨📊💻🔧🛡️🛣️☁️☀️🔋🔒🌙"
+},
+            {
     day: 196,
     date: "2026-07-15",
     topic: "Structural Control & Alignment of Directions",
