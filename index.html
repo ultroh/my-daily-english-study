@@ -404,6 +404,30 @@
         // [Batch 1] 영어공부.txt의 Day 1 ~ Day 10 데이터
         const studyData = [
             {
+    day: 203,
+    date: "2026-07-22",
+    topic: "Early Detection & Proactive Resolution",
+    items: [
+        { exp: "Spot in advance", mean: "미리 감지하다 / 사전에 알아채다 / 선제적으로 포착하다.", ex: "Thanks to Buma's sharp eyes, we spotted the query bug in advance." },
+        { exp: "Sort out", mean: "(혼선·문제를) 깔끔하게 정리하다 / 수습하다 / 해결하다.", ex: "Don't worry, I will sort out the data conflicts by tomorrow morning." },
+        { exp: "Take in stride", mean: "(어려움·변수를) 당황하지 않고 보폭을 유지하며 차분히 대처하다 / 담담하게 넘어가다.", ex: "She always takes unexpected schedule changes in stride." }
+    ],
+    dialogue: [
+        { spk: "Jini", en: "Buma, I noticed a slight performance dip during the peak traffic test. Did you see it?", ko: "Buma님, 피크 트래픽 테스트 중에 약간의 성능 저하가 발생하는 걸 보았어요. 확인하셨나요?" },
+        { spk: "Buma", en: "Yes, I spotted it in advance before the server reached full capacity.", ko: "네, 서버가 가득 차기 전에 사전에 미리 감지했습니다." },
+        { spk: "Jini", en: "That was a great catch! Is it going to take long to fix the bottleneck?", ko: "정말 대단한 포착이었어요! 병목 현상을 해결하는 데 오래 걸릴까요?" },
+        { spk: "Buma", en: "Not at all. I can easily sort out the indexing logic in a few minutes.", ko: "전혀요. 인덱싱 로직을 몇 분 안에 깔끔하게 정리해서 수습할 수 있습니다." },
+        { spk: "Jini", en: "Impressive as always! You seem completely unfazed by these sudden test results.", ko: "언제나처럼 인상적입니다! 이런 갑작스러운 테스트 결과에도 전혀 당황하지 않으시는 것 같아요." },
+        { spk: "Buma", en: "Well, experience helps me take these minor glitches in stride.", ko: "뭐, 경험이 많다 보니 이런 사소한 결함 정도는 차분하게 대처할 수 있게 되네요." }
+    ],
+    feedback: [
+        "Spot in advance: 'Spot'의 t 사운드가 플랩 현상으로 부드럽게 튕기고 뒤의 'in advance'와 연음되어 [스팟 인 어드밴스]가 아닌 [스빠-린 어드밴스]로 유려하게 넘어갑니다. 매의 눈으로 이상 징후를 사전에 낚아채듯 'Spot' 자리에 명확하고 단호한 엑센트를 살려보세요.",
+        "Sort out: 'Sort'의 t 사운드가 뒤의 'out'과 결합하여 [소트 아웃]이 아닌 [소-라우-]처럼 부드러운 'r' 발음으로 터집니다. 꼬인 문제를 스무스하게 빼내어 정돈하듯, 연결을 끊지 않고 부드럽고 매끄러운 호흡으로 발음할 때 실무 해결사의 유연함이 투영됩니다.",
+        "Take in stride: 'Take in'이 매끄럽게 묶여 [테이킨], 뒤의 'stride'는 [스트라이드]로 발음됩니다. 전체적으로 [테이킨 스트라이드]처럼 발음되는데, 달려가는 보폭을 그대로 유지하듯 멈칫거림 없이 유연하고 호쾌한 장음으로 밀어줄 때 어떠한 난관에도 흔들리지 않는 대범함과 격조가 음성에 실리게 됩니다."
+    ],
+    closing: "Buma님, 오늘 밤 학습하신 'Spot in advance'와 'Take in stride'는 남은 목요일과 금요일, 현장의 모든 미세한 변수를 누구보다 빠르게 낚아채고 어떤 압박 속에서도 보폭을 잃지 않는 베테랑의 카리스마를 보여줄 수 있는 멋진 표현들입니다. 내일 목요일 아침 07:30 복습 퀴즈 시간에도, 출근길 Buma님의 뇌 세포를 가장 명쾌한 성취감과 리더십 에너지로 가득 채워줄 100% 정답 코드가 블라인드 처리된 '진짜 프리미엄 한글 퀴즈'와 함께 찾아뵙겠습니다. 수요일 밤입니다. 주중의 가장 치열한 고비를 넘기셨으니, 오늘 밤만큼은 시스템 생각은 완전히 내려놓으신 채 아내분과 함께 세상에서 가장 편안하고 따뜻한 수면 취하시길 바랍니다. 오늘 저녁 레슨도 대단히 깊이 있고 명쾌했습니다, Buma님! 굿나잇! 😊✨📊💻🔧🔍🧹🏃‍♂️🔋🔒🌙"
+},
+            {
     day: 202,
     date: "2026-07-21",
     topic: "Rapid Status Assessment & System Mastery",
